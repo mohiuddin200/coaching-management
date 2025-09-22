@@ -1,36 +1,175 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Coaching Management Software
 
-## Getting Started
+A SaaS platform for managing coaching institutes, handling users, classes, attendance with biometric integration, and future financial management capabilities.
 
-First, run the development server:
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Database Schema](#database-schema)
+- [API Endpoints](#api-endpoints)
+- [Biometric Integration](#biometric-integration)
+- [SMS Integration](#sms-integration)
+- [Development Phases](#development-phases)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- **User Management**: Role-based access control (Admin, Teachers, Students, Employees)
+- **Class Management**: Scheduling with conflict detection, enrollment, and capacity management
+- **Attendance Tracking**: Biometric integration for real-time attendance
+- **SMS Notifications**: Alerts for attendance, class updates, and fee reminders
+- **Future Scope**: Financial management system for payments and invoicing
+- **Scalability**: Designed for high concurrency with caching and indexing
+- **Security**: GDPR-compliant biometric data handling, encrypted storage, and audit trails
+
+## Tech Stack
+
+- **Frontend**: Next.js 15+ (App Router), TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Next.js API Routes (or tRPC for type safety), Prisma ORM
+- **Database**: PostgreSQL (via Supabase)
+- **Authentication**: NextAuth.js or Auth0
+- **Real-time**: Socket.io or Server-Sent Events
+- **Storage**: AWS S3 for documents/photos
+- **Caching**: Redis for session data
+- **Monitoring**: System health monitoring and alerting
+
+## Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-repo/coaching-management.git
+cd coaching-management
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Set Up Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+DATABASE_URL=your_postgresql_connection_string
+NEXTAUTH_SECRET=your_nextauth_secret
+SMS_PROVIDER_API_KEY=your_sms_provider_key
+BIOMETRIC_API_KEY=your_biometric_device_key
+AWS_ACCESS_KEY_ID=your_aws_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret
+```
+
+### 4. Run Database Migrations
+
+```bash
+npx prisma migrate dev
+```
+
+### 5. Start the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Database**: Configure PostgreSQL via Supabase or a local instance. Update `DATABASE_URL` in `.env.local`
+- **Authentication**: Set up NextAuth.js or Auth0 for user authentication. Configure providers in `pages/api/auth/[...nextauth].ts`
+- **Biometric Devices**: Register device API endpoints and keys in the `BiometricDevices` table
+- **SMS Provider**: Configure SMS provider (e.g., Twilio) in `SmsSettings` table and update `.env.local` with API keys
+- **Caching**: Set up Redis for session caching and configure connection in `.env.local`
 
-## Learn More
+## Database Schema
 
-To learn more about Next.js, take a look at the following resources:
+The database schema includes the following core tables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Users**: Stores user details (email, role, contact info)
+- **Classes**: Manages class schedules, teacher assignments, and capacity
+- **Enrollments**: Tracks student-class relationships
+- **Attendance**: Records biometric-based attendance data
+- **BiometricDevices**: Stores device configurations
+- **SMS Tables**: `SmsTemplates`, `SmsLogs`, `SmsSettings`, `NotificationPreferences`, `SmsQueues` for handling SMS notifications
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Run `npx prisma studio` to view and manage the database schema.
 
-## Deploy on Vercel
+## API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### User Management
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `POST /api/users` - Create a new user
+- `GET /api/users/:id` - Fetch user details
+- `PUT /api/users/:id` - Update user information
+
+### Class Management
+
+- `POST /api/classes` - Create a new class
+- `GET /api/classes` - List all classes with filters
+- `POST /api/enrollments` - Enroll a student in a class
+
+### Attendance
+
+- `POST /api/attendance` - Record attendance via biometric data
+- `GET /api/attendance` - Fetch attendance records
+
+### SMS
+
+- `POST /api/sms/send` - Send an SMS notification
+- `GET /api/sms/logs` - Retrieve SMS logs
+
+## Biometric Integration
+
+- **Architecture**: Uses API Gateway pattern for device communication
+- **Webhook Support**: Configurable webhooks for real-time attendance updates
+- **Offline Handling**: Stores attendance locally on devices and syncs when online
+- **Error Handling**: Retries failed API calls and logs errors in `BiometricDevices`
+
+## SMS Integration
+
+### Triggers
+
+- Attendance alerts (e.g., student absent after 15 minutes)
+- Daily attendance summaries for parents
+- Fee reminders and class schedule updates
+
+### Features
+
+- **Queue System**: Uses `SmsQueues` for batch processing and retries
+- **Providers**: Configurable via `SmsSettings` (e.g., Twilio, AWS SNS)
+
+## Development Phases
+
+### Phase 1: Core Foundation
+
+- Set up Next.js, authentication, and database schema
+- Implement user and class CRUD operations
+- Build responsive dashboard UI
+
+### Phase 2: Biometric Integration
+
+- Develop middleware for biometric device APIs
+- Implement real-time attendance tracking and analytics
+
+### Phase 3: Advanced Features
+
+- Add class scheduling with conflict detection
+- Implement SMS notifications and financial management
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit changes (`git commit -m "Add your feature"`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a pull request
+
+## License
+
+This project is licensed under the MIT License.
