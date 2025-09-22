@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Users {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  role          String
+  first_name    String?
+  last_name     String?
+  phone_number  String?
+  parent_phone  String?
+  emergency_contact String?
+  sms_enabled   Boolean   @default(false)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
