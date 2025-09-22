@@ -8,16 +8,79 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Users {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  role          String
-  first_name    String?
-  last_name     String?
-  phone_number  String?
-  parent_phone  String?
-  emergency_contact String?
-  sms_enabled   Boolean   @default(false)
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
+model User {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  password         String?
+  firstName        String
+  lastName         String
+  role             Role      @default(STUDENT)
+  phoneNumber      String?
+  parentPhone      String?
+  emergencyContact String?
+  smsEnabled       Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  
+  // Relations
+  enrollments      Enrollment[]
+  attendance       Attendance[]
+  teachingClasses  Class[]
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+  STAFF
+}
+
+model Enrollment {
+  id             String   @id @default(uuid())
+  userId         String
+  classId        String
+  enrollmentDate DateTime @default(now())
+  status         String
+  paymentStatus  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relations
+  user           User     @relation(fields: [userId], references: [id])
+  class          Class    @relation(fields: [classId], references: [id])
+}
+
+model Class {
+  id           String   @id @default(uuid())
+  name         String
+  description  String?
+  scheduleTime DateTime
+  duration     Int
+  teacherId    String
+  capacity     Int
+  roomNumber   String?
+  status       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  enrollments  Enrollment[]
+  attendance   Attendance[]
+  teacher      User     @relation(fields: [teacherId], references: [id])
+}
+
+model Attendance {
+  id        String   @id @default(uuid())
+  userId    String
+  classId   String
+  timestamp DateTime @default(now())
+  status    String
+  deviceId  String?
+  entryType String?
+  markedBy  String?
+  createdAt DateTime @default(now())
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  class     Class    @relation(fields: [classId], references: [id])
 }
