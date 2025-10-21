@@ -11,20 +11,19 @@ type SupabaseContextType = {
 
 const SupabaseContext = createContext<SupabaseContextType | undefined>(undefined);
 
-export function SupabaseProvider({ children, session }: { children: React.ReactNode; session: Session | null }) {
+export function SupabaseProvider({ children, session: initialSession }: { children: React.ReactNode; session: Session | null }) {
   const [supabase] = useState(() => createClient());
+  const [session, setSession] = useState<Session | null>(initialSession);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      if (newSession?.expires_at !== session?.expires_at) {
-        // Optionally, you can refresh the page or update state here
-      }
+      setSession(newSession);
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [session, supabase]);
+  }, [supabase]);
 
   return (
     <SupabaseContext.Provider value={{ supabase, session }}>

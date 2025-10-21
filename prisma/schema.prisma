@@ -1,12 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider   = "prisma-client-js"
+  output     = "../src/generated/prisma"
+  engineType = "binary"
 }
 
 datasource db {
@@ -15,10 +13,131 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// --------------------------------------
+// Enums
+// --------------------------------------
+
+enum Role {
+  Admin
+  Teacher
+  Student
+  Staff
+}
+
+enum ClassStatus {
+  Scheduled
+  InProgress
+  Completed
+  Cancelled
+}
+
+enum EnrollmentStatus {
+  Active
+  Withdrawn
+  Completed
+}
+
+enum AttendanceType {
+  Entry
+  Exit
+}
+
+enum SmsStatus {
+  Sent
+  Failed
+  Pending
+}
+
+// --------------------------------------
+// Models
+// --------------------------------------
+
+// Corresponds to the `auth.users` table in Supabase.
 model User {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
-  name      String?
+  id              String       @id @default(uuid())
+  email           String       @unique
+  role            Role         @default(Student)
+  firstName       String?
+  lastName        String?
+  phoneNumber     String?
+  parentPhone     String?
+  smsEnabled      Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  enrollments     Enrollment[]
+  attendances     Attendance[]
+  assignedClasses Class[]      @relation("TeacherToClass")
+
+  @@map("users")
+}
+
+model Class {
+  id           String       @id @default(cuid())
+  name         String
+  scheduleTime DateTime
+  capacity     Int
+  status       ClassStatus  @default(Scheduled)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  teacher      User         @relation("TeacherToClass", fields: [teacherId], references: [id])
+  teacherId    String
+  enrollments  Enrollment[]
+  attendances  Attendance[]
+}
+
+model Enrollment {
+  id             String           @id @default(cuid())
+  enrollmentDate DateTime         @default(now())
+  status         EnrollmentStatus @default(Active)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  student        User             @relation(fields: [studentId], references: [id])
+  studentId      String
+  class          Class            @relation(fields: [classId], references: [id])
+  classId        String
+}
+
+model Attendance {
+  id        String           @id @default(cuid())
+  timestamp DateTime         @default(now())
+  entryType AttendanceType
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  student   User             @relation(fields: [studentId], references: [id])
+  studentId String
+  class     Class            @relation(fields: [classId], references: [id])
+  classId   String
+  device    BiometricDevice? @relation(fields: [deviceId], references: [id])
+  deviceId  String?
+}
+
+model BiometricDevice {
+  id          String       @id @default(cuid())
+  name        String
+  apiEndpoint String
+  apiKey      String?
+  status      String       @default("active")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  attendances Attendance[]
+}
+
+model SmsLog {
+  id             String    @id @default(cuid())
+  recipientPhone String
+  messageContent String
+  status         SmsStatus @default(Pending)
+  cost           Float?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model MarketingContact {
+  id            String    @id @default(cuid())
+  parentName    String
+  phoneNumber   String    @unique
+  queryDetails  String?
+  lastContacted DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }

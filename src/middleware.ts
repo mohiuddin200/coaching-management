@@ -1,12 +1,33 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+// import { PrismaClient } from '@/generated/prisma'; // Temporarily removed
+
+// const prisma = new PrismaClient(); // Temporarily removed
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
   const supabase = await createClient();
 
-  await supabase.auth.getSession();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Temporarily removed admin route protection to resolve Edge Runtime incompatibility
+  // if (request.nextUrl.pathname.startsWith('/admin')) {
+  //   if (user) {
+  //     const dbUser = await prisma.user.findUnique({
+  //       where: { id: user.id },
+  //       select: { role: true },
+  //     });
+
+  //     if (dbUser?.role !== 'Admin') {
+  //       return NextResponse.redirect(new URL('/', request.url));
+  //     }
+  //   } else {
+  //     return NextResponse.redirect(new URL('/signin', request.url));
+  //   }
+  // }
 
   return response;
 }
