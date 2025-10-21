@@ -1,32 +1,25 @@
-import { withAuth } from "next-auth/middleware";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 
-export default withAuth({
-  callbacks: {
-    authorized: ({ token, req }) => {
-      const pathname = req.nextUrl.pathname;
+export async function middleware(request: NextRequest) {
+  const response = NextResponse.next();
+  const supabase = await createClient();
 
-      // Public routes
-      if (pathname === "/auth/signin" || pathname === "/auth/error") {
-        return true;
-      }
+  await supabase.auth.getSession();
 
-      // Role-based access control
-      if (pathname.startsWith("/admin") && token?.role !== "ADMIN") {
-        return false;
-      }
-      if (pathname.startsWith("/teacher") && token?.role !== "TEACHER" && token?.role !== "ADMIN") {
-        return false;
-      }
-      if (pathname.startsWith("/student") && token?.role !== "STUDENT" && token?.role !== "ADMIN") {
-        return false;
-      }
-
-      // Allow authenticated users to access dashboard
-      return !!token;
-    },
-  },
-});
+  return response;
+}
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/teacher/:path*", "/student/:path*"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - api/auth (next-auth routes)
+     */
+    '/((?!_next/static|_next/image|favicon.ico|api/auth).*)',
+  ],
 };

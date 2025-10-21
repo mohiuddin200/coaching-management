@@ -1,86 +1,24 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id               String    @id @default(uuid())
-  email            String    @unique
-  password         String?
-  firstName        String
-  lastName         String
-  role             Role      @default(STUDENT)
-  phoneNumber      String?
-  parentPhone      String?
-  emergencyContact String?
-  smsEnabled       Boolean   @default(false)
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  
-  // Relations
-  enrollments      Enrollment[]
-  attendance       Attendance[]
-  teachingClasses  Class[]
-}
-
-enum Role {
-  ADMIN
-  TEACHER
-  STUDENT
-  STAFF
-}
-
-model Enrollment {
-  id             String   @id @default(uuid())
-  userId         String
-  classId        String
-  enrollmentDate DateTime @default(now())
-  status         String
-  paymentStatus  String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  
-  // Relations
-  user           User     @relation(fields: [userId], references: [id])
-  class          Class    @relation(fields: [classId], references: [id])
-}
-
-model Class {
-  id           String   @id @default(uuid())
-  name         String
-  description  String?
-  scheduleTime DateTime
-  duration     Int
-  teacherId    String
-  capacity     Int
-  roomNumber   String?
-  status       String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
-  // Relations
-  enrollments  Enrollment[]
-  attendance   Attendance[]
-  teacher      User     @relation(fields: [teacherId], references: [id])
-}
-
-model Attendance {
-  id        String   @id @default(uuid())
-  userId    String
-  classId   String
-  timestamp DateTime @default(now())
-  status    String
-  deviceId  String?
-  entryType String?
-  markedBy  String?
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  
-  // Relations
-  user      User     @relation(fields: [userId], references: [id])
-  class     Class    @relation(fields: [classId], references: [id])
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  name      String?
 }
