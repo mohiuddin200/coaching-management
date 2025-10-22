@@ -13,21 +13,17 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Temporarily removed admin route protection to resolve Edge Runtime incompatibility
-  // if (request.nextUrl.pathname.startsWith('/admin')) {
-  //   if (user) {
-  //     const dbUser = await prisma.user.findUnique({
-  //       where: { id: user.id },
-  //       select: { role: true },
-  //     });
-
-  //     if (dbUser?.role !== 'Admin') {
-  //       return NextResponse.redirect(new URL('/', request.url));
-  //     }
-  //   } else {
-  //     return NextResponse.redirect(new URL('/signin', request.url));
-  //   }
-  // }
+  // Protect admin routes
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (user) {
+      const userRole = user.user_metadata.role;
+      if (userRole !== 'Admin') {
+        return NextResponse.redirect(new URL('/', request.url));
+      }
+    } else {
+      return NextResponse.redirect(new URL('/signin', request.url));
+    }
+  }
 
   return response;
 }
