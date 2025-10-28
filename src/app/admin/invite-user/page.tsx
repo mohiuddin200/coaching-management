@@ -1,21 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 export default function InviteUserPage() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("Student"); // Default role
   const [message, setMessage] = useState("");
+  const [invitationLink, setInvitationLink] = useState("");
   const [error, setError] = useState("");
-  const router = useRouter();
-  const supabase = createClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
     setError("");
+    setInvitationLink("");
 
     const response = await fetch("/api/admin/invite-user", {
       method: "POST",
@@ -31,6 +29,9 @@ export default function InviteUserPage() {
       setError(result.error || "Failed to send invitation.");
     } else {
       setMessage(result.message);
+      if (result.invitationLink) {
+        setInvitationLink(result.invitationLink);
+      }
       setEmail("");
     }
   };
@@ -77,6 +78,17 @@ export default function InviteUserPage() {
         </form>
         {message && <p className="mt-4 text-center text-green-600">{message}</p>}
         {error && <p className="mt-4 text-center text-red-600">{error}</p>}
+        {invitationLink && (
+          <div className="mt-4 p-4 bg-blue-50 rounded-md">
+            <p className="text-sm font-medium text-blue-800 mb-2">Invitation Link (for testing):</p>
+            <div className="bg-white p-2 rounded border text-xs break-all">
+              <a href={invitationLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                {invitationLink}
+              </a>
+            </div>
+            <p className="text-xs text-blue-600 mt-2">Click the link above to test the invitation flow</p>
+          </div>
+        )}
       </div>
     </div>
   );

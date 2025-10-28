@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignIn() {
@@ -8,21 +8,35 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
+
+  useEffect(() => {
+    // Check for error message in URL parameters
+    const urlError = searchParams.get('message');
+    if (urlError) {
+      setError(decodeURIComponent(urlError));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (signInError) {
       setError(signInError.message);
-    } else {
-      router.push("/dashboard"); // Redirect to dashboard on success
+    } else if (data.user) {
+      // Check if user has completed onboarding
+      if (!data.user.user_metadata.onboarded) {
+        router.push("/auth/onboarding");
+      } else {
+        router.push("/dashboard");
+      }
     }
   };
 
