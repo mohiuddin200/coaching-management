@@ -26,42 +26,22 @@ export async function POST(request: Request) {
   }
 
   try {
-    // First, create the user directly
-    const { error: createError } = await supabaseAdmin.auth.admin.createUser({
-      email: email,
-      email_confirm: true, // Auto-confirm the email
-      user_metadata: {
+    // Use Supabase's built-in invite user functionality
+    const { error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+      data: {
         role: role,
         onboarded: false, // Mark as not onboarded
-      }
+      },
+      redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/onboarding`
     });
 
-    if (createError) {
-      console.error("Error creating user:", createError);
-      return NextResponse.json({ error: createError.message }, { status: 500 });
+    if (inviteError) {
+      console.error("Error inviting user:", inviteError);
+      return NextResponse.json({ error: inviteError.message }, { status: 500 });
     }
-
-    // Generate a password reset link that we'll use as an invitation link
-    const { data: resetData, error: resetError } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'recovery',
-      email: email,
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`
-      }
-    });
-
-    if (resetError) {
-      console.error("Error generating reset link:", resetError);
-      return NextResponse.json({ error: resetError.message }, { status: 500 });
-    }
-
-    // In a real application, you would send this link via email
-    // For now, we'll return it in the response
-    console.log("Generated invitation link:", resetData.properties?.action_link);
 
     return NextResponse.json({
-      message: `User created and invitation generated for ${email} with role ${role}.`,
-      invitationLink: resetData.properties?.action_link, // Remove this in production
+      message: `Invitation sent to ${email} with role ${role}. Check your email for the invitation link.`
     });
   } catch (e) {
     console.error("Unexpected error inviting user:", e);

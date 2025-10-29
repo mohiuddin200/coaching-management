@@ -23,16 +23,15 @@ export default function OnboardingPage() {
     event.preventDefault();
     setError(null);
 
+    // --- All your client-side validation is still good ---
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-
     if (password.length < 6) {
       setError("Password must be at least 6 characters long.");
       return;
     }
-
     if (!firstName.trim() || !lastName.trim()) {
       setError("First name and last name are required.");
       return;
@@ -41,25 +40,15 @@ export default function OnboardingPage() {
     setLoading(true);
 
     try {
-      // --- PART 1: Set the Password (Client-side) ---
-      // This is required by Supabase's auth flow when coming from an invite link
-      const { error: passwordError } = await supabase.auth.updateUser({
-        password: password,
-      });
-
-      if (passwordError) {
-        throw new Error(`Password update failed: ${passwordError.message}`);
-      }
-
-      // --- PART 2: Update Profile (Server Action) ---
-      // Now that the password is set, the user is fully authenticated.
-      // We can now securely call our Server Action to update the profile.
-
-      // Create FormData manually with our form values
+      // --- PART 1: Create FormData with ALL data ---
       const formData = new FormData();
       formData.append('firstName', firstName.trim());
       formData.append('lastName', lastName.trim());
+      // Add the password to the FormData
+      formData.append('password', password); 
       
+      // --- PART 2: Call the Server Action ---
+      // All logic (password + profile) is now in the action
       const actionResponse = await completeOnboarding(formData);
 
       if (actionResponse?.error) {
@@ -67,13 +56,14 @@ export default function OnboardingPage() {
         throw new Error(actionResponse.error);
       }
 
-      // If the server action is successful, it will redirect.
-      // We'll add a fallback navigation here just in case.
-      router.push("/dashboard");
+      // The server action will handle the redirect on success.
+      // We'll just catch errors here.
     } catch (e: unknown) {
       console.error("Onboarding failed:", e);
       const errorMessage = e instanceof Error ? e.message : "An unexpected error occurred";
       setError(errorMessage);
+    } finally {
+      // Always stop loading, even if the redirect is just about to happen
       setLoading(false);
     }
   };

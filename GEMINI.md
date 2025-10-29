@@ -249,7 +249,7 @@ _Risk Buffer: +2-3 days for ORM learning curve_
 
 **Week 8.5: SMS Foundation** _(Add 3-4 days)_
 
-- Day 1-2: Local SMS provider API setup and configuration
+- Day 1-2: Local SMS provider API setup and configuration   
 - Day 3-4: Create SMS templates system and basic SMS service
 
 **Week 9: Student Enrollment**

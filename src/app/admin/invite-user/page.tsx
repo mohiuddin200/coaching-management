@@ -80,13 +80,15 @@ export default function InviteUserPage() {
         {error && <p className="mt-4 text-center text-red-600">{error}</p>}
         {invitationLink && (
           <div className="mt-4 p-4 bg-blue-50 rounded-md">
-            <p className="text-sm font-medium text-blue-800 mb-2">Invitation Link (for testing):</p>
+            <p className="text-sm font-medium text-blue-800 mb-2">Development Testing Link:</p>
             <div className="bg-white p-2 rounded border text-xs break-all">
               <a href={invitationLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                 {invitationLink}
               </a>
             </div>
-            <p className="text-xs text-blue-600 mt-2">Click the link above to test the invitation flow</p>
+            <p className="text-xs text-blue-600 mt-2">
+              This link is for testing purposes only. In production, the user will receive this link via email.
+            </p>
           </div>
         )}
       </div>

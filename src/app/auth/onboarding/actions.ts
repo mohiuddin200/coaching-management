@@ -1,3 +1,5 @@
+// /app/onboarding/actions.ts
+
 'use server';
 
 import { prisma } from "@/lib/prisma";
@@ -6,35 +8,53 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function completeOnboarding(formData: FormData) {
-  const supabase = await createClient();
-  const supabaseAdmin = await createAdminClient();
+  // Use the standard server client (not admin) to get/update the user
+  const supabase = await createClient(); 
 
   const { data: { user }, error: userError } = await supabase.auth.getUser();
 
   if (userError || !user) {
     console.error("Onboarding Error: No user found.", userError);
-    return redirect("/auth/login?message=Authentication required. Please log in.");
+    return { error: "Authentication session missing. Please try the invite link again." };
   }
 
+  // --- Get ALL form data ---
   const firstName = formData.get('firstName') as string;
   const lastName = formData.get('lastName') as string;
+  const password = formData.get('password') as string; // Get the password
 
+  // --- Server-side validation ---
   if (!firstName || !lastName) {
     return { error: "First name and last name are required." };
   }
+  if (!password || password.length < 6) {
+    return { error: "Password must be at least 6 characters long." };
+  }
 
   try {
-    // 1. Update Supabase Auth user_metadata
-    // We use the admin client to update metadata for a specific user
-    const { data: updatedUser, error: adminError } = await supabaseAdmin.auth.admin.updateUserById(
+    // --- STEP 1: Set the Password ---
+    // This uses the authenticated server client
+    const { error: passwordError } = await supabase.auth.updateUser({
+      password: password,
+    });
+
+    if (passwordError) {
+      console.error("Supabase password update error:", passwordError);
+      throw new Error(`Failed to set password: ${passwordError.message}`);
+    }
+
+    // --- STEP 2: Update Metadata (Admin) ---
+    // You still need the admin client for this part
+    const supabaseAdmin = await createAdminClient();
+    const { error: adminError } = await supabaseAdmin.auth.admin.updateUserById(
       user.id,
       {
         user_metadata: {
-          ...user.user_metadata, // Preserve existing metadata (like role)
+          ...user.user_metadata,
           first_name: firstName,
           last_name: lastName,
-          full_name: `${firstName} ${lastName}`, // Optional: convenience
-          onboarded: true, // This is the crucial flag!
+          full_name: `${firstName} ${lastName}`,
+          onboarded: true,
         }
       }
     );
@@ -44,21 +64,19 @@ export async function completeOnboarding(formData: FormData) {
       throw new Error(`Failed to update user metadata: ${adminError.message}`);
     }
 
-    // 2. Update your Prisma User table
-    // We use upsert to either create the user (if it doesn't exist)
-    // or update it (if it somehow already does).
+    // --- STEP 3: Update your Prisma User table ---
     await prisma.user.upsert({
-      where: { id: user.id }, // Assumes your User model's ID matches Supabase user ID
+      where: { id: user.id },
       update: {
         firstName: firstName,
         lastName: lastName,
       },
       create: {
         id: user.id,
-        email: user.email!, // Make sure to store the email
+        email: user.email!,
         firstName: firstName,
         lastName: lastName,
-        role: user.user_metadata.role || 'Student', // Use the role from metadata or default to Student
+        role: user.user_metadata.role || 'Student',
       }
     });
 
@@ -69,8 +87,6 @@ export async function completeOnboarding(formData: FormData) {
   }
 
   // Success!
-  // Revalidate the root layout to refresh user session data
   revalidatePath('/', 'layout');
-  // Redirect to the dashboard
   redirect('/dashboard');
 }
