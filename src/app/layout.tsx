@@ -4,6 +4,7 @@ import "./globals.css";
 import { createClient } from "@/lib/supabase/server";
 import { SupabaseProvider } from "./supabase-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,14 +33,21 @@ export default async function RootLayout({
 
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SupabaseProvider session={session}>
-          {children}
-        </SupabaseProvider>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SupabaseProvider session={session}>
+            {children}
+          </SupabaseProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
