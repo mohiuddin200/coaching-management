@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma';
 // GET /api/levels/[id] - Get a specific level
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const level = await prisma.level.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         subjects: {
           include: {
@@ -43,14 +44,15 @@ export async function GET(
 // PATCH /api/levels/[id] - Update a level
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { name, levelNumber, description, status } = body;
 
     const level = await prisma.level.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(name && { name }),
         ...(levelNumber && { levelNumber: parseInt(levelNumber) }),
@@ -72,11 +74,12 @@ export async function PATCH(
 // DELETE /api/levels/[id] - Delete a level
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await prisma.level.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Level deleted successfully' });

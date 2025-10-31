@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma';
 // GET /api/class-sections/[id] - Get a specific class section
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const classSection = await prisma.classSection.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         subject: { include: { level: true } },
         teacher: true,
@@ -43,9 +44,10 @@ export async function GET(
 // PATCH /api/class-sections/[id] - Update a class section
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const {
       name,
@@ -57,7 +59,7 @@ export async function PATCH(
     } = body;
 
     const classSection = await prisma.classSection.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(name && { name }),
         ...(teacherId && { teacherId }),
@@ -86,11 +88,12 @@ export async function PATCH(
 // DELETE /api/class-sections/[id] - Delete a class section
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await prisma.classSection.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Class section deleted successfully' });

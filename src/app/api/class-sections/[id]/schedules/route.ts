@@ -4,9 +4,10 @@ import { prisma } from '@/lib/prisma';
 // POST /api/class-sections/[id]/schedules - Add a schedule to a class section
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { dayOfWeek, startTime, endTime } = body;
 
@@ -19,7 +20,7 @@ export async function POST(
 
     const schedule = await prisma.schedule.create({
       data: {
-        classSectionId: params.id,
+        classSectionId: id,
         dayOfWeek,
         startTime,
         endTime,

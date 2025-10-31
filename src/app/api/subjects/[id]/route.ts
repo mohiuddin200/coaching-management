@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma';
 // GET /api/subjects/[id] - Get a specific subject
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const subject = await prisma.subject.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         level: true,
         classSections: {
@@ -43,14 +44,15 @@ export async function GET(
 // PATCH /api/subjects/[id] - Update a subject
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { name, code, description, status } = body;
 
     const subject = await prisma.subject.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(name && { name }),
         ...(code !== undefined && { code }),
@@ -73,11 +75,12 @@ export async function PATCH(
 // DELETE /api/subjects/[id] - Delete a subject
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await prisma.subject.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Subject deleted successfully' });
