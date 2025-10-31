@@ -2,27 +2,27 @@
 
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { createColumns, Teacher } from "@/components/teachers/columns"
-import { CreateTeacherDialog } from "@/components/teachers/create-teacher-dialog"
+import { createColumns, Student } from "@/components/students/columns"
+import { CreateStudentDialog } from "@/components/students/create-student-dialog"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { FullPaginationTable } from "@/components/table/FullPaginationTable"
 import { useMemo } from "react"
 
-export default function TeachersPage() {
-  const [teachers, setTeachers] = useState<Teacher[]>([])
+export default function StudentsPage() {
+  const [students, setStudents] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
 
-  const fetchTeachers = async () => {
+  const fetchStudents = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/teachers')
+      const response = await fetch('/api/students')
       if (!response.ok) {
-        throw new Error('Failed to fetch teachers')
+        throw new Error('Failed to fetch students')
       }
       const data = await response.json()
-      setTeachers(data.teachers)
+      setStudents(data.students)
       setError(null)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
@@ -41,10 +41,10 @@ export default function TeachersPage() {
     }
     
     checkUserRole()
-    fetchTeachers()
+    fetchStudents()
   }, [])
 
-  const columns = useMemo(() => createColumns(fetchTeachers, isAdmin), [isAdmin])
+  const columns = useMemo(() => createColumns(fetchStudents, isAdmin), [isAdmin])
 
   if (loading) {
     return (
@@ -52,12 +52,12 @@ export default function TeachersPage() {
         <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Teachers</h1>
-              <p className="text-muted-foreground">Manage your teaching staff</p>
+              <h1 className="text-3xl font-bold tracking-tight">Students</h1>
+              <p className="text-muted-foreground">Manage your students</p>
             </div>
           </div>
           <div className="flex items-center justify-center h-64">
-            <p className="text-muted-foreground">Loading teachers...</p>
+            <p className="text-muted-foreground">Loading students...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -70,8 +70,8 @@ export default function TeachersPage() {
         <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Teachers</h1>
-              <p className="text-muted-foreground">Manage your teaching staff</p>
+              <h1 className="text-3xl font-bold tracking-tight">Students</h1>
+              <p className="text-muted-foreground">Manage your students</p>
             </div>
           </div>
           <div className="flex items-center justify-center h-64">
@@ -87,16 +87,16 @@ export default function TeachersPage() {
       <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Teachers</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Students</h1>
             <p className="text-muted-foreground">
-              Manage your teaching staff and their portal access
+              Manage your students and their information
             </p>
           </div>
-          <CreateTeacherDialog onTeacherCreated={fetchTeachers} />
+          <CreateStudentDialog onStudentCreated={fetchStudents} />
         </div>
         <FullPaginationTable 
           columns={columns} 
-          data={teachers}
+          data={students}
           filterColumn="firstName"
         />
       </div>

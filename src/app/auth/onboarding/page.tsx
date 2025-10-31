@@ -10,10 +10,9 @@ export default function OnboardingPage() {
   const supabase = createClient();
 
   // Form state
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [userName, setUserName] = useState("");
 
   // Error/Loading state
   const [error, setError] = useState<string | null>(null);
@@ -38,6 +37,12 @@ export default function OnboardingPage() {
           return;
         }
         
+        // Set the user's name from metadata
+        const firstName = user.user_metadata?.firstName || '';
+        const lastName = user.user_metadata?.lastName || '';
+        const fullName = `${firstName} ${lastName}`.trim() || user.email?.split('@')[0] || 'User';
+        setUserName(fullName);
+        
         setChecking(false);
       } catch (err) {
         console.error('Auth check error:', err);
@@ -52,7 +57,7 @@ export default function OnboardingPage() {
     event.preventDefault();
     setError(null);
 
-    // --- All your client-side validation is still good ---
+    // Client-side validation
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -61,38 +66,27 @@ export default function OnboardingPage() {
       setError("Password must be at least 6 characters long.");
       return;
     }
-    if (!firstName.trim() || !lastName.trim()) {
-      setError("First name and last name are required.");
-      return;
-    }
 
     setLoading(true);
 
     try {
-      // --- PART 1: Create FormData with ALL data ---
+      // Create FormData with password only
       const formData = new FormData();
-      formData.append('firstName', firstName.trim());
-      formData.append('lastName', lastName.trim());
-      // Add the password to the FormData
       formData.append('password', password); 
       
-      // --- PART 2: Call the Server Action ---
-      // All logic (password + profile) is now in the action
+      // Call the Server Action
       const actionResponse = await completeOnboarding(formData);
 
       if (actionResponse?.error) {
-        // This error came from our Server Action
         throw new Error(actionResponse.error);
       }
 
-      // The server action will handle the redirect on success.
-      // We'll just catch errors here.
+      // The server action will handle the redirect on success
     } catch (e: unknown) {
       console.error("Onboarding failed:", e);
       const errorMessage = e instanceof Error ? e.message : "An unexpected error occurred";
       setError(errorMessage);
     } finally {
-      // Always stop loading, even if the redirect is just about to happen
       setLoading(false);
     }
   };
@@ -112,39 +106,10 @@ export default function OnboardingPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
         <h2 className="mb-2 text-2xl font-bold text-center">Complete Your Account Setup</h2>
-        <p className="mb-6 text-center text-gray-600">Welcome! Please set your password and profile details to continue.</p>
+        <p className="mb-2 text-center text-gray-600">Welcome, <span className="font-semibold">{userName}</span>!</p>
+        <p className="mb-6 text-center text-gray-600 text-sm">Please set your password to continue.</p>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-              First Name
-            </label>
-            <input
-              id="firstName"
-              name="firstName"
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-              Last Name
-            </label>
-            <input
-              id="lastName"
-              name="lastName"
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none"
-              required
-            />
-          </div>
-
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
@@ -155,6 +120,7 @@ export default function OnboardingPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="At least 6 characters"
               className="mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none"
               required
             />
@@ -170,6 +136,7 @@ export default function OnboardingPage() {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Re-enter your password"
               className="mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none"
               required
             />

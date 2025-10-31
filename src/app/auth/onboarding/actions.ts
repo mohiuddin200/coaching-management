@@ -18,15 +18,10 @@ export async function completeOnboarding(formData: FormData) {
     return { error: "Authentication session missing. Please try the invite link again." };
   }
 
-  // --- Get ALL form data ---
-  const firstName = formData.get('firstName') as string;
-  const lastName = formData.get('lastName') as string;
-  const password = formData.get('password') as string; // Get the password
+  // Get password from form data
+  const password = formData.get('password') as string;
 
-  // --- Server-side validation ---
-  if (!firstName || !lastName) {
-    return { error: "First name and last name are required." };
-  }
+  // Server-side validation
   if (!password || password.length < 6) {
     return { error: "Password must be at least 6 characters long." };
   }
@@ -44,16 +39,13 @@ export async function completeOnboarding(formData: FormData) {
     }
 
     // --- STEP 2: Update Metadata (Admin) ---
-    // You still need the admin client for this part
+    // Mark user as onboarded
     const supabaseAdmin = await createAdminClient();
     const { error: adminError } = await supabaseAdmin.auth.admin.updateUserById(
       user.id,
       {
         user_metadata: {
           ...user.user_metadata,
-          first_name: firstName,
-          last_name: lastName,
-          full_name: `${firstName} ${lastName}`,
           onboarded: true,
         }
       }
@@ -65,35 +57,38 @@ export async function completeOnboarding(formData: FormData) {
     }
 
     // --- STEP 3: Update your Prisma User table (minimal sync) ---
-    await prisma.user.upsert({
-      where: { id: user.id },
-      update: {
-        email: user.email!,
-      },
-      create: {
-        id: user.id,
-        email: user.email!,
-        role: user.user_metadata.role || 'Teacher',
-      }
+    // Check if user already exists first
+    const existingUser = await prisma.user.findUnique({
+      where: { id: user.id }
     });
 
-    // --- STEP 4: Create or update Teacher profile if role is Teacher ---
-    if (user.user_metadata.role === 'Teacher') {
-      await prisma.teacher.upsert({
-        where: { userId: user.id },
-        update: {
-          firstName: firstName,
-          lastName: lastName,
+    if (!existingUser) {
+      // Create new user record
+      await prisma.user.create({
+        data: {
+          id: user.id,
           email: user.email!,
-        },
-        create: {
-          firstName: firstName,
-          lastName: lastName,
-          email: user.email!,
-          phoneNumber: '', // Will be updated later in profile settings
-          userId: user.id,
+          role: user.user_metadata.role || 'Teacher',
         }
       });
+    }
+
+    // --- STEP 4: Link Teacher profile if role is Teacher ---
+    if (user.user_metadata.role === 'Teacher') {
+      const teacherId = user.user_metadata.teacherId;
+      
+      if (teacherId) {
+        // Update the existing teacher profile with the user ID
+        await prisma.teacher.update({
+          where: { id: teacherId },
+          data: {
+            userId: user.id,
+          }
+        });
+      } else {
+        // This shouldn't happen - all teachers should be invited from the teacher table
+        console.warn('Teacher invited without teacherId in metadata');
+      }
     }
 
   } catch (error: unknown) {

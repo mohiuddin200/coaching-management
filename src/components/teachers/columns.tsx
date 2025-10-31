@@ -2,16 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ArrowUpDown, MoreHorizontal, Mail, Phone } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Mail } from "lucide-react"
+import { TeacherActions } from "./teacher-actions"
 
 export type Teacher = {
   id: string
@@ -26,20 +18,10 @@ export type Teacher = {
   userId: string | null
 }
 
-export const columns: ColumnDef<Teacher>[] = [
+export const createColumns = (onUpdate?: () => void, isAdmin?: boolean): ColumnDef<Teacher>[] => [
   {
     accessorKey: "firstName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: "Name",
     cell: ({ row }) => {
       const firstName = row.original.firstName
       const lastName = row.original.lastName
@@ -55,7 +37,6 @@ export const columns: ColumnDef<Teacher>[] = [
     header: "Contact",
     cell: ({ row }) => {
       const email = row.original.email
-      const phone = row.original.phoneNumber
       return (
         <div className="flex flex-col gap-1">
           {email && (
@@ -64,10 +45,6 @@ export const columns: ColumnDef<Teacher>[] = [
               <span>{email}</span>
             </div>
           )}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Phone className="h-3 w-3" />
-            <span>{phone}</span>
-          </div>
         </div>
       )
     },
@@ -122,17 +99,7 @@ export const columns: ColumnDef<Teacher>[] = [
   },
   {
     accessorKey: "joinDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Join Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: "Join Date",
     cell: ({ row }) => {
       const date = new Date(row.getValue("joinDate"))
       return <div>{date.toLocaleDateString()}</div>
@@ -140,30 +107,13 @@ export const columns: ColumnDef<Teacher>[] = [
   },
   {
     id: "actions",
+    header: () => <div className="text-right">Actions</div>,
     cell: ({ row }) => {
       const teacher = row.original
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(teacher.id)}>
-              Copy teacher ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View details</DropdownMenuItem>
-            <DropdownMenuItem>Edit teacher</DropdownMenuItem>
-            {!teacher.userId && (
-              <DropdownMenuItem>Send portal invite</DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+      return <TeacherActions teacher={teacher} onUpdate={onUpdate} isAdmin={isAdmin} />
     },
   },
 ]
+
+// Default export for backward compatibility
+export const columns = createColumns()
