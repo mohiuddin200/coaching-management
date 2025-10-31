@@ -45,6 +45,7 @@ const studentFormSchema = z.object({
   address: z.string().optional(),
   status: z.enum(["Active", "Inactive"]),
   smsEnabled: z.boolean(),
+  levelId: z.string().optional(),
 })
 
 type StudentFormValues = z.infer<typeof studentFormSchema>
@@ -55,10 +56,27 @@ interface StudentDialogProps {
   onSuccess?: () => void
 }
 
+interface Level {
+  id: string
+  name: string
+  levelNumber: number
+}
+
 export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProps) {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [levels, setLevels] = useState<Level[]>([])
   const isEditMode = !!student
+
+  // Fetch levels when dialog opens
+  useEffect(() => {
+    if (open) {
+      fetch('/api/levels')
+        .then(res => res.json())
+        .then(data => setLevels(data))
+        .catch(err => console.error('Error fetching levels:', err))
+    }
+  }, [open])
 
   const form = useForm<StudentFormValues>({
     resolver: zodResolver(studentFormSchema),
@@ -73,6 +91,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
       address: student?.address || "",
       status: student?.status || "Active",
       smsEnabled: student?.smsEnabled || false,
+      levelId: (student as Student & { levelId?: string })?.levelId || "",
     },
   })
 
@@ -90,6 +109,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
         address: student?.address || "",
         status: student?.status || "Active",
         smsEnabled: student?.smsEnabled || false,
+        levelId: (student as Student & { levelId?: string })?.levelId || "",
       })
     }
   }, [open, student, form])
@@ -295,6 +315,35 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
                   <FormControl>
                     <Input placeholder="123 Main St, City, State" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="levelId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Class Level</FormLabel>
+                  <Select 
+                    onValueChange={(value) => field.onChange(value === "none" ? "" : value)} 
+                    defaultValue={field.value || "none"}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select class level (optional)" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">No level assigned</SelectItem>
+                      {levels.map((level) => (
+                        <SelectItem key={level.id} value={level.id}>
+                          {level.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

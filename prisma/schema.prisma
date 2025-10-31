@@ -24,20 +24,21 @@ model User {
 
 // Teacher profiles (may or may not have portal access)
 model Teacher {
-  id             String      @id @default(uuid())
+  id             String         @id @default(uuid())
   firstName      String
   lastName       String
   email          String?
   phoneNumber    String
   subject        String?
   qualifications String?
-  joinDate       DateTime    @default(now())
-  status         Status      @default(Active)
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  userId         String?     @unique
-  user           User?       @relation("UserToTeacher", fields: [userId], references: [id], onDelete: SetNull)
-  classes        Class[]     @relation("TeacherToClass")
+  joinDate       DateTime       @default(now())
+  status         Status         @default(Active)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  userId         String?        @unique
+  user           User?          @relation("UserToTeacher", fields: [userId], references: [id], onDelete: SetNull)
+  classes        Class[]        @relation("TeacherToClass")
+  classSections  ClassSection[] @relation("TeacherToClassSection")
 
   @@map("teachers")
 }
@@ -56,14 +57,85 @@ model Student {
   enrollmentDate DateTime     @default(now())
   status         Status       @default(Active)
   smsEnabled     Boolean      @default(false)
+  levelId        String?      // Added: Student's class level
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  level          Level?       @relation(fields: [levelId], references: [id])
   attendances    Attendance[]
   enrollments    Enrollment[]
 
   @@map("students")
 }
 
+// Academic levels (Class 1-10)
+model Level {
+  id          String    @id @default(cuid())
+  name        String    @unique // "Class 1", "Class 2", etc.
+  levelNumber Int       @unique // 1-10
+  description String?
+  status      Status    @default(Active)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  subjects    Subject[]
+  students    Student[]
+
+  @@map("levels")
+}
+
+// Subjects for each level
+model Subject {
+  id            String         @id @default(cuid())
+  name          String         // "Mathematics", "English", etc.
+  code          String?        // "MATH", "ENG"
+  description   String?
+  levelId       String
+  level         Level          @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  status        Status         @default(Active)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  classSections ClassSection[]
+
+  @@unique([levelId, name])
+  @@map("subjects")
+}
+
+// Class sections (actual teaching groups)
+model ClassSection {
+  id           String       @id @default(cuid())
+  name         String       // "Section A", "Morning Batch"
+  subjectId    String
+  teacherId    String
+  capacity     Int          @default(30)
+  roomNumber   String?
+  academicYear String       // "2024-2025"
+  status       ClassStatus  @default(Scheduled)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  teacher      Teacher      @relation("TeacherToClassSection", fields: [teacherId], references: [id])
+  schedules    Schedule[]
+  enrollments  Enrollment[]
+  attendances  Attendance[]
+
+  @@map("class_sections")
+}
+
+// Schedule for class sections
+model Schedule {
+  id             String       @id @default(cuid())
+  classSectionId String
+  dayOfWeek      DayOfWeek
+  startTime      String       // "09:00"
+  endTime        String       // "10:30"
+  status         Status       @default(Active)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  classSection   ClassSection @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
+
+  @@map("schedules")
+}
+
+// Legacy - kept for backward compatibility, will be migrated to ClassSection
 model Class {
   id           String       @id @default(cuid())
   name         String
@@ -87,25 +159,29 @@ model Enrollment {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   studentId      String
-  classId        String
-  class          Class            @relation(fields: [classId], references: [id])
+  classId        String?          // Legacy field
+  classSectionId String?          // New field
+  class          Class?           @relation(fields: [classId], references: [id])
+  classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   student        Student          @relation(fields: [studentId], references: [id])
 
   @@map("enrollments")
 }
 
 model Attendance {
-  id        String           @id @default(cuid())
-  timestamp DateTime         @default(now())
-  entryType AttendanceType
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  studentId String
-  classId   String
-  deviceId  String?
-  class     Class            @relation(fields: [classId], references: [id])
-  device    BiometricDevice? @relation(fields: [deviceId], references: [id])
-  student   Student          @relation(fields: [studentId], references: [id])
+  id             String           @id @default(cuid())
+  timestamp      DateTime         @default(now())
+  entryType      AttendanceType
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  studentId      String
+  classId        String?          // Legacy field
+  classSectionId String?          // New field
+  deviceId       String?
+  class          Class?           @relation(fields: [classId], references: [id])
+  classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
+  device         BiometricDevice? @relation(fields: [deviceId], references: [id])
+  student        Student          @relation(fields: [studentId], references: [id])
 
   @@map("attendances")
 }
@@ -180,4 +256,14 @@ enum SmsStatus {
   Sent
   Failed
   Pending
+}
+
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
 }

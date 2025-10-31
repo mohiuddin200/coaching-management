@@ -4,6 +4,9 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     const students = await prisma.student.findMany({
+      include: {
+        level: true,
+      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -32,7 +35,8 @@ export async function POST(request: Request) {
       dateOfBirth, 
       address, 
       status, 
-      smsEnabled 
+      smsEnabled,
+      levelId 
     } = body;
 
     // Validate required fields
@@ -56,8 +60,34 @@ export async function POST(request: Request) {
         address: address || null,
         status: status || 'Active',
         smsEnabled: smsEnabled || false,
+        levelId: levelId || null,
+      },
+      include: {
+        level: true,
       },
     });
+
+    // If levelId is provided, auto-enroll student in all class sections of that level
+    if (levelId) {
+      const classSections = await prisma.classSection.findMany({
+        where: {
+          subject: {
+            levelId: levelId,
+          },
+          status: 'Scheduled',
+        },
+      });
+
+      if (classSections.length > 0) {
+        await prisma.enrollment.createMany({
+          data: classSections.map((section) => ({
+            studentId: student.id,
+            classSectionId: section.id,
+            status: 'Active',
+          })),
+        });
+      }
+    }
 
     return NextResponse.json({ student }, { status: 201 });
   } catch (error) {

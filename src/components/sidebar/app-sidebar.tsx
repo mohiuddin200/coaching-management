@@ -41,73 +41,26 @@ const data = {
       url: "/dashboard",
       icon: LayoutDashboard,
       isActive: true,
-      items: [
-        {
-          title: "Overview",
-          url: "/dashboard",
-        },
-        {
-          title: "Analytics",
-          url: "/dashboard/analytics",
-        },
-      ],
     },
     {
       title: "Students",
       url: "/students",
       icon: GraduationCap,
-      items: [
-        {
-          title: "All Students",
-          url: "/students",
-        },
-        {
-          title: "Add Student",
-          url: "/students/add",
-        },
-        {
-          title: "Enrollments",
-          url: "/students/enrollments",
-        },
-      ],
     },
     {
       title: "Teachers",
       url: "/teachers",
       icon: Users,
-      items: [
-        {
-          title: "All Teachers",
-          url: "/teachers",
-        },
-        {
-          title: "Add Teacher",
-          url: "/teachers/add",
-        },
-        {
-          title: "Assignments",
-          url: "/teachers/assignments",
-        },
-      ],
     },
     {
       title: "Classes",
       url: "/classes",
       icon: BookOpen,
-      items: [
-        {
-          title: "All Classes",
-          url: "/classes",
-        },
-        {
-          title: "Create Class",
-          url: "/classes/create",
-        },
-        {
-          title: "Schedule",
-          url: "/classes/schedule",
-        },
-      ],
+    },
+    {
+      title: "Levels & Subjects",
+      url: "/levels",
+      icon: School,
     },
     {
       title: "Attendance",
@@ -125,10 +78,6 @@ const data = {
         {
           title: "Reports",
           url: "/attendance/reports",
-        },
-        {
-          title: "Biometric Devices",
-          url: "/attendance/devices",
         },
       ],
     },
@@ -200,7 +149,7 @@ const data = {
         },
         {
           title: "Users & Roles",
-          url: "/settings/users",
+          url: "/admin/users",
         },
         {
           title: "SMS Configuration",
