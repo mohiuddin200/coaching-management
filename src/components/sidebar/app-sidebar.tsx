@@ -14,6 +14,7 @@ import {
   LifeBuoy,
   Send,
   School,
+  LogOut,
 } from "lucide-react"
 
 import {
@@ -27,14 +28,11 @@ import {
 } from "@/components/ui/sidebar"
 import { NavMain } from "./ nav-main"
 import { NavSecondary } from "./nav-secondary"
-import { NavUser } from "./nav-user"
+import { Button } from "@/components/ui/button"
+import { createClient } from "@/lib/supabase/client"
+import { useRouter } from "next/navigation"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -142,24 +140,6 @@ const data = {
       title: "Settings",
       url: "/settings",
       icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "/settings/general",
-        },
-        {
-          title: "Users & Roles",
-          url: "/admin/users",
-        },
-        {
-          title: "SMS Configuration",
-          url: "/settings/sms",
-        },
-        {
-          title: "Notifications",
-          url: "/settings/notifications",
-        },
-      ],
     },
   ],
   navSecondary: [
@@ -177,6 +157,14 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/signin')
+  }
+
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -204,7 +192,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={handleLogout} tooltip="Log out">
+              <LogOut />
+              <span>Log out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   )
