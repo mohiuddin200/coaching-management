@@ -3,13 +3,24 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
+  const token_hash = searchParams.get('token_hash');
   const token = searchParams.get('token');
   const type = searchParams.get('type');
   const redirect_to = searchParams.get('redirect_to');
   
-  console.log('Verification called with params:', { token, type, redirect_to });
+  console.log('Verification called with params:', { 
+    token_hash, 
+    token, 
+    type, 
+    redirect_to,
+    allParams: Object.fromEntries(searchParams.entries())
+  });
   
-  if (!token || !type) {
+  // Use token_hash if available, otherwise fall back to token
+  const actualToken = token_hash || token;
+  
+  if (!actualToken || !type) {
+    console.error('Missing required parameters:', { token: actualToken, type });
     return NextResponse.redirect(new URL('/signin?message=Invalid verification link', origin));
   }
 
@@ -17,88 +28,65 @@ export async function GET(request: Request) {
 
   try {
     if (type === 'invite') {
-      // For invite links, we need to verify using the token directly
-      // First try as token_hash (newer format)
-      const verificationResult = await supabase.auth.verifyOtp({
+      // For invite links, verify the token hash
+      console.log('Attempting invite verification with token:', actualToken.substring(0, 10) + '...');
+      
+      const { data, error } = await supabase.auth.verifyOtp({
         type: 'invite',
-        token_hash: token,
+        token_hash: actualToken,
       });
-
-      // If that fails, the token might be in the older format
-      if (verificationResult.error) {
-        console.log('Token hash verification failed, trying direct API call');
-        
-        // Try direct verification via Supabase API
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/verify`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-            },
-            body: JSON.stringify({
-              type: 'invite',
-              token: token,
-            }),
-          });
-
-          if (response.ok) {
-            const result = await response.json();
-            
-            // Set the session in our Supabase client
-            const { error: sessionError } = await supabase.auth.setSession({
-              access_token: result.access_token,
-              refresh_token: result.refresh_token,
-            });
-
-            if (!sessionError) {
-              console.log('Direct verification successful');
-              return NextResponse.redirect(new URL('/auth/onboarding', origin));
-            } else {
-              console.error('Session setting error:', sessionError);
-            }
-          } else {
-            console.error('Direct verification failed:', await response.text());
-          }
-        } catch (directError) {
-          console.error('Direct verification error:', directError);
-        }
-      } else {
-        // Token hash verification succeeded
-        console.log('Token hash verification successful');
-        const { data } = verificationResult;
-
-        if (data.user) {
-          const isOnboarded = data.user.user_metadata.onboarded;
-          
-          if (!isOnboarded) {
-            return NextResponse.redirect(new URL('/auth/onboarding', origin));
-          } else {
-            return NextResponse.redirect(new URL('/dashboard', origin));
-          }
-        }
-      }
-    } else {
-      // Handle other verification types
-      const verificationResult = await supabase.auth.verifyOtp({
-        type: type as 'email' | 'recovery' | 'email_change',
-        token_hash: token,
-      });
-
-      const { data, error } = verificationResult;
 
       if (error) {
-        console.error('Verification error:', error);
-        return NextResponse.redirect(new URL(`/signin?message=${encodeURIComponent('Verification failed')}`, origin));
+        console.error('Invite verification error:', error);
+        return NextResponse.redirect(
+          new URL(`/signin?message=${encodeURIComponent('Invalid or expired invitation link. Please request a new invitation.')}`, origin)
+        );
       }
 
       if (data.user) {
-        return NextResponse.redirect(new URL('/dashboard', origin));
+        console.log('Invite verification successful for user:', data.user.id);
+        console.log('User metadata:', data.user.user_metadata);
+        
+        // Check if user has completed onboarding
+        const isOnboarded = data.user.user_metadata?.onboarded;
+        
+        // Create response with proper redirect
+        const redirectUrl = isOnboarded ? '/dashboard' : '/auth/onboarding';
+        console.log('Redirecting to:', redirectUrl);
+        
+        const response = NextResponse.redirect(new URL(redirectUrl, origin));
+        
+        return response;
+      }
+      
+      console.error('No user data returned from verification');
+      return NextResponse.redirect(
+        new URL(`/signin?message=${encodeURIComponent('Verification failed - no user data')}`, origin)
+      );
+    } else {
+      // Handle other verification types (email, recovery, etc.)
+      const { data, error } = await supabase.auth.verifyOtp({
+        type: type as 'email' | 'recovery' | 'email_change',
+        token_hash: actualToken,
+      });
+
+      if (error) {
+        console.error('Verification error:', error);
+        return NextResponse.redirect(
+          new URL(`/signin?message=${encodeURIComponent('Verification failed')}`, origin)
+        );
+      }
+
+      if (data.user) {
+        const response = NextResponse.redirect(new URL(redirect_to || '/dashboard', origin));
+        return response;
       }
     }
 
     // If we get here, something went wrong
-    return NextResponse.redirect(new URL(`/signin?message=${encodeURIComponent('Email link is invalid or has expired')}`, origin));
+    return NextResponse.redirect(
+      new URL(`/signin?message=${encodeURIComponent('Email link is invalid or has expired')}`, origin)
+    );
 
   } catch (error) {
     console.error('Unexpected verification error:', error);

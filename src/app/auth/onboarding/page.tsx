@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { completeOnboarding } from "./actions";
@@ -18,6 +18,35 @@ export default function OnboardingPage() {
   // Error/Loading state
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  // Check if user is authenticated
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        
+        if (error || !user) {
+          console.error('No authenticated user found:', error);
+          router.push('/signin?message=Please use your invitation link to access this page');
+          return;
+        }
+        
+        // Check if already onboarded
+        if (user.user_metadata?.onboarded) {
+          router.push('/dashboard');
+          return;
+        }
+        
+        setChecking(false);
+      } catch (err) {
+        console.error('Auth check error:', err);
+        router.push('/signin?message=Authentication error');
+      }
+    };
+
+    checkAuth();
+  }, [supabase, router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -67,6 +96,17 @@ export default function OnboardingPage() {
       setLoading(false);
     }
   };
+
+  if (checking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Verifying your invitation...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">

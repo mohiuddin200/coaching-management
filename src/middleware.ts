@@ -13,8 +13,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow access to auth callback, verification, and onboarding pages
-  if (pathname.startsWith('/api/auth/callback') || 
-      pathname.startsWith('/api/auth/verify') || 
+  if (pathname.startsWith('/api/auth') || 
       pathname.startsWith('/auth/onboarding')) {
     return response;
   }

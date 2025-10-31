@@ -26,13 +26,17 @@ export async function POST(request: Request) {
   }
 
   try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    
+    console.log('Inviting user with redirect to:', `${baseUrl}/api/auth/callback`);
+    
     // Use Supabase's built-in invite user functionality
-    const { error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+    const { data, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
       data: {
         role: role,
         onboarded: false, // Mark as not onboarded
       },
-      redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/onboarding`
+      redirectTo: `${baseUrl}/api/auth/callback`
     });
 
     if (inviteError) {
@@ -40,8 +44,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: inviteError.message }, { status: 500 });
     }
 
+    console.log('User invited successfully:', {
+      userId: data?.user?.id,
+      email: data?.user?.email,
+      metadata: data?.user?.user_metadata
+    });
+
     return NextResponse.json({
-      message: `Invitation sent to ${email} with role ${role}. Check your email for the invitation link.`
+      message: `Invitation sent to ${email} with role ${role}. Check your email for the invitation link.`,
+      userId: data?.user?.id
     });
   } catch (e) {
     console.error("Unexpected error inviting user:", e);

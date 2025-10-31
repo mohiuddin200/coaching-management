@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider   = "prisma-client-js"
   output     = "../src/generated/prisma"
@@ -13,46 +10,6 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// --------------------------------------
-// Enums
-// --------------------------------------
-
-enum Role {
-  Admin
-  Teacher
-  Student
-  Staff
-}
-
-enum ClassStatus {
-  Scheduled
-  InProgress
-  Completed
-  Cancelled
-}
-
-enum EnrollmentStatus {
-  Active
-  Withdrawn
-  Completed
-}
-
-enum AttendanceType {
-  Entry
-  Exit
-}
-
-enum SmsStatus {
-  Sent
-  Failed
-  Pending
-}
-
-// --------------------------------------
-// Models
-// --------------------------------------
-
-// Corresponds to the `auth.users` table in Supabase.
 model User {
   id              String       @id @default(uuid())
   email           String       @unique
@@ -64,9 +21,9 @@ model User {
   smsEnabled      Boolean      @default(false)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
-  enrollments     Enrollment[]
   attendances     Attendance[]
   assignedClasses Class[]      @relation("TeacherToClass")
+  enrollments     Enrollment[]
 
   @@map("users")
 }
@@ -79,10 +36,10 @@ model Class {
   status       ClassStatus  @default(Scheduled)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  teacher      User         @relation("TeacherToClass", fields: [teacherId], references: [id])
   teacherId    String
-  enrollments  Enrollment[]
   attendances  Attendance[]
+  teacher      User         @relation("TeacherToClass", fields: [teacherId], references: [id])
+  enrollments  Enrollment[]
 }
 
 model Enrollment {
@@ -91,10 +48,10 @@ model Enrollment {
   status         EnrollmentStatus @default(Active)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
-  student        User             @relation(fields: [studentId], references: [id])
   studentId      String
-  class          Class            @relation(fields: [classId], references: [id])
   classId        String
+  class          Class            @relation(fields: [classId], references: [id])
+  student        User             @relation(fields: [studentId], references: [id])
 }
 
 model Attendance {
@@ -103,12 +60,12 @@ model Attendance {
   entryType AttendanceType
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
-  student   User             @relation(fields: [studentId], references: [id])
   studentId String
-  class     Class            @relation(fields: [classId], references: [id])
   classId   String
-  device    BiometricDevice? @relation(fields: [deviceId], references: [id])
   deviceId  String?
+  class     Class            @relation(fields: [classId], references: [id])
+  device    BiometricDevice? @relation(fields: [deviceId], references: [id])
+  student   User             @relation(fields: [studentId], references: [id])
 }
 
 model BiometricDevice {
@@ -140,4 +97,35 @@ model MarketingContact {
   lastContacted DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+}
+
+enum Role {
+  Admin
+  Teacher
+  Student
+  Staff
+}
+
+enum ClassStatus {
+  Scheduled
+  InProgress
+  Completed
+  Cancelled
+}
+
+enum EnrollmentStatus {
+  Active
+  Withdrawn
+  Completed
+}
+
+enum AttendanceType {
+  Entry
+  Exit
+}
+
+enum SmsStatus {
+  Sent
+  Failed
+  Pending
 }
