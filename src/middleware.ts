@@ -21,6 +21,11 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
+  // Allow access to forgot password and reset password pages (public)
+  if (pathname === '/auth/forgot-password' || pathname === '/auth/reset-password') {
+    return response;
+  }
+
   // Allow access to auth callback and verification endpoints (needed for auth flow)
   if (pathname.startsWith('/api/auth/callback') || 
       pathname.startsWith('/api/auth/verify')) {

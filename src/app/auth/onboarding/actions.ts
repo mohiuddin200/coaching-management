@@ -57,21 +57,21 @@ export async function completeOnboarding(formData: FormData) {
     }
 
     // --- STEP 3: Update your Prisma User table (minimal sync) ---
-    // Check if user already exists first
-    const existingUser = await prisma.user.findUnique({
-      where: { id: user.id }
+    // Use upsert with email to avoid race conditions or duplicate user creation
+    // This handles cases where user might already exist with same email
+    await prisma.user.upsert({
+      where: { email: user.email! },
+      update: {
+        // Ensure ID and role are correct
+        id: user.id,
+        role: user.user_metadata.role || 'Teacher',
+      },
+      create: {
+        id: user.id,
+        email: user.email!,
+        role: user.user_metadata.role || 'Teacher',
+      }
     });
-
-    if (!existingUser) {
-      // Create new user record
-      await prisma.user.create({
-        data: {
-          id: user.id,
-          email: user.email!,
-          role: user.user_metadata.role || 'Teacher',
-        }
-      });
-    }
 
     // --- STEP 4: Link Teacher profile if role is Teacher ---
     if (user.user_metadata.role === 'Teacher') {

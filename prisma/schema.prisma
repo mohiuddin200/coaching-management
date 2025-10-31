@@ -223,6 +223,22 @@ model MarketingContact {
   @@map("marketing_contacts")
 }
 
+model Feedback {
+  id          String       @id @default(cuid())
+  userId      String?
+  userName    String?
+  email       String?
+  type        FeedbackType @default(General)
+  subject     String
+  message     String
+  status      FeedbackStatus @default(Open)
+  priority    Priority     @default(Medium)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("feedbacks")
+}
+
 enum UserRole {
   Admin
   Teacher
@@ -266,4 +282,27 @@ enum DayOfWeek {
   Friday
   Saturday
   Sunday
+}
+
+enum FeedbackType {
+  General
+  BugReport
+  FeatureRequest
+  Support
+  Complaint
+  Suggestion
+}
+
+enum FeedbackStatus {
+  Open
+  InProgress
+  Resolved
+  Closed
+}
+
+enum Priority {
+  Low
+  Medium
+  High
+  Urgent
 }

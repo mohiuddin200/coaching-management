@@ -12,7 +12,6 @@ import {
   UserCheck,
   GraduationCap,
   LifeBuoy,
-  Send,
   School,
   LogOut,
 } from "lucide-react"
@@ -64,78 +63,64 @@ const data = {
       title: "Attendance",
       url: "/attendance",
       icon: UserCheck,
-      items: [
-        {
-          title: "Mark Attendance",
-          url: "/attendance/mark",
-        },
-        {
-          title: "View Records",
-          url: "/attendance/records",
-        },
-        {
-          title: "Reports",
-          url: "/attendance/reports",
-        },
-      ],
     },
-    {
-      title: "Accounts",
-      url: "/accounts",
-      icon: CreditCard,
-      items: [
-        {
-          title: "Payments",
-          url: "/accounts/payments",
-        },
-        {
-          title: "Expenses",
-          url: "/accounts/expenses",
-        },
-        {
-          title: "Reports",
-          url: "/accounts/reports",
-        },
-      ],
-    },
-    {
-      title: "Exams",
-      url: "/exams",
-      icon: FileText,
-      items: [
-        {
-          title: "All Exams",
-          url: "/exams",
-        },
-        {
-          title: "Create Exam",
-          url: "/exams/create",
-        },
-        {
-          title: "Results",
-          url: "/exams/results",
-        },
-      ],
-    },
-    {
-      title: "Marketing",
-      url: "/marketing",
-      icon: Megaphone,
-      items: [
-        {
-          title: "Contacts",
-          url: "/marketing/contacts",
-        },
-        {
-          title: "Campaigns",
-          url: "/marketing/campaigns",
-        },
-        {
-          title: "SMS Logs",
-          url: "/marketing/sms-logs",
-        },
-      ],
-    },
+    // {
+    //   title: "Accounts",
+    //   url: "/accounts",
+    //   icon: CreditCard,
+    //   items: [
+    //     {
+    //       title: "Payments",
+    //       url: "/accounts/payments",
+    //     },
+    //     {
+    //       title: "Expenses",
+    //       url: "/accounts/expenses",
+    //     },
+    //     {
+    //       title: "Reports",
+    //       url: "/accounts/reports",
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Exams",
+    //   url: "/exams",
+    //   icon: FileText,
+    //   items: [
+    //     {
+    //       title: "All Exams",
+    //       url: "/exams",
+    //     },
+    //     {
+    //       title: "Create Exam",
+    //       url: "/exams/create",
+    //     },
+    //     {
+    //       title: "Results",
+    //       url: "/exams/results",
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Marketing",
+    //   url: "/marketing",
+    //   icon: Megaphone,
+    //   items: [
+    //     {
+    //       title: "Contacts",
+    //       url: "/marketing/contacts",
+    //     },
+    //     {
+    //       title: "Campaigns",
+    //       url: "/marketing/campaigns",
+    //     },
+    //     {
+    //       title: "SMS Logs",
+    //       url: "/marketing/sms-logs",
+    //     },
+    //   ],
+    // },
     {
       title: "Settings",
       url: "/settings",
@@ -144,14 +129,9 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Support",
+      title: "Support & Feedback",
       url: "/support",
       icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "/feedback",
-      icon: Send,
     },
   ],
 }

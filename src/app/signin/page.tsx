@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { School, Loader2, Mail, Lock, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -109,16 +110,12 @@ export default function SignIn() {
                   <Label htmlFor="password" className="text-sm font-medium">
                     Password
                   </Label>
-                  <button
-                    type="button"
+                  <Link
+                    href="/auth/forgot-password"
                     className="text-xs text-primary hover:underline"
-                    onClick={() => {
-                      // TODO: Implement forgot password
-                      console.log("Forgot password clicked");
-                    }}
                   >
                     Forgot password?
-                  </button>
+                  </Link>
                 </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
