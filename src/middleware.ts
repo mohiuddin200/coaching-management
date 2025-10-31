@@ -12,32 +12,42 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // Allow access to auth callback, verification, and onboarding pages
-  if (pathname.startsWith('/api/auth') || 
-      pathname.startsWith('/auth/onboarding')) {
+  // Allow access to signin page (public)
+  if (pathname === '/signin') {
+    // If user is already authenticated, redirect to dashboard
+    if (user) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
     return response;
   }
 
-  // Protect admin routes
-  if (pathname.startsWith('/admin')) {
-    if (user) {
-      const userRole = user.user_metadata.role;
-      if (userRole !== 'Admin') {
-        return NextResponse.redirect(new URL('/', request.url));
-      }
-    } else {
-      return NextResponse.redirect(new URL('/signin', request.url));
-    }
+  // Allow access to auth callback and verification endpoints (needed for auth flow)
+  if (pathname.startsWith('/api/auth/callback') || 
+      pathname.startsWith('/api/auth/verify')) {
+    return response;
+  }
+
+  // All other routes require authentication
+  if (!user) {
+    return NextResponse.redirect(new URL('/signin', request.url));
   }
 
   // Check if user needs to complete onboarding
-  if (user && !user.user_metadata.onboarded && !pathname.startsWith('/auth/onboarding')) {
+  if (!user.user_metadata.onboarded && !pathname.startsWith('/auth/onboarding')) {
     return NextResponse.redirect(new URL('/auth/onboarding', request.url));
   }
 
-  // Redirect unauthenticated users trying to access protected routes
-  if (!user && (pathname.startsWith('/dashboard') || pathname.startsWith('/admin'))) {
-    return NextResponse.redirect(new URL('/signin', request.url));
+  // Allow access to onboarding page for unonboarded users
+  if (pathname.startsWith('/auth/onboarding')) {
+    return response;
+  }
+
+  // Protect admin routes - require Admin role
+  if (pathname.startsWith('/admin')) {
+    const userRole = user.user_metadata.role;
+    if (userRole !== 'Admin') {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
   }
 
   return response;
@@ -50,10 +60,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - api/auth (auth callback routes)
-     * - signin (signin page)
-     * - public assets
+     * - public assets (images, fonts, etc.)
      */
-    '/((?!_next/static|_next/image|favicon.ico|api/auth|signin|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)).*)',
   ],
 };

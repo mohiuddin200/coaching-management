@@ -3,15 +3,17 @@
 import * as React from "react"
 import {
   BookOpen,
-  Bot,
-  Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
+  CreditCard,
+  FileText,
+  LayoutDashboard,
+  Megaphone,
   Settings2,
-  SquareTerminal,
+  Users,
+  UserCheck,
+  GraduationCap,
+  LifeBuoy,
+  Send,
+  School,
 } from "lucide-react"
 
 import {
@@ -24,7 +26,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { NavMain } from "./ nav-main"
-import { NavProjects } from "./nav-project"
 import { NavSecondary } from "./nav-secondary"
 import { NavUser } from "./nav-user"
 
@@ -36,87 +37,178 @@ const data = {
   },
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Overview",
+          url: "/dashboard",
         },
         {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Analytics",
+          url: "/dashboard/analytics",
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
+      title: "Students",
+      url: "/students",
+      icon: GraduationCap,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "All Students",
+          url: "/students",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Add Student",
+          url: "/students/add",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Enrollments",
+          url: "/students/enrollments",
         },
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
+      title: "Teachers",
+      url: "/teachers",
+      icon: Users,
+      items: [
+        {
+          title: "All Teachers",
+          url: "/teachers",
+        },
+        {
+          title: "Add Teacher",
+          url: "/teachers/add",
+        },
+        {
+          title: "Assignments",
+          url: "/teachers/assignments",
+        },
+      ],
+    },
+    {
+      title: "Classes",
+      url: "/classes",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "All Classes",
+          url: "/classes",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Create Class",
+          url: "/classes/create",
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Schedule",
+          url: "/classes/schedule",
+        },
+      ],
+    },
+    {
+      title: "Attendance",
+      url: "/attendance",
+      icon: UserCheck,
+      items: [
+        {
+          title: "Mark Attendance",
+          url: "/attendance/mark",
         },
         {
-          title: "Changelog",
-          url: "#",
+          title: "View Records",
+          url: "/attendance/records",
+        },
+        {
+          title: "Reports",
+          url: "/attendance/reports",
+        },
+        {
+          title: "Biometric Devices",
+          url: "/attendance/devices",
+        },
+      ],
+    },
+    {
+      title: "Accounts",
+      url: "/accounts",
+      icon: CreditCard,
+      items: [
+        {
+          title: "Payments",
+          url: "/accounts/payments",
+        },
+        {
+          title: "Expenses",
+          url: "/accounts/expenses",
+        },
+        {
+          title: "Reports",
+          url: "/accounts/reports",
+        },
+      ],
+    },
+    {
+      title: "Exams",
+      url: "/exams",
+      icon: FileText,
+      items: [
+        {
+          title: "All Exams",
+          url: "/exams",
+        },
+        {
+          title: "Create Exam",
+          url: "/exams/create",
+        },
+        {
+          title: "Results",
+          url: "/exams/results",
+        },
+      ],
+    },
+    {
+      title: "Marketing",
+      url: "/marketing",
+      icon: Megaphone,
+      items: [
+        {
+          title: "Contacts",
+          url: "/marketing/contacts",
+        },
+        {
+          title: "Campaigns",
+          url: "/marketing/campaigns",
+        },
+        {
+          title: "SMS Logs",
+          url: "/marketing/sms-logs",
         },
       ],
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings2,
       items: [
         {
           title: "General",
-          url: "#",
+          url: "/settings/general",
         },
         {
-          title: "Team",
-          url: "#",
+          title: "Users & Roles",
+          url: "/settings/users",
         },
         {
-          title: "Billing",
-          url: "#",
+          title: "SMS Configuration",
+          url: "/settings/sms",
         },
         {
-          title: "Limits",
-          url: "#",
+          title: "Notifications",
+          url: "/settings/notifications",
         },
       ],
     },
@@ -124,30 +216,13 @@ const data = {
   navSecondary: [
     {
       title: "Support",
-      url: "#",
+      url: "/support",
       icon: LifeBuoy,
     },
     {
       title: "Feedback",
-      url: "#",
+      url: "/feedback",
       icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
     },
   ],
 }
@@ -162,13 +237,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <a href="/dashboard">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Command className="size-4" />
+                  <School className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <span className="truncate font-medium">Coaching Management</span>
+                  <span className="truncate text-xs">Institute Portal</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -177,7 +252,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

@@ -14,22 +14,31 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="rounded-lg bg-white p-8 shadow-md max-w-md w-full">
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
-            <p className="text-lg text-gray-600">Welcome, {user.user_metadata.first_name || user.email}!</p>
-          </div>
-          <SignOutButton />
+    <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">Welcome, {user.user_metadata.first_name || user.email}!</p>
         </div>
-        
-        <div className="bg-gray-50 p-4 rounded-md">
-          <h2 className="font-semibold mb-2">Your Profile</h2>
-          <div className="text-sm text-gray-600 space-y-1">
-            <p><span className="font-medium">Email:</span> {user.email}</p>
-            <p><span className="font-medium">Role:</span> {user.user_metadata.role || 'Student'}</p>
-            <p><span className="font-medium">Name:</span> {user.user_metadata.first_name} {user.user_metadata.last_name}</p>
+        <SignOutButton />
+      </div>
+      
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <h2 className="font-semibold mb-4 text-lg">Your Profile</h2>
+          <div className="text-sm space-y-2">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Email:</span>
+              <span className="font-medium">{user.email}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Role:</span>
+              <span className="font-medium">{user.user_metadata.role || 'Student'}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Name:</span>
+              <span className="font-medium">{user.user_metadata.first_name} {user.user_metadata.last_name}</span>
+            </div>
           </div>
         </div>
       </div>

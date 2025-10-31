@@ -64,21 +64,37 @@ export async function completeOnboarding(formData: FormData) {
       throw new Error(`Failed to update user metadata: ${adminError.message}`);
     }
 
-    // --- STEP 3: Update your Prisma User table ---
+    // --- STEP 3: Update your Prisma User table (minimal sync) ---
     await prisma.user.upsert({
       where: { id: user.id },
       update: {
-        firstName: firstName,
-        lastName: lastName,
+        email: user.email!,
       },
       create: {
         id: user.id,
         email: user.email!,
-        firstName: firstName,
-        lastName: lastName,
-        role: user.user_metadata.role || 'Student',
+        role: user.user_metadata.role || 'Teacher',
       }
     });
+
+    // --- STEP 4: Create or update Teacher profile if role is Teacher ---
+    if (user.user_metadata.role === 'Teacher') {
+      await prisma.teacher.upsert({
+        where: { userId: user.id },
+        update: {
+          firstName: firstName,
+          lastName: lastName,
+          email: user.email!,
+        },
+        create: {
+          firstName: firstName,
+          lastName: lastName,
+          email: user.email!,
+          phoneNumber: '', // Will be updated later in profile settings
+          userId: user.id,
+        }
+      });
+    }
 
   } catch (error: unknown) {
     console.error("Onboarding Error:", error);

@@ -10,22 +10,58 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// System users who can log in to the portal
 model User {
-  id              String       @id @default(uuid())
-  email           String       @unique
-  role            Role         @default(Student)
-  firstName       String?
-  lastName        String?
-  phoneNumber     String?
-  parentPhone     String?
-  smsEnabled      Boolean      @default(false)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  attendances     Attendance[]
-  assignedClasses Class[]      @relation("TeacherToClass")
-  enrollments     Enrollment[]
+  id              String    @id @default(uuid())
+  email           String    @unique
+  role            UserRole  @default(Teacher)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  teacherProfile  Teacher?  @relation("UserToTeacher")
 
   @@map("users")
+}
+
+// Teacher profiles (may or may not have portal access)
+model Teacher {
+  id             String      @id @default(uuid())
+  firstName      String
+  lastName       String
+  email          String?
+  phoneNumber    String
+  subject        String?
+  qualifications String?
+  joinDate       DateTime    @default(now())
+  status         Status      @default(Active)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  userId         String?     @unique
+  user           User?       @relation("UserToTeacher", fields: [userId], references: [id], onDelete: SetNull)
+  classes        Class[]     @relation("TeacherToClass")
+
+  @@map("teachers")
+}
+
+// Student profiles (no portal access)
+model Student {
+  id             String       @id @default(uuid())
+  firstName      String
+  lastName       String
+  email          String?
+  phoneNumber    String?
+  parentName     String
+  parentPhone    String
+  dateOfBirth    DateTime?
+  address        String?
+  enrollmentDate DateTime     @default(now())
+  status         Status       @default(Active)
+  smsEnabled     Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  attendances    Attendance[]
+  enrollments    Enrollment[]
+
+  @@map("students")
 }
 
 model Class {
@@ -38,8 +74,10 @@ model Class {
   updatedAt    DateTime     @updatedAt
   teacherId    String
   attendances  Attendance[]
-  teacher      User         @relation("TeacherToClass", fields: [teacherId], references: [id])
+  teacher      Teacher      @relation("TeacherToClass", fields: [teacherId], references: [id])
   enrollments  Enrollment[]
+
+  @@map("classes")
 }
 
 model Enrollment {
@@ -51,7 +89,9 @@ model Enrollment {
   studentId      String
   classId        String
   class          Class            @relation(fields: [classId], references: [id])
-  student        User             @relation(fields: [studentId], references: [id])
+  student        Student          @relation(fields: [studentId], references: [id])
+
+  @@map("enrollments")
 }
 
 model Attendance {
@@ -65,7 +105,9 @@ model Attendance {
   deviceId  String?
   class     Class            @relation(fields: [classId], references: [id])
   device    BiometricDevice? @relation(fields: [deviceId], references: [id])
-  student   User             @relation(fields: [studentId], references: [id])
+  student   Student          @relation(fields: [studentId], references: [id])
+
+  @@map("attendances")
 }
 
 model BiometricDevice {
@@ -77,6 +119,8 @@ model BiometricDevice {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   attendances Attendance[]
+
+  @@map("biometric_devices")
 }
 
 model SmsLog {
@@ -87,6 +131,8 @@ model SmsLog {
   cost           Float?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+
+  @@map("sms_logs")
 }
 
 model MarketingContact {
@@ -97,13 +143,19 @@ model MarketingContact {
   lastContacted DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  @@map("marketing_contacts")
 }
 
-enum Role {
+enum UserRole {
   Admin
   Teacher
-  Student
   Staff
+}
+
+enum Status {
+  Active
+  Inactive
 }
 
 enum ClassStatus {

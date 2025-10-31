@@ -60,15 +60,64 @@ This document provides essential context for AI models interacting with the Coac
   - /components: Shared UI components based on shadcn/ui.
   - /prisma: Database schema and migrations.
 
-- **Database Schema** (Preliminary):
+### 3.1 Access Control & Entity Separation Architecture
 
-  - **Users**: id, email, role (Admin, Teacher, Student, Staff), first_name, last_name, phone_number, parent_phone, sms_enabled, timestamps
-  - **Classes**: id, name, schedule_time, teacher_id, capacity, status, timestamps
-  - **Enrollments**: id, user_id, class_id, enrollment_date, status, timestamps
-  - **Attendance**: id, user_id, class_id, timestamp, entry_type (Entry/Exit), device_id, timestamps
-  - **BiometricDevices**: id, name, api_endpoint, api_key, status, timestamps
-  - **SmsLogs**: id, recipient_phone, message_content, status, cost, timestamps
-  - **MarketingContacts**: id, parent_name, phone_number, query_details, last_contacted, timestamps
+**Key Principle**: Separate system access (authentication) from entity profiles (data management).
+
+#### Portal Access Model
+
+- **User Table**: Only for individuals who need to **log in** to the system (Admin, Teacher, Staff)
+- **Teacher Table**: All teacher profiles, regardless of portal access
+- **Student Table**: All student profiles (no portal access)
+
+#### Access Workflow
+
+1. **Invitation-Based Access**:
+   - Admin sends invitation email to Teacher/Staff
+   - Recipient creates User account with login credentials
+   - User account optionally links to Teacher profile via `userId`
+
+2. **Profile Management Without Access**:
+   - Admin/Teacher can create Teacher profiles without sending invitations
+   - Admin/Teacher can create Student profiles (students never receive invitations)
+   - Profiles exist for operational purposes (class assignment, attendance, records)
+
+3. **Granting Access Later**:
+   - Admin can send invitation to existing Teacher profile
+   - Creates User account and links via `userId` foreign key
+   - Teacher can now log in and manage their classes
+
+#### Permission Matrix
+
+| Action | Admin | Teacher (portal access) | Teacher (no access) | Student |
+|--------|-------|------------------------|---------------------|---------|
+| Login to portal | ✅ | ✅ | ❌ | ❌ |
+| Create Teacher profiles | ✅ | ✅ | ❌ | ❌ |
+| Create Student profiles | ✅ | ✅ | ❌ | ❌ |
+| Send invitations | ✅ | ❌ | ❌ | ❌ |
+| Mark attendance | ✅ | ✅ (own classes) | ❌ | ❌ |
+| View reports | ✅ | ✅ (own classes) | ❌ | ❌ |
+
+#### Benefits of This Approach
+
+- **Clean Separation**: Authentication concerns separate from business entities
+- **Scalability**: Student table won't bloat the authentication system
+- **Flexibility**: Easy to grant/revoke access without affecting profiles
+- **Future-Proof**: Can add student portal later by adding `Student.userId` relation
+- **Performance**: Authentication queries only scan User table (faster)
+- **Security**: Reduces attack surface by limiting authentication records
+
+- **Database Schema**:
+
+  - **User** (System Access Only): id, email, role (Admin, Teacher, Staff), created_at, updated_at
+  - **Teacher** (Profile): id, first_name, last_name, email, phone_number, subject, qualifications, join_date, status, user_id (nullable), timestamps
+  - **Student** (Profile): id, first_name, last_name, email, phone_number, parent_name, parent_phone, date_of_birth, address, enrollment_date, status, sms_enabled, timestamps
+  - **Class**: id, name, schedule_time, teacher_id (→Teacher), capacity, status, timestamps
+  - **Enrollment**: id, student_id (→Student), class_id, enrollment_date, status, timestamps
+  - **Attendance**: id, student_id (→Student), class_id, timestamp, entry_type (Entry/Exit), device_id, timestamps
+  - **BiometricDevice**: id, name, api_endpoint, api_key, status, timestamps
+  - **SmsLog**: id, recipient_phone, message_content, status, cost, timestamps
+  - **MarketingContact**: id, parent_name, phone_number, query_details, last_contacted, timestamps
 
 ## 4\. Coding Conventions & Style Guide
 
