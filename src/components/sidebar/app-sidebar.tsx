@@ -3,10 +3,7 @@
 import * as React from "react"
 import {
   BookOpen,
-  CreditCard,
-  FileText,
   LayoutDashboard,
-  Megaphone,
   Settings2,
   Users,
   UserCheck,
@@ -27,7 +24,6 @@ import {
 } from "@/components/ui/sidebar"
 import { NavMain } from "./ nav-main"
 import { NavSecondary } from "./nav-secondary"
-import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
