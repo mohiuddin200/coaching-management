@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { X } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import { Button } from "./ui/button";
 
 interface ConfirmationDialogProps {
   title: string;
@@ -36,6 +38,15 @@ export function ConfirmationDialog({
   isOpen,
   onOpenChange,
 }: ConfirmationDialogProps): React.ReactElement {
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+    }
+    if (onOpenChange) {
+      onOpenChange(false);
+    }
+  };
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       {children && <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>}
@@ -45,11 +56,9 @@ export function ConfirmationDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          {onCancel && (
-            <AlertDialogCancel onClick={onCancel}>
-              {cancelText}
-            </AlertDialogCancel>
-          )}
+          <AlertDialogCancel onClick={handleCancel}>
+            {cancelText}
+          </AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm}>
             {confirmText}
           </AlertDialogAction>

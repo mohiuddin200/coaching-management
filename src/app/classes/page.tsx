@@ -27,9 +27,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Plus, Clock, Users, BookOpen } from "lucide-react";
+import { Plus, Clock, Users, BookOpen, MoreHorizontal, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ConfirmationDialog } from "@/components/confirmation-dialog";
 
 interface Level {
   id: string;
@@ -219,6 +226,25 @@ export default function ClassSectionsPage() {
     } catch (error) {
       console.error("Error creating class section:", error);
       toast.error("Failed to create class section");
+    }
+  };
+
+  const handleDeleteClassSection = async (sectionId: string) => {
+    try {
+      const response = await fetch(`/api/class-sections/${sectionId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        toast.success("Class section deleted successfully");
+        fetchClassSections();
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || "Failed to delete class section");
+      }
+    } catch (error) {
+      console.error("Error deleting class section:", error);
+      toast.error("Failed to delete class section");
     }
   };
 
@@ -508,7 +534,29 @@ export default function ClassSectionsPage() {
                             <h3 className="font-semibold text-lg">
                               {section.name}
                             </h3>
-                            <Badge variant="outline">{section.status}</Badge>
+                            <div className="flex items-center">
+                              <Badge variant="outline" className="mr-2">{section.status}</Badge>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <ConfirmationDialog
+                                    title="Delete Class Section"
+                                    description="Are you sure you want to delete this class section? This action cannot be undone."
+                                    onConfirm={() => handleDeleteClassSection(section.id)}
+                                    confirmText="Delete"
+                                  >
+                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-600 focus:text-red-600">
+                                      <Trash2 className="mr-2 h-4 w-4" />
+                                      Delete
+                                    </DropdownMenuItem>
+                                  </ConfirmationDialog>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
                           </div>
                           <p className="text-sm text-muted-foreground flex items-center gap-1">
                             <BookOpen className="h-3 w-3" />
