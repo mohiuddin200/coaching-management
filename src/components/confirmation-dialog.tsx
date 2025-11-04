@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import { X } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +12,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
-import { Button } from "./ui/button";
 
 interface ConfirmationDialogProps {
   title: string;
