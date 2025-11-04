@@ -10,19 +10,17 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// System users who can log in to the portal
 model User {
-  id              String    @id @default(uuid())
-  email           String    @unique
-  role            UserRole  @default(Teacher)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  teacherProfile  Teacher?  @relation("UserToTeacher")
+  id             String   @id @default(uuid())
+  email          String   @unique
+  role           UserRole @default(Teacher)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  teacherProfile Teacher? @relation("UserToTeacher")
 
   @@map("users")
 }
 
-// Teacher profiles (may or may not have portal access)
 model Teacher {
   id             String         @id @default(uuid())
   firstName      String
@@ -36,14 +34,13 @@ model Teacher {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   userId         String?        @unique
-  user           User?          @relation("UserToTeacher", fields: [userId], references: [id], onDelete: SetNull)
-  classes        Class[]        @relation("TeacherToClass")
   classSections  ClassSection[] @relation("TeacherToClassSection")
+  classes        Class[]        @relation("TeacherToClass")
+  user           User?          @relation("UserToTeacher", fields: [userId], references: [id])
 
   @@map("teachers")
 }
 
-// Student profiles (no portal access)
 model Student {
   id             String       @id @default(uuid())
   firstName      String
@@ -57,76 +54,72 @@ model Student {
   enrollmentDate DateTime     @default(now())
   status         Status       @default(Active)
   smsEnabled     Boolean      @default(false)
-  levelId        String?      // Added: Student's class level
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  level          Level?       @relation(fields: [levelId], references: [id])
+  levelId        String?
   attendances    Attendance[]
   enrollments    Enrollment[]
+  level          Level?       @relation(fields: [levelId], references: [id])
 
   @@map("students")
 }
 
-// Academic levels (Class 1-10)
 model Level {
   id          String    @id @default(cuid())
-  name        String    @unique // "Class 1", "Class 2", etc.
-  levelNumber Int       @unique // 1-10
+  name        String    @unique
+  levelNumber Int       @unique
   description String?
   status      Status    @default(Active)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  subjects    Subject[]
   students    Student[]
+  subjects    Subject[]
 
   @@map("levels")
 }
 
-// Subjects for each level
 model Subject {
   id            String         @id @default(cuid())
-  name          String         // "Mathematics", "English", etc.
-  code          String?        // "MATH", "ENG"
+  name          String
+  code          String?
   description   String?
   levelId       String
-  level         Level          @relation(fields: [levelId], references: [id], onDelete: Cascade)
   status        Status         @default(Active)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   classSections ClassSection[]
+  level         Level          @relation(fields: [levelId], references: [id], onDelete: Cascade)
 
   @@unique([levelId, name])
   @@map("subjects")
 }
 
-// Class sections (actual teaching groups)
 model ClassSection {
   id           String       @id @default(cuid())
-  name         String       // "Section A", "Morning Batch"
+  name         String
   subjectId    String
   teacherId    String
   capacity     Int          @default(30)
   roomNumber   String?
-  academicYear String       // "2024-2025"
+  academicYear String
   status       ClassStatus  @default(Scheduled)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+  attendances  Attendance[]
   subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   teacher      Teacher      @relation("TeacherToClassSection", fields: [teacherId], references: [id])
-  schedules    Schedule[]
   enrollments  Enrollment[]
-  attendances  Attendance[]
+  schedules    Schedule[]
 
   @@map("class_sections")
 }
 
-// Schedule for class sections
 model Schedule {
   id             String       @id @default(cuid())
   classSectionId String
   dayOfWeek      DayOfWeek
-  startTime      String       // "09:00"
-  endTime        String       // "10:30"
+  startTime      String
+  endTime        String
   status         Status       @default(Active)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -135,7 +128,6 @@ model Schedule {
   @@map("schedules")
 }
 
-// Legacy - kept for backward compatibility, will be migrated to ClassSection
 model Class {
   id           String       @id @default(cuid())
   name         String
@@ -159,8 +151,8 @@ model Enrollment {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   studentId      String
-  classId        String?          // Legacy field
-  classSectionId String?          // New field
+  classId        String?
+  classSectionId String?
   class          Class?           @relation(fields: [classId], references: [id])
   classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   student        Student          @relation(fields: [studentId], references: [id])
@@ -175,9 +167,9 @@ model Attendance {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   studentId      String
-  classId        String?          // Legacy field
-  classSectionId String?          // New field
+  classId        String?
   deviceId       String?
+  classSectionId String?
   class          Class?           @relation(fields: [classId], references: [id])
   classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   device         BiometricDevice? @relation(fields: [deviceId], references: [id])
@@ -224,17 +216,17 @@ model MarketingContact {
 }
 
 model Feedback {
-  id          String       @id @default(cuid())
-  userId      String?
-  userName    String?
-  email       String?
-  type        FeedbackType @default(General)
-  subject     String
-  message     String
-  status      FeedbackStatus @default(Open)
-  priority    Priority     @default(Medium)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id        String         @id @default(cuid())
+  userId    String?
+  userName  String?
+  email     String?
+  type      FeedbackType   @default(General)
+  subject   String
+  message   String
+  status    FeedbackStatus @default(Open)
+  priority  Priority       @default(Medium)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   @@map("feedbacks")
 }

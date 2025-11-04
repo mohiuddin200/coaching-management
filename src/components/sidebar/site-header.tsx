@@ -35,7 +35,7 @@ export function SiteHeader() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="#">
-                Building Your Application
+                Dashboard
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
