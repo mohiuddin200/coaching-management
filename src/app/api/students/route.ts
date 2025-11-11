@@ -60,9 +60,9 @@ export async function POST(request: Request) {
     } = body;
 
     // Validate required fields
-    if (!firstName || !lastName) {
+    if (!firstName || !lastName || !email || !phoneNumber || !fatherName || !fatherPhone || !motherName || !motherPhone || !address || !levelId) {
       return NextResponse.json(
-        { error: 'First name and last name are required' },
+        { error: 'Missing required fields' },
         { status: 400 }
       );
     }
@@ -72,17 +72,17 @@ export async function POST(request: Request) {
       data: {
         firstName,
         lastName,
-        email: email || null,
-        phoneNumber: phoneNumber || null,
-        fatherName: fatherName || null,
-        fatherPhone: fatherPhone || null,
-        motherName: motherName || null,
-        motherPhone: motherPhone || null,
+        email,
+        phoneNumber,
+        fatherName,
+        fatherPhone,
+        motherName,
+        motherPhone,
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
-        address: address || null,
+        address,
         status: status || 'Active',
         smsEnabled: smsEnabled || false,
-        levelId: levelId || null,
+        levelId,
         gender: gender || null,
         bloodGroup: bloodGroup || null,
         nationality: nationality || null,

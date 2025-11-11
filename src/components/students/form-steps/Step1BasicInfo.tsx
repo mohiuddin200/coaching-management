@@ -70,7 +70,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel>Email <span className="text-red-500">*</span></FormLabel>
             <FormControl>
               <Input type="email" placeholder="student@example.com" {...field} />
             </FormControl>
@@ -84,7 +84,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
         name="phoneNumber"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Phone Number</FormLabel>
+            <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
             <FormControl>
               <Input type="tel" placeholder="+1234567890" {...field} />
             </FormControl>
@@ -99,7 +99,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
           name="fatherName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Father&apos;s Name</FormLabel>
+              <FormLabel>Father&apos;s Name <span className="text-red-500">*</span></FormLabel>
               <FormControl>
                 <Input placeholder="John Doe Sr." {...field} />
               </FormControl>
@@ -113,7 +113,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
           name="fatherPhone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Father&apos;s Phone</FormLabel>
+              <FormLabel>Father&apos;s Phone <span className="text-red-500">*</span></FormLabel>
               <FormControl>
                 <Input type="tel" placeholder="+1234567890" {...field} />
               </FormControl>
@@ -129,7 +129,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
           name="motherName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mother&apos;s Name</FormLabel>
+              <FormLabel>Mother&apos;s Name <span className="text-red-500">*</span></FormLabel>
               <FormControl>
                 <Input placeholder="Jane Doe Sr." {...field} />
               </FormControl>
@@ -143,7 +143,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
           name="motherPhone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mother&apos;s Phone</FormLabel>
+              <FormLabel>Mother&apos;s Phone <span className="text-red-500">*</span></FormLabel>
               <FormControl>
                 <Input type="tel" placeholder="+1234567890" {...field} />
               </FormControl>
@@ -172,7 +172,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
         name="address"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Address</FormLabel>
+            <FormLabel>Address <span className="text-red-500">*</span></FormLabel>
             <FormControl>
               <Input placeholder="123 Main St, City, State" {...field} />
             </FormControl>
@@ -186,7 +186,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
         name="levelId"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Class Level</FormLabel>
+            <FormLabel>Class Level <span className="text-red-500">*</span></FormLabel>
             <Select 
               onValueChange={(value) => field.onChange(value === "none" ? "" : value)} 
               defaultValue={field.value || "none"}

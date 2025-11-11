@@ -45,20 +45,20 @@ model Student {
   id             String       @id @default(uuid())
   firstName      String
   lastName       String
-  email          String?
-  phoneNumber    String?
-  fatherName     String?
-  fatherPhone    String?
-  motherName     String?
-  motherPhone    String?
+  email          String
+  phoneNumber    String
+  fatherName     String
+  fatherPhone    String
+  motherName     String
+  motherPhone    String
   dateOfBirth    DateTime?
-  address        String?
+  address        String
   enrollmentDate DateTime     @default(now())
   status         Status       @default(Active)
   smsEnabled     Boolean      @default(false)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  levelId        String?
+  levelId        String
 
   // Detailed Profile
   gender                 Gender?

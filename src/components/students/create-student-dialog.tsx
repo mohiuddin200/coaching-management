@@ -30,17 +30,17 @@ const BloodGroupEnum = z.enum(["A_Positive", "A_Negative", "B_Positive", "B_Nega
 const studentFormSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(100),
   lastName: z.string().min(1, "Last name is required").max(100),
-  email: z.string().email("Invalid email address").optional().or(z.literal("")),
-  phoneNumber: z.string().optional(),
-  fatherName: z.string().optional(),
-  fatherPhone: z.string().optional(),
-  motherName: z.string().optional(),
-  motherPhone: z.string().optional(),
+  email: z.string().email("Invalid email address").min(1, "Email is required"),
+  phoneNumber: z.string().min(1, "Phone number is required"),
+  fatherName: z.string().min(1, "Father's name is required"),
+  fatherPhone: z.string().min(1, "Father's phone number is required"),
+  motherName: z.string().min(1, "Mother's name is required"),
+  motherPhone: z.string().min(1, "Mother's phone number is required"),
   dateOfBirth: z.string().optional(),
-  address: z.string().optional(),
+  address: z.string().min(1, "Address is required"),
   status: z.enum(["Active", "Inactive"]),
   smsEnabled: z.boolean(),
-  levelId: z.string().optional(),
+  levelId: z.string().min(1, "Class Level is required"),
 
   // Detailed Profile
   gender: GenderEnum.optional(),
@@ -291,7 +291,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
             )}
 
             {/* Progress Indicator */}
-            <div className="flex justify-between mb-4">
+            <div className="flex justify-between mb-12">
               {STEPS.map((step, index) => (
                 <div key={step} className="flex flex-col items-center">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
