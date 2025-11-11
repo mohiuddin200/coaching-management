@@ -12,13 +12,40 @@ export type Student = {
   lastName: string
   email: string | null
   phoneNumber: string | null
-  parentName: string
-  parentPhone: string
+  fatherName?: string | null
+  fatherPhone?: string | null
+  motherName?: string | null
+  motherPhone?: string | null
   dateOfBirth: string | null
   address: string | null
   status: "Active" | "Inactive"
   enrollmentDate: string
   smsEnabled: boolean
+  levelId?: string | null
+
+  // Detailed Profile
+  gender?: "Male" | "Female" | "Other" | null
+  bloodGroup?: "A_Positive" | "A_Negative" | "B_Positive" | "B_Negative" | "AB_Positive" | "AB_Negative" | "O_Positive" | "O_Negative" | null
+  nationality?: string | null
+  religion?: string | null
+  streetAddress?: string | null
+  city?: string | null
+  state?: string | null
+  postalCode?: string | null
+  country?: string | null
+  previousSchool?: string | null
+  previousClass?: string | null
+  previousMarks?: number | null
+
+  // Emergency Contact
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+
+  // Documents
+  profileImage?: string | null
+  birthCertificate?: string | null
+  idProof?: string | null
 }
 
 export const createColumns = (onUpdate?: () => void, isAdmin?: boolean): ColumnDef<Student>[] => [

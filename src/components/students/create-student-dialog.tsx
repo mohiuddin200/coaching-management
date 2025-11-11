@@ -16,36 +16,55 @@ import {
 } from "@/components/ui/dialog"
 import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Plus } from "lucide-react"
+import { Step1BasicInfo } from "./form-steps/Step1BasicInfo"
+import { Step2DetailedProfile } from "./form-steps/Step2DetailedProfile"
+import { Step3AdditionalInfo } from "./form-steps/Step3AdditionalInfo"
 import { Student } from "./columns"
 import { toast } from "sonner"
+
+const GenderEnum = z.enum(["Male", "Female", "Other"]);
+const BloodGroupEnum = z.enum(["A_Positive", "A_Negative", "B_Positive", "B_Negative", "AB_Positive", "AB_Negative", "O_Positive", "O_Negative"]);
 
 const studentFormSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(100),
   lastName: z.string().min(1, "Last name is required").max(100),
   email: z.string().email("Invalid email address").optional().or(z.literal("")),
   phoneNumber: z.string().optional(),
-  parentName: z.string().min(1, "Parent name is required").max(100),
-  parentPhone: z.string().min(1, "Parent phone is required"),
+  fatherName: z.string().optional(),
+  fatherPhone: z.string().optional(),
+  motherName: z.string().optional(),
+  motherPhone: z.string().optional(),
   dateOfBirth: z.string().optional(),
   address: z.string().optional(),
   status: z.enum(["Active", "Inactive"]),
   smsEnabled: z.boolean(),
   levelId: z.string().optional(),
+
+  // Detailed Profile
+  gender: GenderEnum.optional(),
+  bloodGroup: BloodGroupEnum.optional(),
+  nationality: z.string().optional(),
+  religion: z.string().optional(),
+  streetAddress: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  postalCode: z.string().optional(),
+  country: z.string().optional(),
+  previousSchool: z.string().optional(),
+  previousClass: z.string().optional(),
+  previousMarks: z.number().optional(),
+
+  // Emergency Contact
+  emergencyContactName: z.string().optional(),
+  emergencyContactPhone: z.string().optional(),
+  emergencyContactRelation: z.string().optional(),
+
+  // Documents
+  profileImage: z.string().optional(),
+  birthCertificate: z.string().optional(),
+  idProof: z.string().optional(),
 })
 
 type StudentFormValues = z.infer<typeof studentFormSchema>
@@ -66,7 +85,14 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
   const [open, setOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [levels, setLevels] = useState<Level[]>([])
+  const [currentStep, setCurrentStep] = useState(0)
   const isEditMode = !!student
+
+  const STEPS = [
+    "Basic Information",
+    "Detailed Profile",
+    "Additional Information",
+  ]
 
   // Fetch levels when dialog opens
   useEffect(() => {
@@ -85,13 +111,39 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
       lastName: student?.lastName || "",
       email: student?.email || "",
       phoneNumber: student?.phoneNumber || "",
-      parentName: student?.parentName || "",
-      parentPhone: student?.parentPhone || "",
+      fatherName: student?.fatherName || "",
+      fatherPhone: student?.fatherPhone || "",
+      motherName: student?.motherName || "",
+      motherPhone: student?.motherPhone || "",
       dateOfBirth: student?.dateOfBirth ? new Date(student.dateOfBirth).toISOString().split('T')[0] : "",
       address: student?.address || "",
       status: student?.status || "Active",
       smsEnabled: student?.smsEnabled || false,
       levelId: (student as Student & { levelId?: string })?.levelId || "",
+
+      // Detailed Profile
+      gender: student?.gender || undefined,
+      bloodGroup: student?.bloodGroup || undefined,
+      nationality: student?.nationality || "",
+      religion: student?.religion || "",
+      streetAddress: student?.streetAddress || "",
+      city: student?.city || "",
+      state: student?.state || "",
+      postalCode: student?.postalCode || "",
+      country: student?.country || "",
+      previousSchool: student?.previousSchool || "",
+      previousClass: student?.previousClass || "",
+      previousMarks: student?.previousMarks || undefined,
+
+      // Emergency Contact
+      emergencyContactName: student?.emergencyContactName || "",
+      emergencyContactPhone: student?.emergencyContactPhone || "",
+      emergencyContactRelation: student?.emergencyContactRelation || "",
+
+      // Documents
+      profileImage: student?.profileImage || "",
+      birthCertificate: student?.birthCertificate || "",
+      idProof: student?.idProof || "",
     },
   })
 
@@ -103,14 +155,41 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
         lastName: student?.lastName || "",
         email: student?.email || "",
         phoneNumber: student?.phoneNumber || "",
-        parentName: student?.parentName || "",
-        parentPhone: student?.parentPhone || "",
+        fatherName: student?.fatherName || "",
+        fatherPhone: student?.fatherPhone || "",
+        motherName: student?.motherName || "",
+        motherPhone: student?.motherPhone || "",
         dateOfBirth: student?.dateOfBirth ? new Date(student.dateOfBirth).toISOString().split('T')[0] : "",
         address: student?.address || "",
         status: student?.status || "Active",
         smsEnabled: student?.smsEnabled || false,
         levelId: (student as Student & { levelId?: string })?.levelId || "",
+
+        // Detailed Profile
+        gender: student?.gender || undefined,
+        bloodGroup: student?.bloodGroup || undefined,
+        nationality: student?.nationality || "",
+        religion: student?.religion || "",
+        streetAddress: student?.streetAddress || "",
+        city: student?.city || "",
+        state: student?.state || "",
+        postalCode: student?.postalCode || "",
+        country: student?.country || "",
+        previousSchool: student?.previousSchool || "",
+        previousClass: student?.previousClass || "",
+        previousMarks: student?.previousMarks || undefined,
+
+        // Emergency Contact
+        emergencyContactName: student?.emergencyContactName || "",
+        emergencyContactPhone: student?.emergencyContactPhone || "",
+        emergencyContactRelation: student?.emergencyContactRelation || "",
+
+        // Documents
+        profileImage: student?.profileImage || "",
+        birthCertificate: student?.birthCertificate || "",
+        idProof: student?.idProof || "",
       })
+      setCurrentStep(0) // Reset to first step on dialog open
     }
   }, [open, student, form])
 
@@ -129,6 +208,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
         body: JSON.stringify({
           ...data,
           dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString() : null,
+          previousMarks: data.previousMarks !== undefined ? Number(data.previousMarks) : null,
         }),
       })
 
@@ -149,6 +229,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
       // Reset form and close dialog
       form.reset()
       setOpen(false)
+      setCurrentStep(0) // Reset to first step
       
       // Notify parent component to refresh data
       if (onSuccess) {
@@ -162,6 +243,19 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
           description: err instanceof Error ? err.message : "An error occurred",
         }
       )
+    }
+  }
+
+  const handleNext = async () => {
+    const isValid = await form.trigger()
+    if (isValid && currentStep < STEPS.length - 1) {
+      setCurrentStep((prev) => prev + 1)
+    }
+  }
+
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1)
     }
   }
 
@@ -195,224 +289,63 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
                 {error}
               </div>
             )}
+
+            {/* Progress Indicator */}
+            <div className="flex justify-between mb-4">
+              {STEPS.map((step, index) => (
+                <div key={step} className="flex flex-col items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
+                    index === currentStep ? "bg-blue-500" : "bg-gray-400"
+                  }`}>
+                    {index + 1}
+                  </div>
+                  <span className="text-xs mt-1">{step}</span>
+                </div>
+              ))}
+            </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      First Name <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="John" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Last Name <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            {currentStep === 0 && <Step1BasicInfo form={form} levels={levels} />}
+            {currentStep === 1 && <Step2DetailedProfile form={form} />}
+            {currentStep === 2 && <Step3AdditionalInfo form={form} />}
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="student@example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+            <DialogFooter className="flex justify-between">
+              {currentStep > 0 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handlePrevious}
+                  disabled={form.formState.isSubmitting}
+                >
+                  Previous
+                </Button>
               )}
-            />
-
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input type="tel" placeholder="+1234567890" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="parentName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Parent Name <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Jane Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="parentPhone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Parent Phone <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input type="tel" placeholder="+1234567890" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="dateOfBirth"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Date of Birth</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="123 Main St, City, State" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="levelId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Class Level</FormLabel>
-                  <Select 
-                    onValueChange={(value) => field.onChange(value === "none" ? "" : value)} 
-                    defaultValue={field.value || "none"}
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                  disabled={form.formState.isSubmitting}
+                >
+                  Cancel
+                </Button>
+                {currentStep < STEPS.length - 1 && (
+                  <Button
+                    type="button"
+                    onClick={handleNext}
+                    disabled={form.formState.isSubmitting}
                   >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select class level (optional)" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="none">No level assigned</SelectItem>
-                      {levels.map((level) => (
-                        <SelectItem key={level.id} value={level.id}>
-                          {level.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Active">Active</SelectItem>
-                        <SelectItem value="Inactive">Inactive</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
+                    Next
+                  </Button>
                 )}
-              />
-
-              <FormField
-                control={form.control}
-                name="smsEnabled"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>SMS Notifications</FormLabel>
-                    <Select 
-                      onValueChange={(value) => field.onChange(value === "true")} 
-                      defaultValue={field.value ? "true" : "false"}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select SMS preference" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="true">Enabled</SelectItem>
-                        <SelectItem value="false">Disabled</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
+                {currentStep === STEPS.length - 1 && (
+                  <Button type="submit" disabled={form.formState.isSubmitting}>
+                    {form.formState.isSubmitting 
+                      ? (isEditMode ? "Updating..." : "Creating...") 
+                      : (isEditMode ? "Update Student" : "Create Student")
+                    }
+                  </Button>
                 )}
-              />
-            </div>
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setOpen(false)}
-                disabled={form.formState.isSubmitting}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting 
-                  ? (isEditMode ? "Updating..." : "Creating...") 
-                  : (isEditMode ? "Update Student" : "Create Student")
-                }
-              </Button>
+              </div>
             </DialogFooter>
           </form>
         </Form>
