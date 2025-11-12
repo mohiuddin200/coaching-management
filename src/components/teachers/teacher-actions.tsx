@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal, Pencil, Mail, Trash2 } from "lucide-react"
+import { ViewTeacherDetailsDialog } from "./view-teacher-details-dialog"
+import { MoreHorizontal, Pencil, Mail, Trash2, Eye } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -64,6 +65,7 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSendingInvite, setIsSendingInvite] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -188,7 +190,10 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
             Copy teacher ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>View details</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setViewDialogOpen(true)}>
+            <Eye className="mr-2 h-4 w-4" />
+            View details
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
             <Pencil className="mr-2 h-4 w-4" />
             Edit teacher
@@ -382,6 +387,12 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
           </Form>
         </DialogContent>
       </Dialog>
+
+      <ViewTeacherDetailsDialog
+        teacher={teacher}
+        open={viewDialogOpen}
+        onOpenChange={setViewDialogOpen}
+      />
     </div>
   )
 }

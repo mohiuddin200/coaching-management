@@ -14,26 +14,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Form } from "@/components/ui/form"
 import { Plus } from "lucide-react"
+import { toast } from "sonner"
 import { Teacher } from "./columns"
+import { Step1BasicInfo } from "./form-steps/Step1BasicInfo"
+import { Step2DetailedProfile } from "./form-steps/Step2DetailedProfile"
+import { Step3ContactFinance } from "./form-steps/Step3ContactFinance"
+
+const GenderEnum = z.enum(["Male", "Female", "Other"]);
+const BloodGroupEnum = z.enum(["A_Positive", "A_Negative", "B_Positive", "B_Negative", "AB_Positive", "AB_Negative", "O_Positive", "O_Negative"]);
+const PaymentTypeEnum = z.enum(["SALARIED", "HOURLY", "PER_CLASS"]);
 
 const teacherFormSchema = z.object({
+  // Step 1
   firstName: z.string().min(1, "First name is required").max(100),
   lastName: z.string().min(1, "Last name is required").max(100),
   email: z.string().email("Invalid email address").optional().or(z.literal("")),
@@ -41,6 +35,28 @@ const teacherFormSchema = z.object({
   subject: z.string().optional(),
   qualifications: z.string().optional(),
   status: z.enum(["Active", "Inactive"]),
+
+  // Step 2
+  gender: GenderEnum.optional(),
+  dateOfBirth: z.date().optional(),
+  nid: z.string().optional(),
+  bloodGroup: BloodGroupEnum.optional(),
+  nationality: z.string().optional(),
+  religion: z.string().optional(),
+  universityName: z.string().optional(),
+  cgpa: z.coerce.number().optional(),
+
+  // Step 3
+  streetAddress: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  postalCode: z.string().optional(),
+  country: z.string().optional(),
+  emergencyContactName: z.string().optional(),
+  emergencyContactPhone: z.string().optional(),
+  emergencyContactRelation: z.string().optional(),
+  salary: z.coerce.number().optional(),
+  paymentType: PaymentTypeEnum.optional(),
 })
 
 type TeacherFormValues = z.infer<typeof teacherFormSchema>
@@ -54,11 +70,20 @@ interface TeacherDialogProps {
 export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProps) {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [currentStep, setCurrentStep] = useState(0)
   const isEditMode = !!teacher
 
+  const STEPS = [
+    "Basic Information",
+    "Detailed Profile",
+    "Contact & Finance",
+  ]
+
   const form = useForm<TeacherFormValues>({
-    resolver: zodResolver(teacherFormSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(teacherFormSchema) as any,
     defaultValues: {
+      // Step 1
       firstName: teacher?.firstName || "",
       lastName: teacher?.lastName || "",
       email: teacher?.email || "",
@@ -66,13 +91,35 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
       subject: teacher?.subject || "",
       qualifications: teacher?.qualifications || "",
       status: teacher?.status || "Active",
+
+      // Step 2
+      gender: teacher?.gender || undefined,
+      dateOfBirth: teacher?.dateOfBirth ? new Date(teacher.dateOfBirth) : undefined,
+      nid: teacher?.nid || "",
+      bloodGroup: teacher?.bloodGroup || undefined,
+      nationality: teacher?.nationality || "",
+      religion: teacher?.religion || "",
+      universityName: teacher?.universityName || "",
+      cgpa: teacher?.cgpa || undefined,
+
+      // Step 3
+      streetAddress: teacher?.streetAddress || "",
+      city: teacher?.city || "",
+      state: teacher?.state || "",
+      postalCode: teacher?.postalCode || "",
+      country: teacher?.country || "",
+      emergencyContactName: teacher?.emergencyContactName || "",
+      emergencyContactPhone: teacher?.emergencyContactPhone || "",
+      emergencyContactRelation: teacher?.emergencyContactRelation || "",
+      salary: teacher?.salary || undefined,
+      paymentType: teacher?.paymentType || undefined,
     },
   })
 
-  // Reset form when teacher prop changes or dialog opens
   useEffect(() => {
     if (open) {
       form.reset({
+        // Step 1
         firstName: teacher?.firstName || "",
         lastName: teacher?.lastName || "",
         email: teacher?.email || "",
@@ -80,7 +127,30 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
         subject: teacher?.subject || "",
         qualifications: teacher?.qualifications || "",
         status: teacher?.status || "Active",
+
+        // Step 2
+        gender: teacher?.gender || undefined,
+        dateOfBirth: teacher?.dateOfBirth ? new Date(teacher.dateOfBirth) : undefined,
+        nid: teacher?.nid || "",
+        bloodGroup: teacher?.bloodGroup || undefined,
+        nationality: teacher?.nationality || "",
+        religion: teacher?.religion || "",
+        universityName: teacher?.universityName || "",
+        cgpa: teacher?.cgpa || undefined,
+
+        // Step 3
+        streetAddress: teacher?.streetAddress || "",
+        city: teacher?.city || "",
+        state: teacher?.state || "",
+        postalCode: teacher?.postalCode || "",
+        country: teacher?.country || "",
+        emergencyContactName: teacher?.emergencyContactName || "",
+        emergencyContactPhone: teacher?.emergencyContactPhone || "",
+        emergencyContactRelation: teacher?.emergencyContactRelation || "",
+        salary: teacher?.salary || undefined,
+        paymentType: teacher?.paymentType || undefined,
       })
+      setCurrentStep(0)
     }
   }, [open, teacher, form])
 
@@ -96,7 +166,10 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          dateOfBirth: data.dateOfBirth ? data.dateOfBirth.toISOString() : null,
+        }),
       })
 
       if (!response.ok) {
@@ -104,16 +177,42 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
         throw new Error(errorData.error || `Failed to ${isEditMode ? "update" : "create"} teacher`)
       }
 
-      // Reset form and close dialog
+      toast.success(
+        isEditMode ? "Teacher updated successfully!" : "Teacher created successfully!",
+        {
+          description: `${data.firstName} ${data.lastName} has been ${isEditMode ? "updated" : "added"}.`,
+        }
+      )
+
       form.reset()
       setOpen(false)
+      setCurrentStep(0)
       
-      // Notify parent component to refresh data
       if (onSuccess) {
         onSuccess()
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred"
+      setError(errorMessage)
+      toast.error(
+        isEditMode ? "Failed to update teacher" : "Failed to create teacher",
+        {
+          description: errorMessage,
+        }
+      )
+    }
+  }
+
+  const handleNext = async () => {
+    const isValid = await form.trigger()
+    if (isValid && currentStep < STEPS.length - 1) {
+      setCurrentStep((prev) => prev + 1)
+    }
+  }
+
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1)
     }
   }
 
@@ -129,7 +228,7 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{isEditMode ? "Edit Teacher" : "Add New Teacher"}</DialogTitle>
           <DialogDescription>
@@ -147,136 +246,63 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
                 {error}
               </div>
             )}
-            
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      First Name <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="John" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Last Name <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+            {/* Progress Indicator */}
+            <div className="flex justify-between mb-8">
+              {STEPS.map((step, index) => (
+                <div key={step} className="flex flex-col items-center text-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
+                    index === currentStep ? "bg-blue-500" : "bg-gray-400"
+                  }`}>
+                    {index + 1}
+                  </div>
+                  <span className="text-xs mt-1 w-20">{step}</span>
+                </div>
+              ))}
             </div>
+            
+            {currentStep === 0 && <Step1BasicInfo form={form} />}
+            {currentStep === 1 && <Step2DetailedProfile form={form} />}
+            {currentStep === 2 && <Step3ContactFinance form={form} />}
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="teacher@example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Phone Number <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="tel" placeholder="+1234567890" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="subject"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Subject</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Mathematics, Physics, etc." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="qualifications"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qualifications</FormLabel>
-                  <FormControl>
-                    <Input placeholder="B.Ed, M.Sc, etc." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Active">Active</SelectItem>
-                      <SelectItem value="Inactive">Inactive</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setOpen(false)}
-                disabled={form.formState.isSubmitting}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting 
-                  ? (isEditMode ? "Updating..." : "Creating...") 
-                  : (isEditMode ? "Update Teacher" : "Create Teacher")
-                }
-              </Button>
+            <DialogFooter className="flex justify-between pt-4">
+              {currentStep > 0 ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handlePrevious}
+                  disabled={form.formState.isSubmitting}
+                >
+                  Previous
+                </Button>
+              ) : <div></div>}
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                  disabled={form.formState.isSubmitting}
+                >
+                  Cancel
+                </Button>
+                {currentStep < STEPS.length - 1 && (
+                  <Button
+                    type="button"
+                    onClick={handleNext}
+                    disabled={form.formState.isSubmitting}
+                  >
+                    Next
+                  </Button>
+                )}
+                {currentStep === STEPS.length - 1 && (
+                  <Button type="submit" disabled={form.formState.isSubmitting}>
+                    {form.formState.isSubmitting 
+                      ? (isEditMode ? "Updating..." : "Creating...") 
+                      : (isEditMode ? "Update Teacher" : "Create Teacher")
+                    }
+                  </Button>
+                )}
+              </div>
             </DialogFooter>
           </form>
         </Form>
