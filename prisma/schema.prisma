@@ -22,122 +22,88 @@ model User {
 }
 
 model Teacher {
-  id             String         @id @default(uuid())
-  firstName      String
-  lastName       String
-  email          String?
-  phoneNumber    String
-  subject        String?
-  qualifications String?
-  joinDate       DateTime       @default(now())
-  status         Status         @default(Active)
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  userId         String?        @unique
-  classSections  ClassSection[] @relation("TeacherToClassSection")
-  classes        Class[]        @relation("TeacherToClass")
-  user           User?          @relation("UserToTeacher", fields: [userId], references: [id])
-
-  // Detailed Profile
-  gender                 Gender?
-  dateOfBirth            DateTime?
-  nid                    String?        @unique
-  bloodGroup             BloodGroup?
-  nationality            String?
-  religion               String?
-  streetAddress          String?
-  city                   String?
-  state                  String?
-  postalCode             String?
-  country                String?
-  universityName         String?
-  cgpa                   Float?
-
-  // Emergency Contact
+  id                       String         @id @default(uuid())
+  firstName                String
+  lastName                 String
+  email                    String?
+  phoneNumber              String
+  subject                  String?
+  qualifications           String?
+  joinDate                 DateTime       @default(now())
+  status                   Status         @default(Active)
+  createdAt                DateTime       @default(now())
+  updatedAt                DateTime       @updatedAt
+  userId                   String?        @unique
+  bloodGroup               BloodGroup?
+  cgpa                     Float?
+  city                     String?
+  country                  String?
+  cv                       String?
+  dateOfBirth              DateTime?
   emergencyContactName     String?
   emergencyContactPhone    String?
   emergencyContactRelation String?
-
-  // Documents
-  profileImage String?
-  idProof      String?
-  cv           String?
-
-  // Finance
-  salary      Float?
-  paymentType PaymentType?
+  gender                   Gender?
+  idProof                  String?
+  nationality              String?
+  nid                      String?        @unique
+  paymentType              PaymentType?
+  postalCode               String?
+  profileImage             String?
+  religion                 String?
+  salary                   Float?
+  state                    String?
+  streetAddress            String?
+  universityName           String?
+  classSections            ClassSection[] @relation("TeacherToClassSection")
+  classes                  Class[]        @relation("TeacherToClass")
+  user                     User?          @relation("UserToTeacher", fields: [userId], references: [id])
 
   @@map("teachers")
 }
 
 model Student {
-  id             String       @id @default(uuid())
-  firstName      String
-  lastName       String
-  email          String
-  phoneNumber    String
-  fatherName     String
-  fatherPhone    String
-  motherName     String
-  motherPhone    String
-  dateOfBirth    DateTime?
-  address        String
-  enrollmentDate DateTime     @default(now())
-  status         Status       @default(Active)
-  smsEnabled     Boolean      @default(false)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  levelId        String
-
-  // Detailed Profile
-  gender                 Gender?
-  bloodGroup             BloodGroup?
-  nationality            String?
-  religion               String?
-  streetAddress          String?
-  city                   String?
-  state                  String?
-  postalCode             String?
-  country                String?
-  previousSchool         String?
-  previousClass          String?
-  previousMarks          Float?
-
-  // Emergency Contact
+  id                       String       @id @default(uuid())
+  firstName                String
+  lastName                 String
+  email                    String
+  phoneNumber              String
+  dateOfBirth              DateTime?
+  address                  String
+  enrollmentDate           DateTime     @default(now())
+  status                   Status       @default(Active)
+  smsEnabled               Boolean      @default(false)
+  createdAt                DateTime     @default(now())
+  updatedAt                DateTime     @updatedAt
+  levelId                  String
+  birthCertificate         String?
+  bloodGroup               BloodGroup?
+  city                     String?
+  country                  String?
   emergencyContactName     String?
   emergencyContactPhone    String?
   emergencyContactRelation String?
-
-  // Documents
-  profileImage     String?
-  birthCertificate String?
-  idProof          String?
-
-  attendances    Attendance[]
-  enrollments    Enrollment[]
-  level          Level?       @relation(fields: [levelId], references: [id])
+  fatherName               String
+  fatherPhone              String
+  gender                   Gender?
+  idProof                  String?
+  motherName               String
+  motherPhone              String
+  nationality              String?
+  postalCode               String?
+  previousClass            String?
+  previousMarks            Float?
+  previousSchool           String?
+  profileImage             String?
+  religion                 String?
+  state                    String?
+  streetAddress            String?
+  attendances              Attendance[]
+  enrollments              Enrollment[]
+  level                    Level        @relation(fields: [levelId], references: [id])
 
   @@map("students")
 }
-
-enum Gender {
-  Male
-  Female
-  Other
-}
-
-enum BloodGroup {
-  A_Positive
-  A_Negative
-  B_Positive
-  B_Negative
-  AB_Positive
-  AB_Negative
-  O_Positive
-  O_Negative
-}
-
-
 
 model Level {
   id          String    @id @default(cuid())
@@ -237,19 +203,20 @@ model Enrollment {
 
 model Attendance {
   id             String           @id @default(cuid())
-  timestamp      DateTime         @default(now())
-  entryType      AttendanceType
+  date           DateTime         @db.Date
+  status         AttendanceStatus
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   studentId      String
-  classId        String?
+  classSectionId String
   deviceId       String?
-  classSectionId String?
-  class          Class?           @relation(fields: [classId], references: [id])
-  classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
+  classSection   ClassSection     @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   device         BiometricDevice? @relation(fields: [deviceId], references: [id])
   student        Student          @relation(fields: [studentId], references: [id])
+  class          Class?           @relation(fields: [classId], references: [id])
+  classId        String?
 
+  @@unique([studentId, classSectionId, date])
   @@map("attendances")
 }
 
@@ -260,7 +227,7 @@ model BiometricDevice {
   apiKey      String?
   status      String       @default("active")
   createdAt   DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  updatedAt   DateTime     @updatedAt
   attendances Attendance[]
 
   @@map("biometric_devices")
@@ -306,6 +273,23 @@ model Feedback {
   @@map("feedbacks")
 }
 
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum BloodGroup {
+  A_Positive
+  A_Negative
+  B_Positive
+  B_Negative
+  AB_Positive
+  AB_Negative
+  O_Positive
+  O_Negative
+}
+
 enum UserRole {
   Admin
   Teacher
@@ -328,11 +312,6 @@ enum EnrollmentStatus {
   Active
   Withdrawn
   Completed
-}
-
-enum AttendanceType {
-  Entry
-  Exit
 }
 
 enum SmsStatus {
@@ -378,4 +357,9 @@ enum PaymentType {
   SALARIED
   HOURLY
   PER_CLASS
+}
+
+enum AttendanceStatus {
+  Present
+  Absent
 }

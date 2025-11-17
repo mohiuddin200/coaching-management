@@ -1,147 +1,83 @@
-import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
+import { z } from "zod"
 
-// Get attendance records with filters
-export async function GET(request: Request) {
+const attendanceSchema = z.object({
+  studentId: z.string(),
+  classSectionId: z.string(),
+  date: z.string().refine(val => !isNaN(Date.parse(val)), {
+    message: "Invalid date string",
+  }),
+  status: z.enum(["Present", "Absent"]),
+})
+
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const date = searchParams.get('date');
-    const studentId = searchParams.get('studentId');
-    const classSectionId = searchParams.get('classSectionId');
+    const { searchParams } = new URL(request.url)
+    const classSectionId = searchParams.get("classSectionId")
+    const date = searchParams.get("date")
 
-    const where: {
-      timestamp?: { gte: Date; lte: Date };
-      studentId?: string;
-      classSectionId?: string;
-    } = {};
-
-    if (date) {
-      const startDate = new Date(date);
-      startDate.setHours(0, 0, 0, 0);
-      const endDate = new Date(date);
-      endDate.setHours(23, 59, 59, 999);
-      
-      where.timestamp = {
-        gte: startDate,
-        lte: endDate,
-      };
+    if (!classSectionId || !date) {
+      return NextResponse.json(
+        { error: "classSectionId and date are required" },
+        { status: 400 }
+      )
     }
 
-    if (studentId) {
-      where.studentId = studentId;
-    }
-
-    if (classSectionId) {
-      where.classSectionId = classSectionId;
-    }
-
-    const attendances = await prisma.attendance.findMany({
-      where,
-      include: {
-        student: {
-          include: {
-            level: true,
-          },
-        },
-        classSection: {
-          include: {
-            subject: {
-              include: {
-                level: true,
-              },
-            },
-            teacher: true,
-          },
-        },
-        class: true,
+    const attendanceRecords = await prisma.attendance.findMany({
+      where: {
+        classSectionId,
+        date: new Date(date),
       },
-      orderBy: {
-        timestamp: 'desc',
-      },
-    });
+    })
 
-    return NextResponse.json({ attendances });
+    return NextResponse.json(attendanceRecords)
   } catch (error) {
-    console.error('Error fetching attendance:', error);
+    console.error("Error fetching attendance:", error)
     return NextResponse.json(
-      { error: 'Failed to fetch attendance records' },
+      { error: "Internal Server Error" },
       { status: 500 }
-    );
+    )
   }
 }
 
-// Mark attendance (create new record)
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { studentId, classSectionId, timestamp, entryType } = body;
+    const body = await request.json()
+    const { studentId, classSectionId, date, status } =
+      attendanceSchema.parse(body)
 
-    // Validate required fields
-    if (!studentId) {
-      return NextResponse.json(
-        { error: 'Student ID is required' },
-        { status: 400 }
-      );
-    }
+    const attendanceDate = new Date(date)
 
-    // Verify student exists
-    const student = await prisma.student.findUnique({
-      where: { id: studentId },
-    });
-
-    if (!student) {
-      return NextResponse.json(
-        { error: 'Student not found' },
-        { status: 404 }
-      );
-    }
-
-    // If classSectionId provided, verify it exists
-    if (classSectionId) {
-      const classSection = await prisma.classSection.findUnique({
-        where: { id: classSectionId },
-      });
-
-      if (!classSection) {
-        return NextResponse.json(
-          { error: 'Class section not found' },
-          { status: 404 }
-        );
-      }
-    }
-
-    // Create attendance record
-    const attendance = await prisma.attendance.create({
-      data: {
+    // Use upsert to either create a new attendance record or update an existing one
+    const attendance = await prisma.attendance.upsert({
+      where: {
+        studentId_classSectionId_date: {
+          studentId,
+          classSectionId,
+          date: attendanceDate,
+        },
+      },
+      update: {
+        status,
+      },
+      create: {
         studentId,
-        classSectionId: classSectionId || null,
-        timestamp: timestamp ? new Date(timestamp) : new Date(),
-        entryType: entryType || 'Entry',
+        classSectionId,
+        date: attendanceDate,
+        status,
       },
-      include: {
-        student: {
-          include: {
-            level: true,
-          },
-        },
-        classSection: {
-          include: {
-            subject: {
-              include: {
-                level: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    })
 
-    return NextResponse.json({ attendance }, { status: 201 });
+    return NextResponse.json(attendance)
   } catch (error) {
-    console.error('Error creating attendance:', error);
+    console.error("Error saving attendance:", error)
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.issues }, { status: 400 })
+    }
     return NextResponse.json(
-      { error: 'Failed to create attendance record' },
+      { error: "Internal Server Error" },
       { status: 500 }
-    );
+    )
   }
 }

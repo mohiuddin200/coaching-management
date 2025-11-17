@@ -1,9 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -13,9 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { CalendarIcon, CheckCircle2, Search, UserCheck } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
@@ -39,173 +48,268 @@ interface Level {
   levelNumber: number
 }
 
+interface ClassSection {
+  id: string
+  name: string
+  subject: {
+    name: string
+  }
+}
+
+type AttendanceStatus = "present" | "absent"
+
 export default function AttendancePage() {
   const [students, setStudents] = useState<Student[]>([])
   const [filteredStudents, setFilteredStudents] = useState<Student[]>([])
   const [levels, setLevels] = useState<Level[]>([])
-  const [selectedLevel, setSelectedLevel] = useState<string>("all")
+  const [classSections, setClassSections] = useState<ClassSection[]>([])
+  const [selectedLevel, setSelectedLevel] = useState<string>("")
+  const [selectedClassSection, setSelectedClassSection] = useState<string>("")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [attendance, setAttendance] = useState<Map<string, boolean>>(new Map())
+  const [attendance, setAttendance] = useState<Map<string, AttendanceStatus>>(
+    new Map()
+  )
   const [loading, setLoading] = useState(true)
-  const [submitting, setSubmitting] = useState(false)
+  const [loadingClassSections, setLoadingClassSections] = useState(false)
+  const [loadingStudents, setLoadingStudents] = useState(false)
+  const debounceTimeouts = useRef<Map<string, NodeJS.Timeout>>(new Map())
 
-  // Fetch students and levels
+  // Fetch initial levels
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchLevels = async () => {
       try {
         setLoading(true)
-        
-        // Fetch students
-        const studentsRes = await fetch('/api/students')
-        const studentsData = await studentsRes.json()
-        
-        // Fetch levels
-        const levelsRes = await fetch('/api/levels')
+        const levelsRes = await fetch("/api/levels")
         const levelsData = await levelsRes.json()
-        
-        setStudents(studentsData.students || [])
-        setFilteredStudents(studentsData.students || [])
-        setLevels(levelsData.levels || [])
+        console.log(levelsData)
+        if (!levelsRes.ok) {
+          throw new Error(levelsData.error || "Failed to fetch levels")
+        }
+        setLevels(levelsData || [])
       } catch (error) {
-        console.error('Error fetching data:', error)
-        toast.error("Failed to load students and levels")
+        console.error("Error fetching levels:", error)
+        toast.error("Failed to load levels")
       } finally {
         setLoading(false)
       }
     }
-
-    fetchData()
+    fetchLevels()
   }, [])
 
-  // Filter students based on level and search query
+  // Fetch class sections when level changes
   useEffect(() => {
-    let filtered = students
-
-    // Filter by level
-    if (selectedLevel !== "all") {
-      filtered = filtered.filter(student => student.level?.id === selectedLevel)
+    if (!selectedLevel) {
+      setClassSections([])
+      setSelectedClassSection("")
+      setStudents([])
+      return
     }
 
-    // Filter by search query
+    const fetchClassSections = async () => {
+      setLoadingClassSections(true)
+      try {
+        const res = await fetch(
+          `/api/class-sections?levelId=${selectedLevel}`
+        )
+        const data = await res.json()
+        setClassSections(data || [])
+      } catch (error) {
+        console.error("Error fetching class sections:", error)
+        toast.error("Failed to load class sections")
+      } finally {
+        setLoadingClassSections(false)
+      }
+    }
+    fetchClassSections()
+  }, [selectedLevel])
+
+  // Fetch students when class section changes
+  useEffect(() => {
+    if (!selectedClassSection) {
+      setStudents([])
+      return
+    }
+
+    const fetchStudents = async () => {
+      setLoadingStudents(true)
+      try {
+        const res = await fetch(
+          `/api/class-sections/${selectedClassSection}/students`
+        )
+        const data = await res.json()
+        setStudents(data.students || [])
+      } catch (error) {
+        console.error("Error fetching students:", error)
+        toast.error("Failed to load students")
+      } finally {
+        setLoadingStudents(false)
+      }
+    }
+    fetchStudents()
+  }, [selectedClassSection])
+
+  // Filter students based on search query
+  useEffect(() => {
+    let filtered = students
     if (searchQuery) {
       filtered = filtered.filter(student => {
         const fullName = `${student.firstName} ${student.lastName}`.toLowerCase()
         return fullName.includes(searchQuery.toLowerCase())
       })
     }
-
     setFilteredStudents(filtered)
-  }, [students, selectedLevel, searchQuery])
+  }, [students, searchQuery])
 
-  // Toggle attendance for a student
-  const toggleAttendance = (studentId: string) => {
-    setAttendance(prev => {
-      const newMap = new Map(prev)
-      newMap.set(studentId, !newMap.get(studentId))
-      return newMap
-    })
-  }
+  // Fetch attendance records when date or class section changes
+  useEffect(() => {
+    if (!selectedClassSection || !selectedDate) {
+      setAttendance(new Map())
+      return
+    }
 
-  // Mark all as present
-  const markAllPresent = () => {
-    const newMap = new Map<string, boolean>()
-    filteredStudents.forEach(student => {
-      newMap.set(student.id, true)
-    })
-    setAttendance(newMap)
-  }
+    const fetchAttendance = async () => {
+      try {
+        const dateString = selectedDate.toISOString().split("T")[0]
+        const res = await fetch(
+          `/api/attendance?classSectionId=${selectedClassSection}&date=${dateString}`
+        )
+        const data = await res.json()
+        if (res.ok) {
+          const attendanceMap = new Map<string, AttendanceStatus>()
+          for (const record of data) {
+            attendanceMap.set(record.studentId, record.status.toLowerCase() as AttendanceStatus)
+          }
+          setAttendance(attendanceMap)
+        } else {
+          throw new Error(data.error || "Failed to fetch attendance")
+        }
+      } catch (error) {
+        console.error("Error fetching attendance:", error)
+        toast.error("Failed to load attendance records.")
+      }
+    }
 
-  // Clear all
-  const clearAll = () => {
-    setAttendance(new Map())
-  }
+    fetchAttendance()
+  }, [selectedClassSection, selectedDate])
 
-  // Submit attendance
-  const submitAttendance = async () => {
-    try {
-      setSubmitting(true)
-
-      // Prepare attendance data for students marked as present
-      const attendanceData = Array.from(attendance.entries())
-        .filter(([, present]) => present)
-        .map(([studentId]) => ({
-          studentId,
-          timestamp: selectedDate.toISOString(),
-          entryType: 'Entry',
-        }))
-
-      if (attendanceData.length === 0) {
-        toast.error("Please mark at least one student as present")
+  const saveAttendance = useCallback(
+    async (
+      studentId: string,
+      status: "Present" | "Absent",
+      date: Date,
+      classSectionId: string
+    ) => {
+      if (!classSectionId) {
+        toast.error("Please select a class section first.")
         return
       }
 
-      // Submit bulk attendance
-      const response = await fetch('/api/attendance/bulk', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ attendanceData }),
-      })
+      try {
+        const response = await fetch("/api/attendance", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            studentId,
+            classSectionId,
+            date: date.toISOString(),
+            status,
+          }),
+        })
 
-      if (!response.ok) {
-        throw new Error('Failed to submit attendance')
+        if (!response.ok) {
+          throw new Error("Failed to save attendance")
+        }
+
+        toast.success(`Attendance for student saved.`)
+      } catch (error) {
+        console.error("Error saving attendance:", error)
+        toast.error("Failed to save attendance.")
+        // TODO: Implement state reversal on API failure.
       }
+    },
+    []
+  )
 
-      const result = await response.json()
+  const handleAttendanceChange = useCallback(
+    (studentId: string, newStatus: AttendanceStatus) => {
+      setAttendance(prev => {
+        const newMap = new Map(prev)
+        const currentStatus = newMap.get(studentId)
+        let finalStatus: AttendanceStatus | "unset" = newStatus
 
-      toast.success(`Attendance marked for ${result.count} student(s)`)
+        if (currentStatus === newStatus) {
+          newMap.delete(studentId)
+          finalStatus = "unset"
+        } else {
+          newMap.set(studentId, newStatus)
+        }
 
-      // Clear attendance after successful submission
-      setAttendance(new Map())
-    } catch (error) {
-      console.error('Error submitting attendance:', error)
-      toast.error("Failed to submit attendance")
-    } finally {
-      setSubmitting(false)
-    }
-  }
+        if (debounceTimeouts.current.has(studentId)) {
+          clearTimeout(debounceTimeouts.current.get(studentId)!)
+        }
+
+        const timeoutId = setTimeout(() => {
+          if (finalStatus !== "unset") {
+            saveAttendance(
+              studentId,
+              finalStatus.charAt(0).toUpperCase() + finalStatus.slice(1) as "Present" | "Absent",
+              selectedDate,
+              selectedClassSection
+            )
+          }
+          // TODO: Handle 'unset' case - maybe a DELETE request to the API
+          debounceTimeouts.current.delete(studentId)
+        }, 1000)
+
+        debounceTimeouts.current.set(studentId, timeoutId)
+
+        return newMap
+      })
+    },
+    [selectedDate, selectedClassSection, saveAttendance]
+  )
 
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-          <div className="flex items-center justify-center h-64">
-            <p className="text-muted-foreground">Loading...</p>
-          </div>
+        <div className="flex items-center justify-center h-64">
+          <p className="text-muted-foreground">Loading...</p>
         </div>
       </DashboardLayout>
     )
   }
 
-  const presentCount = Array.from(attendance.values()).filter(p => p).length
+  const presentCount = Array.from(attendance.values()).filter(
+    s => s === "present"
+  ).length
+  const absentCount = Array.from(attendance.values()).filter(
+    s => s === "absent"
+  ).length
 
   return (
     <DashboardLayout>
       <div className="flex flex-1 flex-col gap-4 p-4 md:p-6">
-        {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Mark Attendance</h1>
             <p className="text-muted-foreground">
-              Mark daily attendance for students
+              Mark daily attendance for students individually. Changes are saved
+              automatically.
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <UserCheck className="h-8 w-8 text-primary" />
-          </div>
+          <UserCheck className="h-8 w-8 text-primary" />
         </div>
 
-        {/* Filters and Date Selection */}
         <Card>
           <CardHeader>
             <CardTitle>Attendance Details</CardTitle>
-            <CardDescription>Select date and filter students</CardDescription>
+            <CardDescription>
+              Select a date, level, and class section to mark attendance.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Date Picker */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label>Date</Label>
                 <Popover>
@@ -218,29 +322,31 @@ export default function AttendancePage() {
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {selectedDate ? format(selectedDate, "PPP") : <span>Pick a date</span>}
+                      {selectedDate ? (
+                        format(selectedDate, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={selectedDate}
-                      onSelect={(date) => date && setSelectedDate(date)}
+                      onSelect={date => date && setSelectedDate(date)}
                       initialFocus
                     />
                   </PopoverContent>
                 </Popover>
               </div>
 
-              {/* Level Filter */}
               <div className="space-y-2">
-                <Label>Filter by Level</Label>
+                <Label>Select Level</Label>
                 <Select value={selectedLevel} onValueChange={setSelectedLevel}>
                   <SelectTrigger>
-                    <SelectValue placeholder="All Levels" />
+                    <SelectValue placeholder="Select a Level" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Levels</SelectItem>
                     {levels.map(level => (
                       <SelectItem key={level.id} value={level.id}>
                         {level.name}
@@ -250,7 +356,32 @@ export default function AttendancePage() {
                 </Select>
               </div>
 
-              {/* Search */}
+              <div className="space-y-2">
+                <Label>Select Class Section</Label>
+                <Select
+                  value={selectedClassSection}
+                  onValueChange={setSelectedClassSection}
+                  disabled={!selectedLevel || loadingClassSections}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a Class Section" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {loadingClassSections ? (
+                      <SelectItem value="loading" disabled>
+                        Loading...
+                      </SelectItem>
+                    ) : (
+                      classSections.map(section => (
+                        <SelectItem key={section.id} value={section.id}>
+                          {section.subject.name} - {section.name}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
                 <Label>Search Student</Label>
                 <div className="relative">
@@ -258,93 +389,107 @@ export default function AttendancePage() {
                   <Input
                     placeholder="Search by name..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={e => setSearchQuery(e.target.value)}
                     className="pl-8"
+                    disabled={!selectedClassSection}
                   />
                 </div>
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="flex items-center justify-between pt-4 border-t">
+            <div className="pt-4 border-t">
               <div className="text-sm text-muted-foreground">
-                Showing {filteredStudents.length} student(s) • {presentCount} marked present
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={clearAll} size="sm">
-                  Clear All
-                </Button>
-                <Button variant="outline" onClick={markAllPresent} size="sm">
-                  Mark All Present
-                </Button>
+                Showing {filteredStudents.length} student(s) • {presentCount}{" "}
+                present • {absentCount} absent
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Student List */}
         <Card>
           <CardHeader>
             <CardTitle>Students</CardTitle>
-            <CardDescription>Select students present today</CardDescription>
+            <CardDescription>
+              {selectedClassSection
+                ? "Mark students as present or absent."
+                : "Select a class section to see the student list."}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            {filteredStudents.length === 0 ? (
+            {loadingStudents ? (
               <div className="text-center py-8 text-muted-foreground">
-                No students found
+                Loading students...
+              </div>
+            ) : filteredStudents.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                {selectedClassSection
+                  ? "No students found for this class section."
+                  : "No class section selected."}
               </div>
             ) : (
               <div className="space-y-2 max-h-[400px] overflow-y-auto">
-                {filteredStudents.map(student => (
-                  <div
-                    key={student.id}
-                    className={cn(
-                      "flex items-center space-x-3 p-3 rounded-lg border transition-colors cursor-pointer hover:bg-accent",
-                      attendance.get(student.id) && "bg-green-50 dark:bg-green-950 border-green-300 dark:border-green-800"
-                    )}
-                    onClick={() => toggleAttendance(student.id)}
-                  >
-                    <Checkbox
-                      checked={attendance.get(student.id) || false}
-                      onCheckedChange={() => toggleAttendance(student.id)}
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium">
-                          {student.firstName} {student.lastName}
-                        </p>
-                        {attendance.get(student.id) && (
-                          <CheckCircle2 className="h-4 w-4 text-green-600" />
-                        )}
+                {filteredStudents.map(student => {
+                  const status = attendance.get(student.id)
+                  return (
+                    <div
+                      key={student.id}
+                      className={cn(
+                        "flex items-center space-x-3 p-3 rounded-lg border transition-colors",
+                        status === "present" &&
+                          "bg-green-50 dark:bg-green-950 border-green-300 dark:border-green-800",
+                        status === "absent" &&
+                          "bg-red-50 dark:bg-red-950 border-red-300 dark:border-red-800"
+                      )}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium">
+                            {student.firstName} {student.lastName}
+                          </p>
+                          {status === "present" && (
+                            <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          )}
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          {student.level && (
+                            <span className="text-xs bg-secondary px-2 py-0.5 rounded">
+                              {student.level.name}
+                            </span>
+                          )}
+                          <span>{student.parentPhone}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        {student.level && (
-                          <span className="text-xs bg-secondary px-2 py-0.5 rounded">
-                            {student.level.name}
-                          </span>
-                        )}
-                        <span>{student.parentPhone}</span>
+                      <div className="flex gap-2">
+                        <Button
+                          variant={status === "present" ? "default" : "outline"}
+                          size="sm"
+                          onClick={() =>
+                            handleAttendanceChange(student.id, "present")
+                          }
+                          className={cn({
+                            "bg-green-600 hover:bg-green-700 text-white":
+                              status === "present",
+                          })}
+                        >
+                          Present
+                        </Button>
+                        <Button
+                          variant={status === "absent" ? "destructive" : "outline"}
+                          size="sm"
+                          onClick={() =>
+                            handleAttendanceChange(student.id, "absent")
+                          }
+                        >
+                          Absent
+                        </Button>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </CardContent>
         </Card>
-
-        {/* Submit Button */}
-        <div className="flex justify-end">
-          <Button
-            onClick={submitAttendance}
-            disabled={submitting || presentCount === 0}
-            size="lg"
-            className="min-w-[200px]"
-          >
-            {submitting ? "Submitting..." : `Submit Attendance (${presentCount})`}
-          </Button>
-        </div>
       </div>
     </DashboardLayout>
   )
