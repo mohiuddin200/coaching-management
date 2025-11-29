@@ -19,7 +19,7 @@ export type User = {
   createdAt: string
 }
 
-export const createColumns = (refetchUsers: () => void, isAdmin: boolean): ColumnDef<User>[] => [
+export const createColumns = (): ColumnDef<User>[] => [
   {
     accessorKey: "email",
     header: "Email",

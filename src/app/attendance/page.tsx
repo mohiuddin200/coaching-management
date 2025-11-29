@@ -25,7 +25,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { CalendarIcon, CheckCircle2, Search, UserCheck } from "lucide-react"
+import { CalendarIcon, CheckCircle2, Search, UserCheck, X } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
@@ -40,6 +40,18 @@ interface Student {
     id: string
     name: string
   }
+  enrollments: {
+    id: string
+    classSectionId: string
+    status: string
+    classSection: {
+      id: string
+      name: string
+      subject: {
+        name: string
+      }
+    }
+  }[]
 }
 
 interface Level {
@@ -102,7 +114,6 @@ export default function AttendancePage() {
     if (!selectedLevel) {
       setClassSections([])
       setSelectedClassSection("")
-      setStudents([])
       return
     }
 
@@ -124,19 +135,12 @@ export default function AttendancePage() {
     fetchClassSections()
   }, [selectedLevel])
 
-  // Fetch students when class section changes
+  // Fetch all students on mount
   useEffect(() => {
-    if (!selectedClassSection) {
-      setStudents([])
-      return
-    }
-
     const fetchStudents = async () => {
       setLoadingStudents(true)
       try {
-        const res = await fetch(
-          `/api/class-sections/${selectedClassSection}/students`
-        )
+        const res = await fetch("/api/students")
         const data = await res.json()
         setStudents(data.students || [])
       } catch (error) {
@@ -147,11 +151,22 @@ export default function AttendancePage() {
       }
     }
     fetchStudents()
-  }, [selectedClassSection])
+  }, [])
 
-  // Filter students based on search query
+  // Filter students based on search query, level, and class section
   useEffect(() => {
     let filtered = students
+
+    if (selectedLevel) {
+      filtered = filtered.filter(student => student.level?.id === selectedLevel)
+    }
+
+    if (selectedClassSection) {
+      filtered = filtered.filter(student =>
+        student.enrollments.some(e => e.classSectionId === selectedClassSection && e.status === 'Active')
+      )
+    }
+
     if (searchQuery) {
       filtered = filtered.filter(student => {
         const fullName = `${student.firstName} ${student.lastName}`.toLowerCase()
@@ -159,11 +174,13 @@ export default function AttendancePage() {
       })
     }
     setFilteredStudents(filtered)
-  }, [students, searchQuery])
+  }, [students, searchQuery, selectedLevel, selectedClassSection])
 
-  // Fetch attendance records when date or class section changes
+
+
+  // Fetch attendance records when date changes (and optionally class section)
   useEffect(() => {
-    if (!selectedClassSection || !selectedDate) {
+    if (!selectedDate) {
       setAttendance(new Map())
       return
     }
@@ -171,9 +188,12 @@ export default function AttendancePage() {
     const fetchAttendance = async () => {
       try {
         const dateString = selectedDate.toISOString().split("T")[0]
-        const res = await fetch(
-          `/api/attendance?classSectionId=${selectedClassSection}&date=${dateString}`
-        )
+        let url = `/api/attendance?date=${dateString}`
+        if (selectedClassSection) {
+          url += `&classSectionId=${selectedClassSection}`
+        }
+
+        const res = await fetch(url)
         const data = await res.json()
         if (res.ok) {
           const attendanceMap = new Map<string, AttendanceStatus>()
@@ -191,7 +211,7 @@ export default function AttendancePage() {
     }
 
     fetchAttendance()
-  }, [selectedClassSection, selectedDate])
+  }, [selectedDate, selectedClassSection])
 
   const saveAttendance = useCallback(
     async (
@@ -200,18 +220,13 @@ export default function AttendancePage() {
       date: Date,
       classSectionId: string
     ) => {
-      if (!classSectionId) {
-        toast.error("Please select a class section first.")
-        return
-      }
-
       try {
         const response = await fetch("/api/attendance", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             studentId,
-            classSectionId,
+            classSectionId: classSectionId || undefined,
             date: date.toISOString(),
             status,
           }),
@@ -269,6 +284,13 @@ export default function AttendancePage() {
     },
     [selectedDate, selectedClassSection, saveAttendance]
   )
+
+  const resetFilters = () => {
+    setSelectedLevel("")
+    setSelectedClassSection("")
+    setClassSections([])
+    toast.success("Filters reset successfully")
+  }
 
   if (loading) {
     return (
@@ -364,7 +386,7 @@ export default function AttendancePage() {
                   disabled={!selectedLevel || loadingClassSections}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a Class Section" />
+                    <SelectValue placeholder="All Class Sections" />
                   </SelectTrigger>
                   <SelectContent>
                     {loadingClassSections ? (
@@ -391,11 +413,24 @@ export default function AttendancePage() {
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     className="pl-8"
-                    disabled={!selectedClassSection}
                   />
                 </div>
               </div>
             </div>
+
+            {(selectedLevel || selectedClassSection) && (
+              <div className="flex justify-end pt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resetFilters}
+                  className="gap-2"
+                >
+                  <X className="h-4 w-4" />
+                  Reset Filters
+                </Button>
+              </div>
+            )}
 
             <div className="pt-4 border-t">
               <div className="text-sm text-muted-foreground">
@@ -410,9 +445,7 @@ export default function AttendancePage() {
           <CardHeader>
             <CardTitle>Students</CardTitle>
             <CardDescription>
-              {selectedClassSection
-                ? "Mark students as present or absent."
-                : "Select a class section to see the student list."}
+              Mark students as present or absent.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -422,9 +455,7 @@ export default function AttendancePage() {
               </div>
             ) : filteredStudents.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                {selectedClassSection
-                  ? "No students found for this class section."
-                  : "No class section selected."}
+                No students found.
               </div>
             ) : (
               <div className="space-y-2 max-h-[400px] overflow-y-auto">
@@ -436,9 +467,9 @@ export default function AttendancePage() {
                       className={cn(
                         "flex items-center space-x-3 p-3 rounded-lg border transition-colors",
                         status === "present" &&
-                          "bg-green-50 dark:bg-green-950 border-green-300 dark:border-green-800",
+                        "bg-green-50 dark:bg-green-950 border-green-300 dark:border-green-800",
                         status === "absent" &&
-                          "bg-red-50 dark:bg-red-950 border-red-300 dark:border-red-800"
+                        "bg-red-50 dark:bg-red-950 border-red-300 dark:border-red-800"
                       )}
                     >
                       <div className="flex-1 min-w-0">

@@ -208,15 +208,15 @@ model Attendance {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   studentId      String
-  classSectionId String
+  classSectionId String?
   deviceId       String?
-  classSection   ClassSection     @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
+  classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   device         BiometricDevice? @relation(fields: [deviceId], references: [id])
   student        Student          @relation(fields: [studentId], references: [id])
   class          Class?           @relation(fields: [classId], references: [id])
   classId        String?
 
-  @@unique([studentId, classSectionId, date])
+  @@unique([studentId, date])
   @@map("attendances")
 }
 

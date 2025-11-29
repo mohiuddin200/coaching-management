@@ -67,7 +67,7 @@ const studentFormSchema = z.object({
   idProof: z.string().optional(),
 })
 
-type StudentFormValues = z.infer<typeof studentFormSchema>
+export type StudentFormValues = z.infer<typeof studentFormSchema>
 
 interface StudentDialogProps {
   student?: Student
@@ -218,7 +218,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
       }
 
       await response.json()
-      
+
       toast.success(
         isEditMode ? "Student updated successfully!" : "Student created successfully!",
         {
@@ -230,7 +230,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
       form.reset()
       setOpen(false)
       setCurrentStep(0) // Reset to first step
-      
+
       // Notify parent component to refresh data
       if (onSuccess) {
         onSuccess()
@@ -275,13 +275,13 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
         <DialogHeader>
           <DialogTitle>{isEditMode ? "Edit Student" : "Add New Student"}</DialogTitle>
           <DialogDescription>
-            {isEditMode 
+            {isEditMode
               ? "Update the student information below."
               : "Create a new student profile. Fill in the required information below."
             }
           </DialogDescription>
         </DialogHeader>
-        
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {error && (
@@ -294,16 +294,15 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
             <div className="flex justify-between mb-12">
               {STEPS.map((step, index) => (
                 <div key={step} className="flex flex-col items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
-                    index === currentStep ? "bg-blue-500" : "bg-gray-400"
-                  }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${index === currentStep ? "bg-blue-500" : "bg-gray-400"
+                    }`}>
                     {index + 1}
                   </div>
                   <span className="text-xs mt-1">{step}</span>
                 </div>
               ))}
             </div>
-            
+
             {currentStep === 0 && <Step1BasicInfo form={form} levels={levels} />}
             {currentStep === 1 && <Step2DetailedProfile form={form} />}
             {currentStep === 2 && <Step3AdditionalInfo form={form} />}
@@ -339,8 +338,8 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
                 )}
                 {currentStep === STEPS.length - 1 && (
                   <Button type="submit" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting 
-                      ? (isEditMode ? "Updating..." : "Creating...") 
+                    {form.formState.isSubmitting
+                      ? (isEditMode ? "Updating..." : "Creating...")
                       : (isEditMode ? "Update Student" : "Create Student")
                     }
                   </Button>

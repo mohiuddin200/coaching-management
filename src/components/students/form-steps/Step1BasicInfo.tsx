@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { UseFormReturn } from "react-hook-form"
+import { StudentFormValues } from "../create-student-dialog"
 
 interface Level {
   id: string
@@ -23,8 +24,7 @@ interface Level {
 }
 
 interface Step1BasicInfoProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: UseFormReturn<any>
+  form: UseFormReturn<StudentFormValues>
   levels: Level[]
 }
 
@@ -47,7 +47,7 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="lastName"
@@ -187,8 +187,8 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Class Level <span className="text-red-500">*</span></FormLabel>
-            <Select 
-              onValueChange={(value) => field.onChange(value === "none" ? "" : value)} 
+            <Select
+              onValueChange={(value) => field.onChange(value === "none" ? "" : value)}
               defaultValue={field.value || "none"}
             >
               <FormControl>

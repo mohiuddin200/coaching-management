@@ -1,22 +1,34 @@
-import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
     const students = await prisma.student.findMany({
       include: {
         level: true,
+        enrollments: {
+          where: {
+            status: "Active",
+          },
+          include: {
+            classSection: {
+              include: {
+                subject: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
 
     return NextResponse.json({ students });
   } catch (error) {
-    console.error('Error fetching students:', error);
+    console.error("Error fetching students:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch students' },
+      { error: "Failed to fetch students" },
       { status: 500 }
     );
   }
@@ -25,18 +37,18 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { 
-      firstName, 
-      lastName, 
-      email, 
-      phoneNumber, 
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
       fatherName,
       fatherPhone,
       motherName,
       motherPhone,
-      dateOfBirth, 
-      address, 
-      status, 
+      dateOfBirth,
+      address,
+      status,
       smsEnabled,
       levelId,
       gender,
@@ -60,9 +72,20 @@ export async function POST(request: Request) {
     } = body;
 
     // Validate required fields
-    if (!firstName || !lastName || !email || !phoneNumber || !fatherName || !fatherPhone || !motherName || !motherPhone || !address || !levelId) {
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !phoneNumber ||
+      !fatherName ||
+      !fatherPhone ||
+      !motherName ||
+      !motherPhone ||
+      !address ||
+      !levelId
+    ) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
@@ -80,7 +103,7 @@ export async function POST(request: Request) {
         motherPhone,
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         address,
-        status: status || 'Active',
+        status: status || "Active",
         smsEnabled: smsEnabled || false,
         levelId,
         gender: gender || null,
@@ -94,7 +117,8 @@ export async function POST(request: Request) {
         country: country || null,
         previousSchool: previousSchool || null,
         previousClass: previousClass || null,
-        previousMarks: previousMarks !== undefined ? parseFloat(previousMarks) : null,
+        previousMarks:
+          previousMarks !== undefined ? parseFloat(previousMarks) : null,
         emergencyContactName: emergencyContactName || null,
         emergencyContactPhone: emergencyContactPhone || null,
         emergencyContactRelation: emergencyContactRelation || null,
@@ -114,7 +138,7 @@ export async function POST(request: Request) {
           subject: {
             levelId: levelId,
           },
-          status: 'Scheduled',
+          status: "Scheduled",
         },
       });
 
@@ -123,7 +147,7 @@ export async function POST(request: Request) {
           data: classSections.map((section) => ({
             studentId: student.id,
             classSectionId: section.id,
-            status: 'Active',
+            status: "Active",
           })),
         });
       }
@@ -131,9 +155,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ student }, { status: 201 });
   } catch (error) {
-    console.error('Error creating student:', error);
+    console.error("Error creating student:", error);
     return NextResponse.json(
-      { error: 'Failed to create student' },
+      { error: "Failed to create student" },
       { status: 500 }
     );
   }

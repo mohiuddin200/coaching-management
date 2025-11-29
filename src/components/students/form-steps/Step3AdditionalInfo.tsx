@@ -16,9 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { UseFormReturn } from "react-hook-form"
+import { StudentFormValues } from "../create-student-dialog"
 
 interface Step3AdditionalInfoProps {
-  form: UseFormReturn<any>
+  form: UseFormReturn<StudentFormValues>
 }
 
 export function Step3AdditionalInfo({ form }: Step3AdditionalInfoProps) {
@@ -141,8 +142,8 @@ export function Step3AdditionalInfo({ form }: Step3AdditionalInfoProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>SMS Notifications</FormLabel>
-              <Select 
-                onValueChange={(value) => field.onChange(value === "true")} 
+              <Select
+                onValueChange={(value) => field.onChange(value === "true")}
                 defaultValue={field.value ? "true" : "false"}
               >
                 <FormControl>

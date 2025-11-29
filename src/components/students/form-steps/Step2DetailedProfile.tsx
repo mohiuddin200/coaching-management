@@ -16,9 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { UseFormReturn } from "react-hook-form"
+import { StudentFormValues } from "../create-student-dialog"
 
 interface Step2DetailedProfileProps {
-  form: UseFormReturn<any>
+  form: UseFormReturn<StudentFormValues>
 }
 
 export function Step2DetailedProfile({ form }: Step2DetailedProfileProps) {

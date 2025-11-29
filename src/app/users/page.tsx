@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState, useMemo } from "react"
-import { createClient } from "@/lib/supabase/client"
 import { createColumns, User } from "@/components/users/columns"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { FullPaginationTable } from "@/components/table/FullPaginationTable"
@@ -10,7 +9,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [isAdmin, setIsAdmin] = useState(false)
+
 
   const fetchUsers = async () => {
     try {
@@ -30,19 +29,10 @@ export default function UsersPage() {
   }
 
   useEffect(() => {
-    const checkUserRole = async () => {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user?.user_metadata?.role === 'Admin') {
-        setIsAdmin(true)
-      }
-    }
-    
-    checkUserRole()
     fetchUsers()
   }, [])
 
-  const columns = useMemo(() => createColumns(fetchUsers, isAdmin), [isAdmin])
+  const columns = useMemo(() => createColumns(), [])
 
   if (loading) {
     return (
@@ -92,8 +82,8 @@ export default function UsersPage() {
           </div>
           {/* <CreateUserDialog onUserCreated={fetchUsers} /> */}
         </div>
-        <FullPaginationTable 
-          columns={columns} 
+        <FullPaginationTable
+          columns={columns}
           data={users}
           filterColumn="email"
         />

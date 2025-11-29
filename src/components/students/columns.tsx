@@ -103,8 +103,6 @@ export const createColumns = (
     cell: ({ row }) => {
       const fatherName = row.original.fatherName;
       const fatherPhone = row.original.fatherPhone;
-      const motherName = row.original.motherName;
-      const motherPhone = row.original.motherPhone;
       return (
         <div className="flex flex-col gap-2">
           {fatherName && (
