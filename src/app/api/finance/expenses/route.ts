@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ExpenseCategory } from "@/generated/enums";
-import { SmsLog } from "@prisma/client";
+import { SmsLog } from "@/generated/client";
 
 
 // GET - List all expenses
