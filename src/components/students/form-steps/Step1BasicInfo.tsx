@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select"
 import { UseFormReturn } from "react-hook-form"
 import { StudentFormValues } from "../create-student-dialog"
+import { InlineLoader } from "@/components/data-loader"
 
 interface Level {
   id: string
@@ -26,9 +27,10 @@ interface Level {
 interface Step1BasicInfoProps {
   form: UseFormReturn<StudentFormValues>
   levels: Level[]
+  loadingLevels?: boolean
 }
 
-export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
+export function Step1BasicInfo({ form, levels, loadingLevels }: Step1BasicInfoProps) {
   return (
     <>
       <div className="grid grid-cols-2 gap-4">
@@ -188,21 +190,31 @@ export function Step1BasicInfo({ form, levels }: Step1BasicInfoProps) {
           <FormItem>
             <FormLabel>Class Level <span className="text-red-500">*</span></FormLabel>
             <Select
-              onValueChange={(value) => field.onChange(value === "none" ? "" : value)}
-              defaultValue={field.value || "none"}
+              onValueChange={field.onChange}
+              value={field.value}
+              disabled={loadingLevels}
             >
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select class level (optional)" />
+                  <SelectValue placeholder={loadingLevels ? "Loading levels..." : "Select class level"} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="none">No level assigned</SelectItem>
-                {levels.map((level) => (
-                  <SelectItem key={level.id} value={level.id}>
-                    {level.name}
-                  </SelectItem>
-                ))}
+                {loadingLevels ? (
+                  <div className="p-4">
+                    <InlineLoader text="Loading levels..." />
+                  </div>
+                ) : levels.length === 0 ? (
+                  <div className="p-4 text-sm text-muted-foreground text-center">
+                    No levels available
+                  </div>
+                ) : (
+                  levels.map((level) => (
+                    <SelectItem key={level.id} value={level.id}>
+                      {level.name}
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
             <FormMessage />

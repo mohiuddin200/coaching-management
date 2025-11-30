@@ -11,6 +11,7 @@ import {
   LifeBuoy,
   School,
   LogOut,
+  Wallet,
 } from "lucide-react"
 
 import {
@@ -65,63 +66,34 @@ const data = {
       url: "/attendance",
       icon: UserCheck,
     },
-    // {
-    //   title: "Accounts",
-    //   url: "/accounts",
-    //   icon: CreditCard,
-    //   items: [
-    //     {
-    //       title: "Payments",
-    //       url: "/accounts/payments",
-    //     },
-    //     {
-    //       title: "Expenses",
-    //       url: "/accounts/expenses",
-    //     },
-    //     {
-    //       title: "Reports",
-    //       url: "/accounts/reports",
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: "Exams",
-    //   url: "/exams",
-    //   icon: FileText,
-    //   items: [
-    //     {
-    //       title: "All Exams",
-    //       url: "/exams",
-    //     },
-    //     {
-    //       title: "Create Exam",
-    //       url: "/exams/create",
-    //     },
-    //     {
-    //       title: "Results",
-    //       url: "/exams/results",
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: "Marketing",
-    //   url: "/marketing",
-    //   icon: Megaphone,
-    //   items: [
-    //     {
-    //       title: "Contacts",
-    //       url: "/marketing/contacts",
-    //     },
-    //     {
-    //       title: "Campaigns",
-    //       url: "/marketing/campaigns",
-    //     },
-    //     {
-    //       title: "SMS Logs",
-    //       url: "/marketing/sms-logs",
-    //     },
-    //   ],
-    // },
+    {
+      title: "Finance",
+      url: "/finance",
+      icon: Wallet,
+      items: [
+        {
+          title: "Dashboard",
+          url: "/finance",
+        },
+        {
+          title: "Fee Structures",
+          url: "/finance/fees",
+        },
+        {
+          title: "Student Payments",
+          url: "/finance/payments",
+        },
+        {
+          title: "Teacher Salaries",
+          url: "/finance/salaries",
+        },
+        {
+          title: "Expenses",
+          url: "/finance/expenses",
+        },
+      ],
+    },
+  
     {
       title: "Settings",
       url: "/settings",

@@ -1,6 +1,7 @@
 "use client"
 
 import { ChevronRight, type LucideIcon } from "lucide-react"
+import { useState } from "react"
 
 import {
   Collapsible,
@@ -34,12 +35,32 @@ export function NavMain({
     }[]
   }[]
 }) {
+  // Track which items are open - initialize from isActive prop
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>(
+    items.reduce((acc, item) => {
+      acc[item.title] = item.isActive || false
+      return acc
+    }, {} as Record<string, boolean>)
+  )
+
+  const handleToggle = (title: string) => {
+    setOpenItems((prev) => ({
+      ...prev,
+      [title]: !prev[title],
+    }))
+  }
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
+          <Collapsible
+            key={item.title}
+            asChild
+            open={openItems[item.title]}
+            onOpenChange={() => handleToggle(item.title)}
+          >
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <Link href={item.url}>
@@ -60,9 +81,9 @@ export function NavMain({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                            <Link href={subItem.url}>
                               <span>{subItem.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}

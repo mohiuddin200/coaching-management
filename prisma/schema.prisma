@@ -5,9 +5,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
 }
 
 model User {
@@ -22,18 +20,18 @@ model User {
 }
 
 model Teacher {
-  id                       String         @id @default(uuid())
+  id                       String           @id @default(uuid())
   firstName                String
   lastName                 String
   email                    String?
   phoneNumber              String
   subject                  String?
   qualifications           String?
-  joinDate                 DateTime       @default(now())
-  status                   Status         @default(Active)
-  createdAt                DateTime       @default(now())
-  updatedAt                DateTime       @updatedAt
-  userId                   String?        @unique
+  joinDate                 DateTime         @default(now())
+  status                   Status           @default(Active)
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
+  userId                   String?          @unique
   bloodGroup               BloodGroup?
   cgpa                     Float?
   city                     String?
@@ -46,7 +44,7 @@ model Teacher {
   gender                   Gender?
   idProof                  String?
   nationality              String?
-  nid                      String?        @unique
+  nid                      String?          @unique
   paymentType              PaymentType?
   postalCode               String?
   profileImage             String?
@@ -55,26 +53,27 @@ model Teacher {
   state                    String?
   streetAddress            String?
   universityName           String?
-  classSections            ClassSection[] @relation("TeacherToClassSection")
-  classes                  Class[]        @relation("TeacherToClass")
-  user                     User?          @relation("UserToTeacher", fields: [userId], references: [id])
+  classSections            ClassSection[]   @relation("TeacherToClassSection")
+  classes                  Class[]          @relation("TeacherToClass")
+  payments                 TeacherPayment[]
+  user                     User?            @relation("UserToTeacher", fields: [userId], references: [id])
 
   @@map("teachers")
 }
 
 model Student {
-  id                       String       @id @default(uuid())
+  id                       String           @id @default(uuid())
   firstName                String
   lastName                 String
   email                    String
   phoneNumber              String
   dateOfBirth              DateTime?
   address                  String
-  enrollmentDate           DateTime     @default(now())
-  status                   Status       @default(Active)
-  smsEnabled               Boolean      @default(false)
-  createdAt                DateTime     @default(now())
-  updatedAt                DateTime     @updatedAt
+  enrollmentDate           DateTime         @default(now())
+  status                   Status           @default(Active)
+  smsEnabled               Boolean          @default(false)
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
   levelId                  String
   birthCertificate         String?
   bloodGroup               BloodGroup?
@@ -100,21 +99,23 @@ model Student {
   streetAddress            String?
   attendances              Attendance[]
   enrollments              Enrollment[]
-  level                    Level        @relation(fields: [levelId], references: [id])
+  payments                 StudentPayment[]
+  level                    Level            @relation(fields: [levelId], references: [id])
 
   @@map("students")
 }
 
 model Level {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  levelNumber Int       @unique
-  description String?
-  status      Status    @default(Active)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  students    Student[]
-  subjects    Subject[]
+  id            String         @id @default(cuid())
+  name          String         @unique
+  levelNumber   Int            @unique
+  description   String?
+  status        Status         @default(Active)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  students      Student[]
+  subjects      Subject[]
+  feeStructures FeeStructure[]
 
   @@map("levels")
 }
@@ -273,6 +274,70 @@ model Feedback {
   @@map("feedbacks")
 }
 
+model FeeStructure {
+  id           String       @id @default(cuid())
+  name         String
+  levelId      String?
+  amount       Float
+  frequency    FeeFrequency @default(Monthly)
+  academicYear String
+  description  String?
+  isActive     Boolean      @default(true)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  level        Level?       @relation(fields: [levelId], references: [id])
+
+  @@map("fee_structures")
+}
+
+model StudentPayment {
+  id          String        @id @default(cuid())
+  studentId   String
+  amount      Float
+  paymentDate DateTime
+  dueDate     DateTime
+  status      PaymentStatus @default(Pending)
+  monthYear   String
+  description String?
+  receiptNo   String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  student     Student       @relation(fields: [studentId], references: [id])
+
+  @@map("student_payments")
+}
+
+model TeacherPayment {
+  id          String        @id @default(cuid())
+  teacherId   String
+  amount      Float
+  paymentDate DateTime
+  periodStart DateTime
+  periodEnd   DateTime
+  status      PaymentStatus @default(Paid)
+  description String?
+  receiptNo   String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  teacher     Teacher       @relation(fields: [teacherId], references: [id])
+
+  @@map("teacher_payments")
+}
+
+model Expense {
+  id          String          @id @default(cuid())
+  category    ExpenseCategory
+  amount      Float
+  expenseDate DateTime
+  description String
+  vendor      String?
+  receiptNo   String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("expenses")
+}
+
 enum Gender {
   Male
   Female
@@ -362,4 +427,30 @@ enum PaymentType {
 enum AttendanceStatus {
   Present
   Absent
+}
+
+enum PaymentStatus {
+  Pending
+  Paid
+  Overdue
+  Cancelled
+}
+
+enum FeeFrequency {
+  Monthly
+  Quarterly
+  Yearly
+  OneTime
+}
+
+enum ExpenseCategory {
+  Salary
+  Rent
+  Utilities
+  SMS
+  Marketing
+  Supplies
+  Maintenance
+  Equipment
+  Other
 }

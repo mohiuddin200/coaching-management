@@ -23,6 +23,7 @@ import { Step2DetailedProfile } from "./form-steps/Step2DetailedProfile"
 import { Step3AdditionalInfo } from "./form-steps/Step3AdditionalInfo"
 import { Student } from "./columns"
 import { toast } from "sonner"
+import { InlineLoader } from "@/components/data-loader"
 
 const GenderEnum = z.enum(["Male", "Female", "Other"]);
 const BloodGroupEnum = z.enum(["A_Positive", "A_Negative", "B_Positive", "B_Negative", "AB_Positive", "AB_Negative", "O_Positive", "O_Negative"]);
@@ -84,6 +85,7 @@ interface Level {
 export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProps) {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [loadingLevels, setLoadingLevels] = useState(false)
   const [levels, setLevels] = useState<Level[]>([])
   const [currentStep, setCurrentStep] = useState(0)
   const isEditMode = !!student
@@ -97,10 +99,15 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
   // Fetch levels when dialog opens
   useEffect(() => {
     if (open) {
+      setLoadingLevels(true)
       fetch('/api/levels')
         .then(res => res.json())
         .then(data => setLevels(data))
-        .catch(err => console.error('Error fetching levels:', err))
+        .catch(err => {
+          console.error('Error fetching levels:', err)
+          toast.error('Failed to load class levels')
+        })
+        .finally(() => setLoadingLevels(false))
     }
   }, [open])
 
@@ -303,7 +310,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
               ))}
             </div>
 
-            {currentStep === 0 && <Step1BasicInfo form={form} levels={levels} />}
+            {currentStep === 0 && <Step1BasicInfo form={form} levels={levels} loadingLevels={loadingLevels} />}
             {currentStep === 1 && <Step2DetailedProfile form={form} />}
             {currentStep === 2 && <Step3AdditionalInfo form={form} />}
 
