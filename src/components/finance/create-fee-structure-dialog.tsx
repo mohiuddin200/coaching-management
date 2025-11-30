@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { InlineLoader } from "@/components/data-loader";
 

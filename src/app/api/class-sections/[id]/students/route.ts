@@ -35,7 +35,16 @@ export async function GET(
       },
     });
 
-    const students = enrollments.map((enrollment) => enrollment.student);
+    const students = enrollments.map(
+      (enrollment: {
+        student: {
+          id: string;
+          firstName: string;
+          lastName: string;
+          level: { id: string; name: string } | null;
+        };
+      }) => enrollment.student
+    );
 
     return NextResponse.json({ students });
   } catch (error) {

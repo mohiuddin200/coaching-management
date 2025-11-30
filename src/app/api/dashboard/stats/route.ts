@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -11,23 +11,23 @@ export async function GET() {
       activeEnrollments,
     ] = await Promise.all([
       prisma.student.count({
-        where: { status: 'Active' },
+        where: { status: "Active" },
       }),
       prisma.teacher.count({
-        where: { status: 'Active' },
+        where: { status: "Active" },
       }),
       prisma.classSection.count({
-        where: { status: 'Scheduled' },
+        where: { status: "Scheduled" },
       }),
       prisma.enrollment.count({
-        where: { status: 'Active' },
+        where: { status: "Active" },
       }),
     ]);
 
     // Get recent students
     const recentStudents = await prisma.student.findMany({
       take: 5,
-      orderBy: { enrollmentDate: 'desc' },
+      orderBy: { enrollmentDate: "desc" },
       include: {
         level: true,
       },
@@ -36,7 +36,7 @@ export async function GET() {
     // Get class sections with enrollment counts
     const classSections = await prisma.classSection.findMany({
       take: 10,
-      where: { status: 'Scheduled' },
+      where: { status: "Scheduled" },
       include: {
         subject: {
           include: {
@@ -50,7 +50,7 @@ export async function GET() {
           },
         },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
     // Get enrollment by level
@@ -62,7 +62,7 @@ export async function GET() {
           },
         },
       },
-      orderBy: { levelNumber: 'asc' },
+      orderBy: { levelNumber: "asc" },
     });
 
     // Calculate today's attendance (placeholder - will be dynamic)
@@ -85,35 +85,56 @@ export async function GET() {
         activeEnrollments,
         monthlyRevenue: 125000, // Placeholder
       },
-      recentStudents: recentStudents.map((student) => ({
-        id: student.id,
-        firstName: student.firstName,
-        lastName: student.lastName,
-        level: student.level?.name || null,
-        enrollmentDate: student.enrollmentDate,
-        status: student.status,
-      })),
-      recentClasses: classSections.map((section) => ({
-        id: section.id,
-        name: section.name,
-        subject: section.subject.name,
-        teacher: `${section.teacher.firstName} ${section.teacher.lastName}`,
-        level: section.subject.level.name,
-        enrollmentCount: section._count.enrollments,
-        capacity: section.capacity,
-        status: section.status,
-      })),
-      enrollmentByLevel: enrollmentsByLevel.map((level) => ({
-        level: level.name,
-        students: level._count.students,
-      })),
+      recentStudents: recentStudents.map(
+        (student: {
+          id: string;
+          firstName: string;
+          lastName: string;
+          level: { name: string } | null;
+          enrollmentDate: Date;
+          status: string;
+        }) => ({
+          id: student.id,
+          firstName: student.firstName,
+          lastName: student.lastName,
+          level: student.level?.name || null,
+          enrollmentDate: student.enrollmentDate,
+          status: student.status,
+        })
+      ),
+      recentClasses: classSections.map(
+        (section: {
+          id: string;
+          name: string;
+          subject: { name: string; level: { name: string } | null };
+          teacher: { firstName: string; lastName: string };
+          _count: { enrollments: number };
+          capacity: number;
+          status: string;
+        }) => ({
+          id: section.id,
+          name: section.name,
+          subject: section.subject.name,
+          teacher: `${section.teacher.firstName} ${section.teacher.lastName}`,
+          level: section.subject.level?.name || null,
+          enrollmentCount: section._count.enrollments,
+          capacity: section.capacity,
+          status: section.status,
+        })
+      ),
+      enrollmentByLevel: enrollmentsByLevel.map(
+        (level: { name: string; _count: { students: number } }) => ({
+          level: level.name,
+          students: level._count.students,
+        })
+      ),
     };
 
     return NextResponse.json(stats);
   } catch (error) {
-    console.error('Error fetching dashboard stats:', error);
+    console.error("Error fetching dashboard stats:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch dashboard statistics' },
+      { error: "Failed to fetch dashboard statistics" },
       { status: 500 }
     );
   }

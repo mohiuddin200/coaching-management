@@ -144,7 +144,7 @@ export async function POST(request: Request) {
 
       if (classSections.length > 0) {
         await prisma.enrollment.createMany({
-          data: classSections.map((section) => ({
+          data: classSections.map((section: { id: string }) => ({
             studentId: student.id,
             classSectionId: section.id,
             status: "Active",

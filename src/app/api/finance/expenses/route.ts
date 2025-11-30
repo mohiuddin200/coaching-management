@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { ExpenseCategory } from "@/generated/prisma";
+import { ExpenseCategory, SmsLog } from "@/generated/prisma";
 
 // GET - List all expenses
 export async function GET(request: NextRequest) {
@@ -44,12 +44,14 @@ export async function GET(request: NextRequest) {
         },
       });
 
-      const smsExpenses = smsLogs.map((log) => ({
+      const smsExpenses = smsLogs.map((log: SmsLog) => ({
         id: log.id,
         category: "SMS" as ExpenseCategory,
         amount: log.cost || 0,
         expenseDate: log.createdAt,
-        description: `SMS to ${log.recipientPhone}: ${log.messageContent.substring(0, 50)}...`,
+        description: `SMS to ${
+          log.recipientPhone
+        }: ${log.messageContent.substring(0, 50)}...`,
         vendor: "SMS Service",
         receiptNo: null,
         createdAt: log.createdAt,

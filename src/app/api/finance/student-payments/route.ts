@@ -43,13 +43,13 @@ export async function GET(request: NextRequest) {
     today.setHours(0, 0, 0, 0);
 
     const overduePayments = payments.filter(
-      (payment) =>
+      (payment: { status: PaymentStatus; dueDate: Date }) =>
         payment.status === "Pending" && new Date(payment.dueDate) < today
     );
 
     if (overduePayments.length > 0) {
       await Promise.all(
-        overduePayments.map((payment) =>
+        overduePayments.map((payment: { id: string }) =>
           prisma.studentPayment.update({
             where: { id: payment.id },
             data: { status: "Overdue" },
@@ -138,10 +138,7 @@ export async function POST(request: Request) {
     });
 
     if (!student) {
-      return NextResponse.json(
-        { error: "Student not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Student not found" }, { status: 404 });
     }
 
     // Auto-calculate status based on due date

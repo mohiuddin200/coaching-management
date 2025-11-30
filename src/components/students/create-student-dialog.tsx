@@ -23,7 +23,6 @@ import { Step2DetailedProfile } from "./form-steps/Step2DetailedProfile"
 import { Step3AdditionalInfo } from "./form-steps/Step3AdditionalInfo"
 import { Student } from "./columns"
 import { toast } from "sonner"
-import { InlineLoader } from "@/components/data-loader"
 
 const GenderEnum = z.enum(["Male", "Female", "Other"]);
 const BloodGroupEnum = z.enum(["A_Positive", "A_Negative", "B_Positive", "B_Negative", "AB_Positive", "AB_Negative", "O_Positive", "O_Negative"]);

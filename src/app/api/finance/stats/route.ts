@@ -5,13 +5,22 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const month = searchParams.get("month"); // Format: YYYY-MM
-    
+
     const now = new Date();
-    const currentMonth = month || `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const currentMonth =
+      month ||
+      `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
     const [year, monthNum] = currentMonth.split("-");
-    
+
     const startOfMonth = new Date(parseInt(year), parseInt(monthNum) - 1, 1);
-    const endOfMonth = new Date(parseInt(year), parseInt(monthNum), 0, 23, 59, 59);
+    const endOfMonth = new Date(
+      parseInt(year),
+      parseInt(monthNum),
+      0,
+      23,
+      59,
+      59
+    );
 
     // Get student payments for the month
     const studentPayments = await prisma.studentPayment.findMany({
@@ -25,7 +34,7 @@ export async function GET(request: NextRequest) {
     });
 
     const totalRevenue = studentPayments.reduce(
-      (sum, payment) => sum + payment.amount,
+      (sum: number, payment: { amount: number }) => sum + payment.amount,
       0
     );
 
@@ -40,7 +49,7 @@ export async function GET(request: NextRequest) {
     });
 
     const totalExpenses = expenses.reduce(
-      (sum, expense) => sum + expense.amount,
+      (sum: number, expense: { amount: number }) => sum + expense.amount,
       0
     );
 
@@ -70,7 +79,7 @@ export async function GET(request: NextRequest) {
     });
 
     const totalOutstanding = outstandingPayments.reduce(
-      (sum, payment) => sum + payment.amount,
+      (sum: number, payment: { amount: number }) => sum + payment.amount,
       0
     );
 
