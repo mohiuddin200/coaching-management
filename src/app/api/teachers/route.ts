@@ -1,4 +1,4 @@
-import { PrismaClientKnownRequestError } from "@/generated/prisma/runtime/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 

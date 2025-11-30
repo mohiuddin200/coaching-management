@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { PaymentStatus } from "@/generated/prisma";
+import { PaymentStatus } from "@prisma/client";
 
 // GET - List all student payments
 export async function GET(request: NextRequest) {

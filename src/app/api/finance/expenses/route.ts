@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { ExpenseCategory, SmsLog } from "@/generated/prisma";
+import { ExpenseCategory, SmsLog } from "@prisma/client";
 
 // GET - List all expenses
 export async function GET(request: NextRequest) {
