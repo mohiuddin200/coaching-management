@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SupabaseProvider } from "./supabase-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +49,8 @@ export default async function RootLayout({
           </SupabaseProvider>
           <Toaster />
         </ThemeProvider>
+
+        <SpeedInsights />
       </body>
     </html>
   );
