@@ -57,11 +57,19 @@ export async function POST(
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    
-    console.log('Inviting teacher:', {
+
+    console.log('Invitation API: Processing teacher invitation', {
       teacherId: teacher.id,
       email: teacher.email,
-      name: `${teacher.firstName} ${teacher.lastName}`
+      name: `${teacher.firstName} ${teacher.lastName}`,
+      baseUrl: baseUrl
+    });
+
+    // Verify production environment variables are loaded
+    console.log('Invitation API: Environment check', {
+      hasBaseUrl: !!baseUrl,
+      hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasSupabaseServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY
     });
 
     // Use Supabase's built-in invite user functionality
@@ -79,17 +87,33 @@ export async function POST(
       }
     );
 
+    // Log external API service response status
+    console.log('External Invitation Service Status:', {
+      success: !inviteError,
+      error: inviteError?.message || null,
+      hasUser: !!data?.user
+    });
+
     if (inviteError) {
-      console.error("Error inviting teacher:", inviteError);
+      console.error('Invitation API Error: Supabase invite failed', {
+        teacherId: teacher.id,
+        email: teacher.email,
+        error: inviteError,
+        errorDetails: {
+          message: inviteError.message,
+          status: inviteError.status
+        }
+      });
       return NextResponse.json(
-        { error: inviteError.message },
+        { error: "Failed to send invitation. Check server logs for details." },
         { status: 500 }
       );
     }
 
-    console.log('Teacher invited successfully:', {
+    console.log('Invitation API: Teacher invited successfully', {
       userId: data?.user?.id,
       email: data?.user?.email,
+      teacherId: teacher.id
     });
 
     // Note: The teacher record will be linked to the user during onboarding
@@ -99,10 +123,17 @@ export async function POST(
       message: `Portal invitation sent to ${teacher.email}`,
       userId: data?.user?.id
     });
-  } catch (e) {
-    console.error("Unexpected error inviting teacher:", e);
+  } catch (error) {
+    console.error('Invitation API Error: Unexpected error occurred', {
+      teacherId: id,
+      error: error,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      errorStack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString()
+    });
+
     return NextResponse.json(
-      { error: "An unexpected error occurred." },
+      { error: "Failed to send invitation. Check server logs for details." },
       { status: 500 }
     );
   }
