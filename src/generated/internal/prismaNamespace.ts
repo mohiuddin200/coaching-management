@@ -16,10 +16,10 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "../models.js"
-import { type PrismaClient } from "./class.js"
+import type * as Prisma from "../models"
+import { type PrismaClient } from "./class"
 
-export type * from '../models.js'
+export type * from '../models'
 
 export type DMMF = typeof runtime.DMMF
 
@@ -1836,7 +1836,11 @@ export const TeacherScalarFieldEnum = {
   salary: 'salary',
   state: 'state',
   streetAddress: 'streetAddress',
-  universityName: 'universityName'
+  universityName: 'universityName',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason'
 } as const
 
 export type TeacherScalarFieldEnum = (typeof TeacherScalarFieldEnum)[keyof typeof TeacherScalarFieldEnum]
@@ -1877,7 +1881,11 @@ export const StudentScalarFieldEnum = {
   profileImage: 'profileImage',
   religion: 'religion',
   state: 'state',
-  streetAddress: 'streetAddress'
+  streetAddress: 'streetAddress',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason'
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
@@ -2250,6 +2258,20 @@ export type ListEnumPaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'DeleteReason'
+ */
+export type EnumDeleteReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeleteReason'>
+    
+
+
+/**
+ * Reference to a field of type 'DeleteReason[]'
+ */
+export type ListEnumDeleteReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeleteReason[]'>
     
 
 

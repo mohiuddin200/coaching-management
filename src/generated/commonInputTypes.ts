@@ -10,8 +10,8 @@
  */
 
 import type * as runtime from "@prisma/client/runtime/client"
-import * as $Enums from "./enums.js"
-import type * as Prisma from "./internal/prismaNamespace.js"
+import * as $Enums from "./enums"
+import type * as Prisma from "./internal/prismaNamespace"
 
 
 export type StringFilter<$PrismaModel = never> = {
@@ -154,6 +154,18 @@ export type EnumPaymentTypeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumPaymentTypeNullableFilter<$PrismaModel> | $Enums.PaymentType | null
 }
 
+export type BoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type EnumDeleteReasonNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.DeleteReason | Prisma.EnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.DeleteReason[] | Prisma.ListEnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.DeleteReason[] | Prisma.ListEnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumDeleteReasonNullableFilter<$PrismaModel> | $Enums.DeleteReason | null
+}
+
 export type SortOrderInput = {
   sort: Prisma.SortOrder
   nulls?: Prisma.NullsOrder
@@ -247,17 +259,22 @@ export type EnumPaymentTypeNullableWithAggregatesFilter<$PrismaModel = never> = 
   _max?: Prisma.NestedEnumPaymentTypeNullableFilter<$PrismaModel>
 }
 
-export type BoolFilter<$PrismaModel = never> = {
-  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
-}
-
 export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type EnumDeleteReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DeleteReason | Prisma.EnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.DeleteReason[] | Prisma.ListEnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.DeleteReason[] | Prisma.ListEnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumDeleteReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.DeleteReason | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDeleteReasonNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDeleteReasonNullableFilter<$PrismaModel>
 }
 
 export type IntFilter<$PrismaModel = never> = {
@@ -649,6 +666,18 @@ export type NestedEnumPaymentTypeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumPaymentTypeNullableFilter<$PrismaModel> | $Enums.PaymentType | null
 }
 
+export type NestedBoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
+export type NestedEnumDeleteReasonNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.DeleteReason | Prisma.EnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.DeleteReason[] | Prisma.ListEnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.DeleteReason[] | Prisma.ListEnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumDeleteReasonNullableFilter<$PrismaModel> | $Enums.DeleteReason | null
+}
+
 export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
@@ -747,17 +776,22 @@ export type NestedEnumPaymentTypeNullableWithAggregatesFilter<$PrismaModel = nev
   _max?: Prisma.NestedEnumPaymentTypeNullableFilter<$PrismaModel>
 }
 
-export type NestedBoolFilter<$PrismaModel = never> = {
-  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
-}
-
 export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type NestedEnumDeleteReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DeleteReason | Prisma.EnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.DeleteReason[] | Prisma.ListEnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.DeleteReason[] | Prisma.ListEnumDeleteReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumDeleteReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.DeleteReason | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDeleteReasonNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDeleteReasonNullableFilter<$PrismaModel>
 }
 
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {

@@ -172,3 +172,16 @@ export const ExpenseCategory = {
 } as const
 
 export type ExpenseCategory = (typeof ExpenseCategory)[keyof typeof ExpenseCategory]
+
+
+export const DeleteReason = {
+  RESIGNED: 'RESIGNED',
+  TERMINATED: 'TERMINATED',
+  REASSIGNED: 'REASSIGNED',
+  GRADUATED: 'GRADUATED',
+  TRANSFERRED: 'TRANSFERRED',
+  ERROR: 'ERROR',
+  OTHER: 'OTHER'
+} as const
+
+export type DeleteReason = (typeof DeleteReason)[keyof typeof DeleteReason]

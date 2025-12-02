@@ -52,6 +52,10 @@ model Teacher {
   state                    String?
   streetAddress            String?
   universityName           String?
+  isDeleted                Boolean          @default(false) @map("is_deleted")
+  deletedAt                DateTime?        @map("deleted_at")
+  deletedBy                String?          @map("deleted_by")
+  deleteReason             DeleteReason?    @map("delete_reason")
   classSections            ClassSection[]   @relation("TeacherToClassSection")
   classes                  Class[]          @relation("TeacherToClass")
   payments                 TeacherPayment[]
@@ -96,6 +100,10 @@ model Student {
   religion                 String?
   state                    String?
   streetAddress            String?
+  isDeleted                Boolean          @default(false) @map("is_deleted")
+  deletedAt                DateTime?        @map("deleted_at")
+  deletedBy                String?          @map("deleted_by")
+  deleteReason             DeleteReason?    @map("delete_reason")
   attendances              Attendance[]
   enrollments              Enrollment[]
   payments                 StudentPayment[]
@@ -452,4 +460,14 @@ enum ExpenseCategory {
   Maintenance
   Equipment
   Other
+}
+
+enum DeleteReason {
+  RESIGNED
+  TERMINATED
+  REASSIGNED
+  GRADUATED
+  TRANSFERRED
+  ERROR
+  OTHER
 }

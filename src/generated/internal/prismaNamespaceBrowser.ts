@@ -17,8 +17,8 @@
 
 import * as runtime from "@prisma/client/runtime/index-browser"
 
-export type * from '../models.js'
-export type * from './prismaNamespace.js'
+export type * from '../models'
+export type * from './prismaNamespace'
 
 export const Decimal = runtime.Decimal
 
@@ -131,7 +131,11 @@ export const TeacherScalarFieldEnum = {
   salary: 'salary',
   state: 'state',
   streetAddress: 'streetAddress',
-  universityName: 'universityName'
+  universityName: 'universityName',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason'
 } as const
 
 export type TeacherScalarFieldEnum = (typeof TeacherScalarFieldEnum)[keyof typeof TeacherScalarFieldEnum]
@@ -172,7 +176,11 @@ export const StudentScalarFieldEnum = {
   profileImage: 'profileImage',
   religion: 'religion',
   state: 'state',
-  streetAddress: 'streetAddress'
+  streetAddress: 'streetAddress',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason'
 } as const
 
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
