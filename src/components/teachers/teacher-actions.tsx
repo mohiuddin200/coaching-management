@@ -40,7 +40,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Teacher } from "./columns"
-import { ConfirmationDialog } from "@/components/confirmation-dialog"
+import { ProgressiveDeletionDialog } from "@/components/deletion/progressive-deletion-dialog"
 import { toast } from "sonner"
 
 interface TeacherActionsProps {
@@ -69,6 +69,70 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
   const [error, setError] = useState<string | null>(null)
   const [isSendingInvite, setIsSendingInvite] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [relatedRecords, setRelatedRecords] = useState<Array<{ type: string; count: number }>>([])
+
+  const fetchRelatedRecords = async () => {
+    try {
+      const response = await fetch(`/api/teachers/${teacher.id}/related-records`)
+      if (response.ok) {
+        const data = await response.json()
+        setRelatedRecords(data.records || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch related records:', error)
+    }
+  }
+
+  const handleDeleteClick = async () => {
+    await fetchRelatedRecords()
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteConfirm = async (options: { type: 'SOFT_DELETE' | 'HARD_DELETE' | 'REASSIGN'; deleteReason?: string; reassignTo?: string; cascade?: boolean }) => {
+    setIsDeleting(true)
+    try {
+      const params = new URLSearchParams()
+      
+      if (options.type === 'HARD_DELETE') {
+        params.append('cascade', 'true')
+      }
+      
+      if (options.deleteReason) {
+        params.append('deleteReason', options.deleteReason)
+      }
+
+      if (options.reassignTo) {
+        params.append('reassignTo', options.reassignTo)
+      }
+
+      const response = await fetch(`/api/teachers/${teacher.id}?${params.toString()}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to delete teacher")
+      }
+
+      const successMessage = options.type === 'HARD_DELETE'
+        ? "Teacher permanently deleted!"
+        : options.type === 'REASSIGN'
+        ? "Teacher reassigned successfully!"
+        : "Teacher archived successfully!"
+      
+      toast.success(successMessage, {
+        description: `${teacher.firstName} ${teacher.lastName} has been ${options.type === 'HARD_DELETE' ? 'permanently deleted' : options.type === 'REASSIGN' ? 'reassigned' : 'archived'}.`,
+      })
+      setDeleteDialogOpen(false)
+      onUpdate?.()
+    } catch (err) {
+      toast.error("Failed to delete teacher", {
+        description: err instanceof Error ? err.message : "An error occurred",
+      })
+    } finally {
+      setIsDeleting(false)
+    }
+  }
 
   const form = useForm<TeacherFormValues>({
     resolver: zodResolver(teacherFormSchema),
@@ -138,31 +202,6 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
     }
   }
 
-  const handleDelete = async () => {
-    setIsDeleting(true)
-    try {
-      const response = await fetch(`/api/teachers/${teacher.id}`, {
-        method: "DELETE",
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Failed to delete teacher")
-      }
-
-      toast.success("Teacher deleted successfully!", {
-        description: `${teacher.firstName} ${teacher.lastName} has been removed.`,
-      })
-      setDeleteDialogOpen(false)
-      onUpdate?.()
-    } catch (err) {
-      toast.error("Failed to delete teacher", {
-        description: err instanceof Error ? err.message : "An error occurred",
-      })
-    } finally {
-      setIsDeleting(false)
-    }
-  }
 
   return (
     <div className="text-right">
@@ -207,8 +246,8 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
           {isAdmin && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
-                onClick={() => setDeleteDialogOpen(true)}
+              <DropdownMenuItem
+                onClick={handleDeleteClick}
                 className="text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
@@ -219,24 +258,34 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ConfirmationDialog
-        isOpen={inviteDialogOpen}
-        onOpenChange={setInviteDialogOpen}
-        title="Send Portal Invite"
-        description={`Are you sure you want to send a portal invitation to ${teacher.firstName} ${teacher.lastName}${teacher.email ? ` (${teacher.email})` : ''}? They will receive an email with instructions to set up their account.`}
-        onConfirm={handleSendInvite}
-        confirmText={isSendingInvite ? "Sending..." : "Send Invite"}
-        cancelText="Cancel"
-      />
+      <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Send Portal Invite</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to send a portal invitation to {teacher.firstName} {teacher.lastName}{teacher.email ? ` (${teacher.email})` : ''}? They will receive an email with instructions to set up their account.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setInviteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSendInvite} disabled={isSendingInvite}>
+              {isSendingInvite ? "Sending..." : "Send Invite"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      <ConfirmationDialog
+      <ProgressiveDeletionDialog
         isOpen={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        title="Delete Teacher"
-        description={`Are you sure you want to delete ${teacher.firstName} ${teacher.lastName}? This action cannot be undone. All associated data will be permanently removed.`}
-        onConfirm={handleDelete}
-        confirmText={isDeleting ? "Deleting..." : "Delete"}
-        cancelText="Cancel"
+        onClose={() => setDeleteDialogOpen(false)}
+        entityType="teacher"
+        entityName={`${teacher.firstName} ${teacher.lastName}`}
+        entityId={teacher.id}
+        relatedRecords={relatedRecords}
+        onConfirm={handleDeleteConfirm}
+        isLoading={isDeleting}
       />
 
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>

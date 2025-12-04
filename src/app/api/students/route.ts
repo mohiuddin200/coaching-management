@@ -3,7 +3,15 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
+    console.log("Starting to fetch students...");
+    
+    // SIMPLIFIED APPROACH: Start with basic query and gradually add complexity
+    console.log("Attempting student query with isDeleted filter...");
+    
     const students = await prisma.student.findMany({
+      where: {
+        isDeleted: false, // Filter out soft-deleted records
+      },
       include: {
         level: true,
         enrollments: {
@@ -24,13 +32,49 @@ export async function GET() {
       },
     });
 
+    console.log(`Successfully fetched ${students.length} students`);
     return NextResponse.json({ students });
+    
   } catch (error) {
     console.error("Error fetching students:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch students" },
-      { status: 500 }
-    );
+    
+    // FALLBACK: If complex query fails, try simpler query
+    try {
+      console.log("Fallback: Attempting simple student query...");
+      const simpleStudents = await prisma.student.findMany({
+        where: {
+          isDeleted: false,
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          phoneNumber: true,
+          status: true,
+          enrollmentDate: true,
+          levelId: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      
+      console.log(`Fallback successful: fetched ${simpleStudents.length} students`);
+      return NextResponse.json({ students: simpleStudents });
+      
+    } catch (fallbackError) {
+      console.error("Fallback also failed:", fallbackError);
+      return NextResponse.json(
+        {
+          error: "Failed to fetch students",
+          details: error instanceof Error ? error.message : "Unknown error",
+          fallbackError: fallbackError instanceof Error ? fallbackError.message : "Unknown fallback error",
+          timestamp: new Date().toISOString()
+        },
+        { status: 500 }
+      );
+    }
   }
 }
 

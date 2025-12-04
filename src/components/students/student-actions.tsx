@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Student } from "./columns"
-import { ConfirmationDialog } from "@/components/confirmation-dialog"
+import { ProgressiveDeletionDialog } from "@/components/deletion/progressive-deletion-dialog"
 import { toast } from "sonner"
 import { StudentDialog } from "./create-student-dialog"
 import { ViewStudentDetailsDialog } from "./view-student-details-dialog"
@@ -26,11 +26,39 @@ interface StudentActionsProps {
 export function StudentActions({ student, onUpdate, isAdmin = false }: StudentActionsProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [relatedRecords, setRelatedRecords] = useState<Array<{ type: string; count: number }>>([])
 
-  const handleDelete = async () => {
+  const fetchRelatedRecords = async () => {
+    try {
+      const response = await fetch(`/api/students/${student.id}/related-records`)
+      if (response.ok) {
+        const data = await response.json()
+        setRelatedRecords(data.records || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch related records:', error)
+    }
+  }
+
+  const handleDeleteClick = async () => {
+    await fetchRelatedRecords()
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteConfirm = async (options: { type: 'SOFT_DELETE' | 'HARD_DELETE' | 'REASSIGN'; deleteReason?: string; reassignTo?: string; cascade?: boolean }) => {
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/students/${student.id}`, {
+      const params = new URLSearchParams()
+      
+      if (options.type === 'HARD_DELETE') {
+        params.append('cascade', 'true')
+      }
+      
+      if (options.deleteReason) {
+        params.append('deleteReason', options.deleteReason)
+      }
+
+      const response = await fetch(`/api/students/${student.id}?${params.toString()}`, {
         method: "DELETE",
       })
 
@@ -39,8 +67,12 @@ export function StudentActions({ student, onUpdate, isAdmin = false }: StudentAc
         throw new Error(errorData.error || "Failed to delete student")
       }
 
-      toast.success("Student deleted successfully!", {
-        description: `${student.firstName} ${student.lastName} has been removed.`,
+      const successMessage = options.type === 'HARD_DELETE'
+        ? "Student permanently deleted!"
+        : "Student archived successfully!"
+      
+      toast.success(successMessage, {
+        description: `${student.firstName} ${student.lastName} has been ${options.type === 'HARD_DELETE' ? 'permanently deleted' : 'archived'}.`,
       })
       setDeleteDialogOpen(false)
       onUpdate?.()
@@ -98,8 +130,8 @@ export function StudentActions({ student, onUpdate, isAdmin = false }: StudentAc
           {isAdmin && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
-                onClick={() => setDeleteDialogOpen(true)}
+              <DropdownMenuItem
+                onClick={handleDeleteClick}
                 className="text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
@@ -110,14 +142,15 @@ export function StudentActions({ student, onUpdate, isAdmin = false }: StudentAc
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ConfirmationDialog
+      <ProgressiveDeletionDialog
         isOpen={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        title="Delete Student"
-        description={`Are you sure you want to delete ${student.firstName} ${student.lastName}? This action cannot be undone. All associated data will be permanently removed.`}
-        onConfirm={handleDelete}
-        confirmText={isDeleting ? "Deleting..." : "Delete"}
-        cancelText="Cancel"
+        onClose={() => setDeleteDialogOpen(false)}
+        entityType="student"
+        entityName={`${student.firstName} ${student.lastName}`}
+        entityId={student.id}
+        relatedRecords={relatedRecords}
+        onConfirm={handleDeleteConfirm}
+        isLoading={isDeleting}
       />
     </div>
   )
