@@ -12,6 +12,7 @@ import {
   School,
   LogOut,
   Wallet,
+  Archive,
 } from "lucide-react"
 
 import {
@@ -98,6 +99,16 @@ const data = {
       title: "Settings",
       url: "/settings",
       icon: Settings2,
+      items: [
+        {
+          title: "General",
+          url: "/settings",
+        },
+        {
+          title: "Archive",
+          url: "/archive",
+        },
+      ],
     },
   ],
   navSecondary: [

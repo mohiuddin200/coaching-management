@@ -2073,6 +2073,10 @@ export const StudentPaymentScalarFieldEnum = {
   monthYear: 'monthYear',
   description: 'description',
   receiptNo: 'receiptNo',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

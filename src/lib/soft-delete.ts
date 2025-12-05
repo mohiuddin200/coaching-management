@@ -21,24 +21,14 @@ export async function softDeleteStudent(
   options: SoftDeleteOptions = {}
 ): Promise<SoftDeleteResult> {
   try {
-    console.log(`[DEBUG] Starting soft delete for student ${studentId}`);
     logDeletionAttempt('student', studentId, 'attempt', { action: 'soft_delete', options });
 
     // Check if student exists and is not already deleted
-    console.log(`[DEBUG] Checking if student exists...`);
     const existingStudent = await prisma.student.findUnique({
       where: { id: studentId }
     });
 
-    console.log(`[DEBUG] Student found:`, {
-      id: existingStudent?.id,
-      isDeleted: existingStudent?.isDeleted,
-      firstName: existingStudent?.firstName,
-      lastName: existingStudent?.lastName
-    });
-
     if (!existingStudent) {
-      console.log(`[DEBUG] Student not found: ${studentId}`);
       return {
         success: false,
         message: 'Student not found'
@@ -46,7 +36,6 @@ export async function softDeleteStudent(
     }
 
     if (existingStudent.isDeleted) {
-      console.log(`[DEBUG] Student already deleted: ${studentId}`);
       return {
         success: false,
         message: 'Student is already deleted'
@@ -57,8 +46,7 @@ export async function softDeleteStudent(
     // This keeps the soft delete function focused on just updating the student record
 
     // Soft delete the student
-    console.log(`[DEBUG] Performing soft delete operation...`);
-    const updatedStudent = await prisma.student.update({
+    await prisma.student.update({
       where: { id: studentId },
       data: {
         isDeleted: true,
@@ -66,14 +54,6 @@ export async function softDeleteStudent(
         deletedBy: options.deletedBy,
         deleteReason: options.deleteReason || 'OTHER'
       }
-    });
-    
-    console.log(`[DEBUG] Soft delete completed successfully for student ${studentId}`);
-
-    console.log(`[DEBUG] Student soft delete result:`, {
-      id: updatedStudent.id,
-      isDeleted: updatedStudent.isDeleted,
-      deletedAt: updatedStudent.deletedAt
     });
     
     logDeletionAttempt('student', studentId, 'success', {
@@ -87,7 +67,6 @@ export async function softDeleteStudent(
       message: 'Student soft deleted successfully'
     };
   } catch (error) {
-    console.error(`[DEBUG] Error in soft delete for student ${studentId}:`, error);
     logDeletionAttempt('student', studentId, 'error', {
       action: 'soft_delete',
       error: error instanceof Error ? error.message : 'Unknown error'

@@ -9,10 +9,7 @@ import {
   extractDeletionParams,
   handleForeignKeyError
 } from '@/lib/soft-delete-utils';
-import {
-  softDeleteTeacher,
-  permanentDeleteTeacher
-} from '@/lib/soft-delete';
+import { softDeleteTeacher } from '@/lib/soft-delete';
 
 export async function PUT(
   request: Request,
@@ -87,7 +84,7 @@ export async function DELETE(
     }
 
     const { id } = await params;
-    const { cascade, reassignTo, deleteReason } = extractDeletionParams(request);
+    const { cascade, deleteReason } = extractDeletionParams(request);
 
     // Check if teacher exists
     const existingTeacher = await prisma.teacher.findUnique({

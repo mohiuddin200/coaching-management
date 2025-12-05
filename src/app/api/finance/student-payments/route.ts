@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
 
     const payments = await prisma.studentPayment.findMany({
       where: {
+        isDeleted: false, // Only return non-deleted payments
         ...(studentId && { studentId }),
         ...(status && { status: status as PaymentStatus }),
         ...(monthYear && { monthYear }),
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest) {
       // Refetch with updated status
       const updatedPayments = await prisma.studentPayment.findMany({
         where: {
+          isDeleted: false, // Only return non-deleted payments
           ...(studentId && { studentId }),
           ...(status && { status: status as PaymentStatus }),
           ...(monthYear && { monthYear }),
@@ -187,6 +189,124 @@ export async function POST(request: Request) {
     console.error("Error creating student payment:", error);
     return NextResponse.json(
       { error: "Failed to create student payment" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT - Bulk update student payments (for status updates, etc.)
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { paymentIds, updates } = body;
+
+    if (!paymentIds || !Array.isArray(paymentIds) || paymentIds.length === 0) {
+      return NextResponse.json(
+        { error: "paymentIds array is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!updates || typeof updates !== "object") {
+      return NextResponse.json(
+        { error: "updates object is required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate that all payments exist and are not deleted
+    const existingPayments = await prisma.studentPayment.findMany({
+      where: {
+        id: { in: paymentIds },
+        isDeleted: false
+      },
+      select: { id: true }
+    });
+
+    if (existingPayments.length !== paymentIds.length) {
+      return NextResponse.json(
+        { error: "One or more payments not found or already deleted" },
+        { status: 404 }
+      );
+    }
+
+    // Prepare update data
+    const updateData: any = {};
+
+    if (updates.status) {
+      updateData.status = updates.status;
+    }
+
+    if (updates.dueDate) {
+      updateData.dueDate = new Date(updates.dueDate);
+    }
+
+    if (updates.paymentDate) {
+      updateData.paymentDate = new Date(updates.paymentDate);
+    }
+
+    if (updates.amount !== undefined) {
+      if (updates.amount <= 0) {
+        return NextResponse.json(
+          { error: "Amount must be greater than 0" },
+          { status: 400 }
+        );
+      }
+      updateData.amount = parseFloat(updates.amount);
+    }
+
+    if (updates.description !== undefined) {
+      updateData.description = updates.description;
+    }
+
+    if (updates.receiptNo !== undefined) {
+      updateData.receiptNo = updates.receiptNo;
+    }
+
+    // Perform bulk update
+    const result = await prisma.studentPayment.updateMany({
+      where: {
+        id: { in: paymentIds },
+        isDeleted: false
+      },
+      data: updateData
+    });
+
+    // Fetch updated payments to return
+    const updatedPayments = await prisma.studentPayment.findMany({
+      where: {
+        id: { in: paymentIds }
+      },
+      include: {
+        student: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phoneNumber: true,
+            level: {
+              select: {
+                name: true,
+                levelNumber: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json({
+      message: `Updated ${result.count} payments successfully`,
+      data: updatedPayments
+    });
+  } catch (error) {
+    console.error("Error updating student payments:", error);
+    return NextResponse.json(
+      { error: "Failed to update student payments" },
       { status: 500 }
     );
   }

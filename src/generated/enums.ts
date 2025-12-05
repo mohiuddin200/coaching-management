@@ -181,7 +181,11 @@ export const DeleteReason = {
   GRADUATED: 'GRADUATED',
   TRANSFERRED: 'TRANSFERRED',
   ERROR: 'ERROR',
-  OTHER: 'OTHER'
+  OTHER: 'OTHER',
+  DUPLICATE: 'DUPLICATE',
+  REFUND: 'REFUND',
+  CANCELLED: 'CANCELLED',
+  WRONG_ENTRY: 'WRONG_ENTRY'
 } as const
 
 export type DeleteReason = (typeof DeleteReason)[keyof typeof DeleteReason]

@@ -307,10 +307,16 @@ model StudentPayment {
   monthYear   String
   description String?
   receiptNo   String?
+  isDeleted   Boolean       @default(false) @map("is_deleted")
+  deletedAt   DateTime?     @map("deleted_at")
+  deletedBy   String?       @map("deleted_by")
+  deleteReason DeleteReason? @map("delete_reason")
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   student     Student       @relation(fields: [studentId], references: [id])
 
+  @@index([isDeleted])
+  @@index([deletedAt])
   @@map("student_payments")
 }
 
@@ -470,4 +476,8 @@ enum DeleteReason {
   TRANSFERRED
   ERROR
   OTHER
+  DUPLICATE
+  REFUND
+  CANCELLED
+  WRONG_ENTRY
 }
