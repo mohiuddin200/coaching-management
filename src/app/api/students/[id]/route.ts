@@ -242,10 +242,30 @@ export async function DELETE(
       return NextResponse.json({ message });
     }
 
-    // If there are blocking records and no cascade, show error
-    if (hasBlockingRecords) {
-      console.log(`[DEBUG] Cannot delete student due to blocking records`);
-      const error = createDeletionError('student', relatedRecords, { includeCascadeMessage: true });
+    // For soft delete, delete any remaining manual enrollments
+    // This is safe because enrollments are just connections - they can be recreated if student is restored
+    if (relatedRecords.enrollments > 0) {
+      console.log(`[DEBUG] Deleting ${relatedRecords.enrollments} remaining manual enrollments...`);
+      const deleteManualEnrollmentsResult = await prisma.enrollment.deleteMany({
+        where: { studentId: id }
+      });
+      console.log(`[DEBUG] Deleted ${deleteManualEnrollmentsResult.count} manual enrollments`);
+      logDeletionAttempt('student', id, 'success', {
+        action: 'delete_manual_enrollments',
+        deletedCount: deleteManualEnrollmentsResult.count
+      });
+    }
+
+    // For soft delete, we only block if there are payments or attendances
+    // These represent actual data that shouldn't be automatically removed
+    const hasBlockingRecordsForSoftDelete = relatedRecords.payments > 0 || relatedRecords.attendances > 0;
+    
+    if (hasBlockingRecordsForSoftDelete) {
+      console.log(`[DEBUG] Cannot soft delete student due to blocking records (payments/attendances)`);
+      const error = createDeletionError('student', {
+        payments: relatedRecords.payments,
+        attendances: relatedRecords.attendances
+      }, { includeCascadeMessage: true });
       console.log(`[DEBUG] Deletion error created:`, error);
       logDeletionAttempt('student', id, 'error', { errorDetails: error });
       return NextResponse.json(error, { status: 400 });

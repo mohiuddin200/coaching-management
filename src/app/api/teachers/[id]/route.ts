@@ -104,7 +104,7 @@ export async function DELETE(
     // Log deletion attempt
     logDeletionAttempt('teacher', id, 'attempt', { cascade, deleteReason });
 
-    // Check for related records before attempting deletion
+    // Check for related records
     const relatedRecords = await getTeacherRelatedRecords(id);
     const hasRelatedRecords = Object.values(relatedRecords).some(count => count > 0);
 
@@ -138,14 +138,7 @@ export async function DELETE(
       return NextResponse.json({ message });
     }
 
-    // If there are related records and no cascade, show error
-    if (hasRelatedRecords) {
-      const error = createDeletionError('teacher', relatedRecords, { includeCascadeMessage: true });
-      logDeletionAttempt('teacher', id, 'error', { errorDetails: error });
-      return NextResponse.json(error, { status: 400 });
-    }
-
-    // Perform soft delete
+    // Perform soft delete (allowed even with related records)
     const softDeleteResult = await softDeleteTeacher(id, {
       deleteReason: deleteReason as 'RESIGNED' | 'TERMINATED' | 'REASSIGNED' | 'ERROR' | 'OTHER',
       deletedBy: user?.id
@@ -158,8 +151,21 @@ export async function DELETE(
       );
     }
 
-    logDeletionAttempt('teacher', id, 'success', { action: 'soft_delete', deleteReason });
-    return NextResponse.json({ message: softDeleteResult.message });
+    // Log if there were related records to inform the user
+    if (hasRelatedRecords) {
+      logDeletionAttempt('teacher', id, 'success', { 
+        action: 'soft_delete_with_related_records', 
+        deleteReason,
+        relatedRecords 
+      });
+    } else {
+      logDeletionAttempt('teacher', id, 'success', { action: 'soft_delete', deleteReason });
+    }
+
+    return NextResponse.json({ 
+      message: softDeleteResult.message,
+      relatedRecords: hasRelatedRecords ? relatedRecords : undefined
+    });
   } catch (error) {
     const { id } = await params;
     
