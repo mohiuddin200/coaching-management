@@ -18,9 +18,9 @@ export async function GET() {
     // Test 3: Count non-deleted students
     console.log("3. Counting non-deleted students...");
     const activeStudentsCount = await prisma.student.count({
-      where: { isDeleted: false }
+      where: { NOT: { isDeleted: true } }
     });
-    console.log(`✓ Active students (isDeleted: false): ${activeStudentsCount}`);
+    console.log(`✓ Active students (NOT isDeleted: true): ${activeStudentsCount}`);
     
     // Test 4: Count deleted students
     console.log("4. Counting deleted students...");
@@ -32,7 +32,7 @@ export async function GET() {
     // Test 5: Try to fetch a few active students with minimal fields
     console.log("5. Fetching sample active students...");
     const sampleStudents = await prisma.student.findMany({
-      where: { isDeleted: false },
+      where: { NOT: { isDeleted: true } },
       select: {
         id: true,
         firstName: true,
@@ -51,7 +51,7 @@ export async function GET() {
     // Test 6: Try the full query (same as main route)
     console.log("6. Testing full query with includes...");
     const fullQueryStudents = await prisma.student.findMany({
-      where: { isDeleted: false },
+      where: { NOT: { isDeleted: true } },
       include: {
         level: true,
         enrollments: {

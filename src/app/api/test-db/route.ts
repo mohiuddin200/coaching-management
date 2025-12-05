@@ -29,9 +29,9 @@ export async function GET() {
     // Test if isDeleted column exists
     try {
       const deletedCount = await prisma.student.count({
-        where: { isDeleted: false }
+        where: { NOT: { isDeleted: true } }
       });
-      console.log(`✓ Active students (isDeleted: false): ${deletedCount}`);
+      console.log(`✓ Active students (NOT isDeleted: true): ${deletedCount}`);
     } catch (error) {
       console.error("✗ Error querying isDeleted field:", error);
     }

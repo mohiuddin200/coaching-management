@@ -10,7 +10,9 @@ export async function GET() {
     
     const students = await prisma.student.findMany({
       where: {
-        isDeleted: false, // Filter out soft-deleted records
+        NOT: {
+          isDeleted: true
+        }
       },
       include: {
         level: true,
@@ -43,7 +45,9 @@ export async function GET() {
       console.log("Fallback: Attempting simple student query...");
       const simpleStudents = await prisma.student.findMany({
         where: {
-          isDeleted: false,
+          NOT: {
+            isDeleted: true
+          }
         },
         select: {
           id: true,

@@ -8,12 +8,16 @@ export async function GET(request: Request) {
     const excludeId = searchParams.get('excludeId');
 
     const whereClause: {
-      isDeleted: boolean;
+      NOT?: {
+        isDeleted: boolean;
+      };
       id?: {
         not: string;
       };
     } = {
-      isDeleted: false, // Filter out soft-deleted records
+      NOT: {
+        isDeleted: true
+      }
     };
 
     // Add excludeId filter if provided

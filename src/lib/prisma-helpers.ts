@@ -5,7 +5,9 @@ import { prisma } from '@/lib/prisma';
  */
 export function excludeSoftDeleted() {
   return {
-    isDeleted: false
+    NOT: {
+      isDeleted: true
+    }
   };
 }
 
@@ -26,7 +28,7 @@ export const studentFindMany = (args?: Parameters<typeof prisma.student.findMany
     ...args,
     where: {
       ...args?.where,
-      isDeleted: false
+      NOT: { isDeleted: true }
     }
   });
 };
@@ -39,7 +41,7 @@ export const studentFindUnique = (args: Parameters<typeof prisma.student.findUni
     ...args,
     where: {
       ...args.where,
-      isDeleted: false
+      NOT: { isDeleted: true }
     }
   });
 };
@@ -52,7 +54,7 @@ export const studentFindFirst = (args?: Parameters<typeof prisma.student.findFir
     ...args,
     where: {
       ...args?.where,
-      isDeleted: false
+      NOT: { isDeleted: true }
     }
   });
 };
@@ -65,7 +67,7 @@ export const teacherFindMany = (args?: Parameters<typeof prisma.teacher.findMany
     ...args,
     where: {
       ...args?.where,
-      isDeleted: false
+      NOT: { isDeleted: true }
     }
   });
 };
@@ -78,7 +80,7 @@ export const teacherFindUnique = (args: Parameters<typeof prisma.teacher.findUni
     ...args,
     where: {
       ...args.where,
-      isDeleted: false
+      NOT: { isDeleted: true }
     }
   });
 };
@@ -91,7 +93,7 @@ export const teacherFindFirst = (args?: Parameters<typeof prisma.teacher.findFir
     ...args,
     where: {
       ...args?.where,
-      isDeleted: false
+      NOT: { isDeleted: true }
     }
   });
 };
@@ -104,7 +106,7 @@ export const studentCount = (args?: Parameters<typeof prisma.student.count>[0]) 
     ...args,
     where: {
       ...args?.where,
-      isDeleted: false
+      NOT: { isDeleted: true }
     }
   });
 };
@@ -117,7 +119,7 @@ export const teacherCount = (args?: Parameters<typeof prisma.teacher.count>[0]) 
     ...args,
     where: {
       ...args?.where,
-      isDeleted: false
+      NOT: { isDeleted: true }
     }
   });
 };
