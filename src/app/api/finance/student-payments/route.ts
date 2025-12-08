@@ -10,12 +10,17 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get("status");
     const monthYear = searchParams.get("monthYear");
 
+    console.log("Fetching payments with filters:", { studentId, status, monthYear });
+
     const payments = await prisma.studentPayment.findMany({
       where: {
         isDeleted: false, // Only return non-deleted payments
         ...(studentId && { studentId }),
         ...(status && { status: status as PaymentStatus }),
         ...(monthYear && { monthYear }),
+        student: {
+          isDeleted: false, // Only include payments for non-deleted students
+        },
       },
       include: {
         student: {
@@ -38,6 +43,8 @@ export async function GET(request: NextRequest) {
         createdAt: "desc",
       },
     });
+
+    console.log("Found payments:", payments.length);
 
     // Auto-update overdue payments
     const today = new Date();
@@ -65,6 +72,9 @@ export async function GET(request: NextRequest) {
           ...(studentId && { studentId }),
           ...(status && { status: status as PaymentStatus }),
           ...(monthYear && { monthYear }),
+          student: {
+            isDeleted: false, // Only include payments for non-deleted students
+          },
         },
         include: {
           student: {
@@ -91,9 +101,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ data: updatedPayments });
     }
 
+    console.log("Returning payments:", payments.length);
     return NextResponse.json({ data: payments });
   } catch (error) {
     console.error("Error fetching student payments:", error);
+    console.error("Full error:", error);
     return NextResponse.json(
       { error: "Failed to fetch student payments" },
       { status: 500 }
