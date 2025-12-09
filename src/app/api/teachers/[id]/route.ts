@@ -1,6 +1,15 @@
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import {
+  getTeacherRelatedRecords,
+  createDeletionError,
+  logDeletionAttempt,
+  validateDeletionPermission,
+  extractDeletionParams,
+  handleForeignKeyError
+} from '@/lib/soft-delete-utils';
+import { softDeleteTeacher } from '@/lib/soft-delete';
 
 export async function PUT(
   request: Request,
@@ -66,14 +75,16 @@ export async function DELETE(
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || user.user_metadata.role !== 'Admin') {
+    const permissionCheck = validateDeletionPermission(user, 'teacher');
+    if (!permissionCheck.valid) {
       return NextResponse.json(
-        { error: 'Unauthorized: Only Admin users can delete teachers.' },
+        { error: permissionCheck.error },
         { status: 403 }
       );
     }
 
     const { id } = await params;
+    const { cascade, deleteReason } = extractDeletionParams(request);
 
     // Check if teacher exists
     const existingTeacher = await prisma.teacher.findUnique({
@@ -87,14 +98,86 @@ export async function DELETE(
       );
     }
 
-    // Delete the teacher
-    await prisma.teacher.delete({
-      where: { id },
+    // Log deletion attempt
+    logDeletionAttempt('teacher', id, 'attempt', { cascade, deleteReason });
+
+    // Check for related records
+    const relatedRecords = await getTeacherRelatedRecords(id);
+    const hasRelatedRecords = Object.values(relatedRecords).some(count => count > 0);
+
+    // If cascade is requested, perform permanent deletion
+    if (cascade) {
+      logDeletionAttempt('teacher', id, 'attempt', { action: 'cascade_delete', relatedRecords });
+      
+      // Delete related records in order to respect foreign key constraints
+      if (relatedRecords.classSections > 0) {
+        await prisma.classSection.deleteMany({ where: { teacherId: id } });
+        logDeletionAttempt('teacher', id, 'success', { deletedRecords: 'classSections', count: relatedRecords.classSections });
+      }
+      
+      if (relatedRecords.classes > 0) {
+        await prisma.class.deleteMany({ where: { teacherId: id } });
+        logDeletionAttempt('teacher', id, 'success', { deletedRecords: 'classes', count: relatedRecords.classes });
+      }
+      
+      if (relatedRecords.payments > 0) {
+        await prisma.teacherPayment.deleteMany({ where: { teacherId: id } });
+        logDeletionAttempt('teacher', id, 'success', { deletedRecords: 'payments', count: relatedRecords.payments });
+      }
+
+      // Delete teacher permanently
+      await prisma.teacher.delete({
+        where: { id },
+      });
+
+      const message = `Teacher and all related records deleted permanently`;
+      logDeletionAttempt('teacher', id, 'success', { action: 'cascade_delete', deleteReason });
+      return NextResponse.json({ message });
+    }
+
+    // Perform soft delete (allowed even with related records)
+    const softDeleteResult = await softDeleteTeacher(id, {
+      deleteReason: deleteReason as 'RESIGNED' | 'TERMINATED' | 'REASSIGNED' | 'ERROR' | 'OTHER',
+      deletedBy: user?.id
     });
 
-    return NextResponse.json({ message: 'Teacher deleted successfully' });
+    if (!softDeleteResult.success) {
+      return NextResponse.json(
+        { error: softDeleteResult.message },
+        { status: 400 }
+      );
+    }
+
+    // Log if there were related records to inform the user
+    if (hasRelatedRecords) {
+      logDeletionAttempt('teacher', id, 'success', { 
+        action: 'soft_delete_with_related_records', 
+        deleteReason,
+        relatedRecords 
+      });
+    } else {
+      logDeletionAttempt('teacher', id, 'success', { action: 'soft_delete', deleteReason });
+    }
+
+    return NextResponse.json({ 
+      message: softDeleteResult.message,
+      relatedRecords: hasRelatedRecords ? relatedRecords : undefined
+    });
   } catch (error) {
-    console.error('Error deleting teacher:', error);
+    const { id } = await params;
+    
+    // Handle foreign key constraint errors
+    const fkError = handleForeignKeyError(error as Error, 'teacher', id);
+    if (fkError) {
+      return NextResponse.json(fkError, { status: 400 });
+    }
+    
+    // Log general error
+    logDeletionAttempt('teacher', id, 'error', {
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      errorStack: error instanceof Error ? error.stack : undefined
+    });
+    
     return NextResponse.json(
       { error: 'Failed to delete teacher' },
       { status: 500 }

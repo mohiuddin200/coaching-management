@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Teacher
@@ -70,6 +70,10 @@ export type TeacherMinAggregateOutputType = {
   state: string | null
   streetAddress: string | null
   universityName: string | null
+  isDeleted: boolean | null
+  deletedAt: Date | null
+  deletedBy: string | null
+  deleteReason: $Enums.DeleteReason | null
 }
 
 export type TeacherMaxAggregateOutputType = {
@@ -106,6 +110,10 @@ export type TeacherMaxAggregateOutputType = {
   state: string | null
   streetAddress: string | null
   universityName: string | null
+  isDeleted: boolean | null
+  deletedAt: Date | null
+  deletedBy: string | null
+  deleteReason: $Enums.DeleteReason | null
 }
 
 export type TeacherCountAggregateOutputType = {
@@ -142,6 +150,10 @@ export type TeacherCountAggregateOutputType = {
   state: number
   streetAddress: number
   universityName: number
+  isDeleted: number
+  deletedAt: number
+  deletedBy: number
+  deleteReason: number
   _all: number
 }
 
@@ -190,6 +202,10 @@ export type TeacherMinAggregateInputType = {
   state?: true
   streetAddress?: true
   universityName?: true
+  isDeleted?: true
+  deletedAt?: true
+  deletedBy?: true
+  deleteReason?: true
 }
 
 export type TeacherMaxAggregateInputType = {
@@ -226,6 +242,10 @@ export type TeacherMaxAggregateInputType = {
   state?: true
   streetAddress?: true
   universityName?: true
+  isDeleted?: true
+  deletedAt?: true
+  deletedBy?: true
+  deleteReason?: true
 }
 
 export type TeacherCountAggregateInputType = {
@@ -262,6 +282,10 @@ export type TeacherCountAggregateInputType = {
   state?: true
   streetAddress?: true
   universityName?: true
+  isDeleted?: true
+  deletedAt?: true
+  deletedBy?: true
+  deleteReason?: true
   _all?: true
 }
 
@@ -385,6 +409,10 @@ export type TeacherGroupByOutputType = {
   state: string | null
   streetAddress: string | null
   universityName: string | null
+  isDeleted: boolean
+  deletedAt: Date | null
+  deletedBy: string | null
+  deleteReason: $Enums.DeleteReason | null
   _count: TeacherCountAggregateOutputType | null
   _avg: TeacherAvgAggregateOutputType | null
   _sum: TeacherSumAggregateOutputType | null
@@ -444,6 +472,10 @@ export type TeacherWhereInput = {
   state?: Prisma.StringNullableFilter<"Teacher"> | string | null
   streetAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
   universityName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  isDeleted?: Prisma.BoolFilter<"Teacher"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"Teacher"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  deleteReason?: Prisma.EnumDeleteReasonNullableFilter<"Teacher"> | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionListRelationFilter
   classes?: Prisma.ClassListRelationFilter
   payments?: Prisma.TeacherPaymentListRelationFilter
@@ -484,6 +516,10 @@ export type TeacherOrderByWithRelationInput = {
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   streetAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   universityName?: Prisma.SortOrderInput | Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleteReason?: Prisma.SortOrderInput | Prisma.SortOrder
   classSections?: Prisma.ClassSectionOrderByRelationAggregateInput
   classes?: Prisma.ClassOrderByRelationAggregateInput
   payments?: Prisma.TeacherPaymentOrderByRelationAggregateInput
@@ -527,6 +563,10 @@ export type TeacherWhereUniqueInput = Prisma.AtLeast<{
   state?: Prisma.StringNullableFilter<"Teacher"> | string | null
   streetAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
   universityName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  isDeleted?: Prisma.BoolFilter<"Teacher"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"Teacher"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  deleteReason?: Prisma.EnumDeleteReasonNullableFilter<"Teacher"> | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionListRelationFilter
   classes?: Prisma.ClassListRelationFilter
   payments?: Prisma.TeacherPaymentListRelationFilter
@@ -567,6 +607,10 @@ export type TeacherOrderByWithAggregationInput = {
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   streetAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   universityName?: Prisma.SortOrderInput | Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  deleteReason?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TeacherCountOrderByAggregateInput
   _avg?: Prisma.TeacherAvgOrderByAggregateInput
   _max?: Prisma.TeacherMaxOrderByAggregateInput
@@ -611,6 +655,10 @@ export type TeacherScalarWhereWithAggregatesInput = {
   state?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
   streetAddress?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
   universityName?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  isDeleted?: Prisma.BoolWithAggregatesFilter<"Teacher"> | boolean
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Teacher"> | Date | string | null
+  deletedBy?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  deleteReason?: Prisma.EnumDeleteReasonNullableWithAggregatesFilter<"Teacher"> | $Enums.DeleteReason | null
 }
 
 export type TeacherCreateInput = {
@@ -646,6 +694,10 @@ export type TeacherCreateInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutTeacherInput
   classes?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
@@ -686,6 +738,10 @@ export type TeacherUncheckedCreateInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedCreateNestedManyWithoutTeacherInput
   classes?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentUncheckedCreateNestedManyWithoutTeacherInput
@@ -724,6 +780,10 @@ export type TeacherUpdateInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUpdateManyWithoutTeacherNestedInput
   classes?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
@@ -764,6 +824,10 @@ export type TeacherUncheckedUpdateInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedUpdateManyWithoutTeacherNestedInput
   classes?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUncheckedUpdateManyWithoutTeacherNestedInput
@@ -803,6 +867,10 @@ export type TeacherCreateManyInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
 }
 
 export type TeacherUpdateManyMutationInput = {
@@ -838,6 +906,10 @@ export type TeacherUpdateManyMutationInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
 }
 
 export type TeacherUncheckedUpdateManyInput = {
@@ -874,6 +946,10 @@ export type TeacherUncheckedUpdateManyInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
 }
 
 export type TeacherNullableScalarRelationFilter = {
@@ -915,6 +991,10 @@ export type TeacherCountOrderByAggregateInput = {
   state?: Prisma.SortOrder
   streetAddress?: Prisma.SortOrder
   universityName?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
+  deleteReason?: Prisma.SortOrder
 }
 
 export type TeacherAvgOrderByAggregateInput = {
@@ -956,6 +1036,10 @@ export type TeacherMaxOrderByAggregateInput = {
   state?: Prisma.SortOrder
   streetAddress?: Prisma.SortOrder
   universityName?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
+  deleteReason?: Prisma.SortOrder
 }
 
 export type TeacherMinOrderByAggregateInput = {
@@ -992,6 +1076,10 @@ export type TeacherMinOrderByAggregateInput = {
   state?: Prisma.SortOrder
   streetAddress?: Prisma.SortOrder
   universityName?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
+  deleteReason?: Prisma.SortOrder
 }
 
 export type TeacherSumOrderByAggregateInput = {
@@ -1066,6 +1154,14 @@ export type NullableEnumGenderFieldUpdateOperationsInput = {
 
 export type NullableEnumPaymentTypeFieldUpdateOperationsInput = {
   set?: $Enums.PaymentType | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type NullableEnumDeleteReasonFieldUpdateOperationsInput = {
+  set?: $Enums.DeleteReason | null
 }
 
 export type TeacherCreateNestedOneWithoutClassSectionsInput = {
@@ -1143,6 +1239,10 @@ export type TeacherCreateWithoutUserInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutTeacherInput
   classes?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
@@ -1181,6 +1281,10 @@ export type TeacherUncheckedCreateWithoutUserInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedCreateNestedManyWithoutTeacherInput
   classes?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentUncheckedCreateNestedManyWithoutTeacherInput
@@ -1235,6 +1339,10 @@ export type TeacherUpdateWithoutUserInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUpdateManyWithoutTeacherNestedInput
   classes?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
@@ -1273,6 +1381,10 @@ export type TeacherUncheckedUpdateWithoutUserInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedUpdateManyWithoutTeacherNestedInput
   classes?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUncheckedUpdateManyWithoutTeacherNestedInput
@@ -1311,6 +1423,10 @@ export type TeacherCreateWithoutClassSectionsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classes?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
   user?: Prisma.UserCreateNestedOneWithoutTeacherProfileInput
@@ -1350,6 +1466,10 @@ export type TeacherUncheckedCreateWithoutClassSectionsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classes?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentUncheckedCreateNestedManyWithoutTeacherInput
 }
@@ -1403,6 +1523,10 @@ export type TeacherUpdateWithoutClassSectionsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classes?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
   user?: Prisma.UserUpdateOneWithoutTeacherProfileNestedInput
@@ -1442,6 +1566,10 @@ export type TeacherUncheckedUpdateWithoutClassSectionsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classes?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUncheckedUpdateManyWithoutTeacherNestedInput
 }
@@ -1479,6 +1607,10 @@ export type TeacherCreateWithoutClassesInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
   user?: Prisma.UserCreateNestedOneWithoutTeacherProfileInput
@@ -1518,6 +1650,10 @@ export type TeacherUncheckedCreateWithoutClassesInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentUncheckedCreateNestedManyWithoutTeacherInput
 }
@@ -1571,6 +1707,10 @@ export type TeacherUpdateWithoutClassesInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
   user?: Prisma.UserUpdateOneWithoutTeacherProfileNestedInput
@@ -1610,6 +1750,10 @@ export type TeacherUncheckedUpdateWithoutClassesInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUncheckedUpdateManyWithoutTeacherNestedInput
 }
@@ -1647,6 +1791,10 @@ export type TeacherCreateWithoutPaymentsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutTeacherInput
   classes?: Prisma.ClassCreateNestedManyWithoutTeacherInput
   user?: Prisma.UserCreateNestedOneWithoutTeacherProfileInput
@@ -1686,6 +1834,10 @@ export type TeacherUncheckedCreateWithoutPaymentsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedCreateNestedManyWithoutTeacherInput
   classes?: Prisma.ClassUncheckedCreateNestedManyWithoutTeacherInput
 }
@@ -1739,6 +1891,10 @@ export type TeacherUpdateWithoutPaymentsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUpdateManyWithoutTeacherNestedInput
   classes?: Prisma.ClassUpdateManyWithoutTeacherNestedInput
   user?: Prisma.UserUpdateOneWithoutTeacherProfileNestedInput
@@ -1778,6 +1934,10 @@ export type TeacherUncheckedUpdateWithoutPaymentsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedUpdateManyWithoutTeacherNestedInput
   classes?: Prisma.ClassUncheckedUpdateManyWithoutTeacherNestedInput
 }
@@ -1865,6 +2025,10 @@ export type TeacherSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   state?: boolean
   streetAddress?: boolean
   universityName?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
+  deleteReason?: boolean
   classSections?: boolean | Prisma.Teacher$classSectionsArgs<ExtArgs>
   classes?: boolean | Prisma.Teacher$classesArgs<ExtArgs>
   payments?: boolean | Prisma.Teacher$paymentsArgs<ExtArgs>
@@ -1906,6 +2070,10 @@ export type TeacherSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   state?: boolean
   streetAddress?: boolean
   universityName?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
+  deleteReason?: boolean
   user?: boolean | Prisma.Teacher$userArgs<ExtArgs>
 }, ExtArgs["result"]["teacher"]>
 
@@ -1943,6 +2111,10 @@ export type TeacherSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   state?: boolean
   streetAddress?: boolean
   universityName?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
+  deleteReason?: boolean
   user?: boolean | Prisma.Teacher$userArgs<ExtArgs>
 }, ExtArgs["result"]["teacher"]>
 
@@ -1980,9 +2152,13 @@ export type TeacherSelectScalar = {
   state?: boolean
   streetAddress?: boolean
   universityName?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
+  deleteReason?: boolean
 }
 
-export type TeacherOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "subject" | "qualifications" | "joinDate" | "status" | "createdAt" | "updatedAt" | "userId" | "bloodGroup" | "cgpa" | "city" | "country" | "cv" | "dateOfBirth" | "emergencyContactName" | "emergencyContactPhone" | "emergencyContactRelation" | "gender" | "idProof" | "nationality" | "nid" | "paymentType" | "postalCode" | "profileImage" | "religion" | "salary" | "state" | "streetAddress" | "universityName", ExtArgs["result"]["teacher"]>
+export type TeacherOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "subject" | "qualifications" | "joinDate" | "status" | "createdAt" | "updatedAt" | "userId" | "bloodGroup" | "cgpa" | "city" | "country" | "cv" | "dateOfBirth" | "emergencyContactName" | "emergencyContactPhone" | "emergencyContactRelation" | "gender" | "idProof" | "nationality" | "nid" | "paymentType" | "postalCode" | "profileImage" | "religion" | "salary" | "state" | "streetAddress" | "universityName" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason", ExtArgs["result"]["teacher"]>
 export type TeacherInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   classSections?: boolean | Prisma.Teacher$classSectionsArgs<ExtArgs>
   classes?: boolean | Prisma.Teacher$classesArgs<ExtArgs>
@@ -2039,6 +2215,10 @@ export type $TeacherPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     state: string | null
     streetAddress: string | null
     universityName: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    deletedBy: string | null
+    deleteReason: $Enums.DeleteReason | null
   }, ExtArgs["result"]["teacher"]>
   composites: {}
 }
@@ -2499,6 +2679,10 @@ export interface TeacherFieldRefs {
   readonly state: Prisma.FieldRef<"Teacher", 'String'>
   readonly streetAddress: Prisma.FieldRef<"Teacher", 'String'>
   readonly universityName: Prisma.FieldRef<"Teacher", 'String'>
+  readonly isDeleted: Prisma.FieldRef<"Teacher", 'Boolean'>
+  readonly deletedAt: Prisma.FieldRef<"Teacher", 'DateTime'>
+  readonly deletedBy: Prisma.FieldRef<"Teacher", 'String'>
+  readonly deleteReason: Prisma.FieldRef<"Teacher", 'DeleteReason'>
 }
     
 

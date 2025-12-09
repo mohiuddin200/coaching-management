@@ -2,9 +2,29 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const excludeId = searchParams.get('excludeId');
+
+    const whereClause: {
+      isDeleted: boolean;
+      id?: {
+        not: string;
+      };
+    } = {
+      isDeleted: false, // Filter out soft-deleted records
+    };
+
+    // Add excludeId filter if provided
+    if (excludeId) {
+      whereClause.id = {
+        not: excludeId
+      };
+    }
+
     const teachers = await prisma.teacher.findMany({
+      where: whereClause,
       orderBy: {
         createdAt: "desc",
       },
