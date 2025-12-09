@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, Archive, RotateCcw, Trash2, Users, UserCheck } from 'lucide-react';
 import { ProgressiveDeletionDialog } from '@/components/deletion/progressive-deletion-dialog';
 import { format } from 'date-fns';

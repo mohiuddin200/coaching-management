@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 model User {
@@ -298,22 +298,22 @@ model FeeStructure {
 }
 
 model StudentPayment {
-  id          String        @id @default(cuid())
-  studentId   String
-  amount      Float
-  paymentDate DateTime
-  dueDate     DateTime
-  status      PaymentStatus @default(Pending)
-  monthYear   String
-  description String?
-  receiptNo   String?
-  isDeleted   Boolean       @default(false) @map("is_deleted")
-  deletedAt   DateTime?     @map("deleted_at")
-  deletedBy   String?       @map("deleted_by")
+  id           String        @id @default(cuid())
+  studentId    String
+  amount       Float
+  paymentDate  DateTime
+  dueDate      DateTime
+  status       PaymentStatus @default(Pending)
+  monthYear    String
+  description  String?
+  receiptNo    String?
+  isDeleted    Boolean       @default(false) @map("is_deleted")
+  deletedAt    DateTime?     @map("deleted_at")
+  deletedBy    String?       @map("deleted_by")
   deleteReason DeleteReason? @map("delete_reason")
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  student     Student       @relation(fields: [studentId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  student      Student       @relation(fields: [studentId], references: [id])
 
   @@index([isDeleted])
   @@index([deletedAt])
@@ -321,19 +321,25 @@ model StudentPayment {
 }
 
 model TeacherPayment {
-  id          String        @id @default(cuid())
-  teacherId   String
-  amount      Float
-  paymentDate DateTime
-  periodStart DateTime
-  periodEnd   DateTime
-  status      PaymentStatus @default(Paid)
-  description String?
-  receiptNo   String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  teacher     Teacher       @relation(fields: [teacherId], references: [id])
+  id           String        @id @default(cuid())
+  teacherId    String
+  amount       Float
+  paymentDate  DateTime
+  periodStart  DateTime
+  periodEnd    DateTime
+  status       PaymentStatus @default(Paid)
+  description  String?
+  receiptNo    String?
+  isDeleted    Boolean       @default(false) @map("is_deleted")
+  deletedAt    DateTime?     @map("deleted_at")
+  deletedBy    String?       @map("deleted_by")
+  deleteReason DeleteReason? @map("delete_reason")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  teacher      Teacher       @relation(fields: [teacherId], references: [id])
 
+  @@index([isDeleted])
+  @@index([deletedAt])
   @@map("teacher_payments")
 }
 
