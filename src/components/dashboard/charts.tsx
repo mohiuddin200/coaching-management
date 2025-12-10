@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,8 +11,6 @@ import {
 import {
   Bar,
   BarChart,
-  Line,
-  LineChart,
   Area,
   AreaChart,
   XAxis,
@@ -38,11 +35,11 @@ interface AttendanceTrendChartProps {
 const attendanceChartConfig = {
   present: {
     label: 'Present',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(142 76% 36%)',
   },
   absent: {
     label: 'Absent',
-    color: 'hsl(var(--chart-2))',
+    color: 'hsl(0 84% 60%)',
   },
   late: {
     label: 'Late',
@@ -51,6 +48,9 @@ const attendanceChartConfig = {
 };
 
 export function AttendanceTrendChart({ data }: AttendanceTrendChartProps) {
+  // Ensure data is mutable and safe to use
+  const chartData = Array.isArray(data) ? [...data] : [];
+
   return (
     <Card>
       <CardHeader>
@@ -59,43 +59,32 @@ export function AttendanceTrendChart({ data }: AttendanceTrendChartProps) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={attendanceChartConfig} className="h-[300px] w-full">
-          <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+          <BarChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="date" 
+            <XAxis
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
-            <YAxis 
+            <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Line
-              type="monotone"
+            <Bar
               dataKey="present"
-              stroke="var(--color-present)"
-              strokeWidth={2}
-              dot={{ fill: 'var(--color-present)' }}
+              fill="var(--color-present)"
+              radius={[4, 4, 0, 0]}
             />
-            <Line
-              type="monotone"
+            <Bar
               dataKey="absent"
-              stroke="var(--color-absent)"
-              strokeWidth={2}
-              dot={{ fill: 'var(--color-absent)' }}
+              fill="var(--color-absent)"
+              radius={[4, 4, 0, 0]}
             />
-            <Line
-              type="monotone"
-              dataKey="late"
-              stroke="var(--color-late)"
-              strokeWidth={2}
-              dot={{ fill: 'var(--color-late)' }}
-            />
-          </LineChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
@@ -114,11 +103,13 @@ interface EnrollmentByLevelChartProps {
 const enrollmentChartConfig = {
   students: {
     label: 'Students',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(217 91% 60%)',
   },
 };
 
 export function EnrollmentByLevelChart({ data }: EnrollmentByLevelChartProps) {
+  const chartData = Array.isArray(data) ? [...data] : [];
+
   return (
     <Card>
       <CardHeader>
@@ -127,23 +118,23 @@ export function EnrollmentByLevelChart({ data }: EnrollmentByLevelChartProps) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={enrollmentChartConfig} className="h-[300px] w-full">
-          <BarChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+          <BarChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="level" 
+            <XAxis
+              dataKey="level"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
-            <YAxis 
+            <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar 
-              dataKey="students" 
-              fill="var(--color-students)" 
+            <Bar
+              dataKey="students"
+              fill="var(--color-students)"
               radius={[8, 8, 0, 0]}
             />
           </BarChart>
@@ -166,15 +157,17 @@ interface RevenueChartProps {
 const revenueChartConfig = {
   revenue: {
     label: 'Revenue',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(142 76% 36%)',
   },
   expenses: {
     label: 'Expenses',
-    color: 'hsl(var(--chart-2))',
+    color: 'hsl(0 84% 60%)',
   },
 };
 
 export function RevenueChart({ data }: RevenueChartProps) {
+  const chartData = Array.isArray(data) ? [...data] : [];
+
   return (
     <Card>
       <CardHeader>
@@ -183,15 +176,15 @@ export function RevenueChart({ data }: RevenueChartProps) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={revenueChartConfig} className="h-[300px] w-full">
-          <AreaChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+          <AreaChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="month" 
+            <XAxis
+              dataKey="month"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
-            <YAxis 
+            <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -238,15 +231,17 @@ export function ClassDistributionChart({ data }: ClassDistributionChartProps) {
     'hsl(var(--chart-5))',
   ];
 
-  const chartData = data.map((item, index) => ({
+  // Ensure data is mutable and safe to use
+  const safeData = Array.isArray(data) ? [...data] : [];
+  const chartData = safeData.map((item, index) => ({
     ...item,
     fill: COLORS[index % COLORS.length],
   }));
 
-  const chartConfig = data.reduce((acc, item) => {
+  const chartConfig = safeData.reduce((acc, item) => {
     acc[item.name] = {
       label: item.name,
-      color: COLORS[data.indexOf(item) % COLORS.length],
+      color: COLORS[safeData.indexOf(item) % COLORS.length],
     };
     return acc;
   }, {} as Record<string, { label: string; color: string }>);
@@ -266,6 +261,7 @@ export function ClassDistributionChart({ data }: ClassDistributionChartProps) {
               cx="50%"
               cy="50%"
               labelLine={false}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
               outerRadius={80}
               fill="#8884d8"
@@ -296,19 +292,21 @@ interface TeacherPerformanceChartProps {
 const teacherChartConfig = {
   classes: {
     label: 'Classes',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(217 91% 60%)',
   },
   students: {
     label: 'Students',
-    color: 'hsl(var(--chart-2))',
+    color: 'hsl(142 76% 36%)',
   },
   attendanceRate: {
     label: 'Attendance %',
-    color: 'hsl(var(--chart-3))',
+    color: 'hsl(38 92% 50%)',
   },
 };
 
 export function TeacherPerformanceChart({ data }: TeacherPerformanceChartProps) {
+  const chartData = Array.isArray(data) ? [...data] : [];
+
   return (
     <Card>
       <CardHeader>
@@ -317,15 +315,15 @@ export function TeacherPerformanceChart({ data }: TeacherPerformanceChartProps) 
       </CardHeader>
       <CardContent>
         <ChartContainer config={teacherChartConfig} className="h-[300px] w-full">
-          <BarChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+          <BarChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="teacher" 
+            <XAxis
+              dataKey="teacher"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
-            <YAxis 
+            <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -334,6 +332,7 @@ export function TeacherPerformanceChart({ data }: TeacherPerformanceChartProps) 
             <ChartLegend content={<ChartLegendContent />} />
             <Bar dataKey="classes" fill="var(--color-classes)" radius={[4, 4, 0, 0]} />
             <Bar dataKey="students" fill="var(--color-students)" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="attendanceRate" fill="var(--color-attendanceRate)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ChartContainer>
       </CardContent>

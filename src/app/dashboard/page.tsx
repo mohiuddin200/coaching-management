@@ -1,19 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { StatsOverview } from "@/components/dashboard/stats-cards";
-import { 
-  AttendanceTrendChart, 
-  EnrollmentByLevelChart,
-  RevenueChart,
-  ClassDistributionChart,
-  TeacherPerformanceChart 
-} from "@/components/dashboard/charts";
-import { 
-  RecentStudents, 
-  RecentClasses, 
+import { StatsOverviewWithNavigation } from "@/components/dashboard/stats-overview-with-navigation";
+import { BirthdayNotice } from "@/components/dashboard/birthday-notice";
+import { ChartWrapper } from "@/components/dashboard/charts-wrapper";
+import {
+  RecentStudents,
+  RecentClasses,
   RecentActivity,
-  UpcomingClasses 
+  UpcomingClasses
 } from "@/components/dashboard/recent-activity";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -233,9 +228,30 @@ export default async function DashboardPage() {
     },
   ];
 
+  // Mock birthday students - will be replaced with real data
+  const birthdayStudents = [
+    {
+      id: '1',
+      firstName: 'Fatima',
+      lastName: 'Khan',
+      level: 'Class 8',
+      age: 14,
+    },
+    {
+      id: '2',
+      firstName: 'Ahmed',
+      lastName: 'Rahman',
+      level: 'Class 6',
+      age: 12,
+    },
+  ];
+
   return (
     <DashboardLayout>
       <div className="flex flex-1 flex-col gap-6 p-4 md:p-8">
+        {/* Birthday Notice */}
+        <BirthdayNotice students={birthdayStudents} />
+
         {/* Header */}
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -245,7 +261,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Stats Overview */}
-        <StatsOverview stats={stats} trends={trends} />
+        <StatsOverviewWithNavigation stats={stats} trends={trends} />
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="overview" className="space-y-4">
@@ -258,8 +274,8 @@ export default async function DashboardPage() {
           <TabsContent value="overview" className="space-y-4">
             {/* Charts Row 1 */}
             <div className="grid gap-4 md:grid-cols-2">
-              <AttendanceTrendChart data={attendanceTrendData} />
-              <EnrollmentByLevelChart data={enrollmentByLevelData} />
+              <ChartWrapper type="attendance" data={attendanceTrendData} />
+              <ChartWrapper type="enrollment" data={enrollmentByLevelData} />
             </div>
 
             {/* Recent Items Row */}
@@ -275,15 +291,15 @@ export default async function DashboardPage() {
           <TabsContent value="analytics" className="space-y-4">
             {/* Analytics Charts */}
             <div className="grid gap-4 md:grid-cols-2">
-              <RevenueChart data={revenueData} />
-              <ClassDistributionChart data={classDistributionData} />
+              <ChartWrapper type="revenue" data={revenueData} />
+              <ChartWrapper type="classDistribution" data={classDistributionData} />
             </div>
 
-            <TeacherPerformanceChart data={teacherPerformanceData} />
+            <ChartWrapper type="teacherPerformance" data={teacherPerformanceData} />
 
             <div className="grid gap-4 md:grid-cols-2">
-              <AttendanceTrendChart data={attendanceTrendData} />
-              <EnrollmentByLevelChart data={enrollmentByLevelData} />
+              <ChartWrapper type="attendance" data={attendanceTrendData} />
+              <ChartWrapper type="enrollment" data={enrollmentByLevelData} />
             </div>
           </TabsContent>
 

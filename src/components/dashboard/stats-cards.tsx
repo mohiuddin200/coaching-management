@@ -26,9 +26,25 @@ interface StatCardProps {
   color?: string;
 }
 
-export function StatCard({ title, value, description, icon: Icon, trend, color = 'text-primary' }: StatCardProps) {
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  description?: string;
+  icon: LucideIcon;
+  trend?: {
+    value: number;
+    isPositive: boolean;
+  };
+  color?: string;
+  onClick?: () => void;
+}
+
+export function StatCard({ title, value, description, icon: Icon, trend, color = 'text-primary', onClick }: StatCardProps) {
   return (
-    <Card>
+    <Card
+      className="hover:shadow-md transition-shadow cursor-pointer hover:bg-accent/5"
+      onClick={onClick}
+    >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className={`h-4 w-4 ${color}`} />
@@ -71,9 +87,10 @@ interface StatsOverviewProps {
     classes: number;
     attendance: number;
   };
+  onCardClick?: (cardType: 'students' | 'teachers' | 'classes' | 'attendance') => void;
 }
 
-export function StatsOverview({ stats, trends }: StatsOverviewProps) {
+export function StatsOverview({ stats, trends, onCardClick }: StatsOverviewProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <StatCard
@@ -86,8 +103,9 @@ export function StatsOverview({ stats, trends }: StatsOverviewProps) {
           isPositive: trends.students > 0
         } : undefined}
         color="text-blue-500"
+        onClick={() => onCardClick?.('students')}
       />
-      
+
       <StatCard
         title="Total Teachers"
         value={stats.totalTeachers}
@@ -98,8 +116,9 @@ export function StatsOverview({ stats, trends }: StatsOverviewProps) {
           isPositive: trends.teachers > 0
         } : undefined}
         color="text-purple-500"
+        onClick={() => onCardClick?.('teachers')}
       />
-      
+
       <StatCard
         title="Class Sections"
         value={stats.totalClasses}
@@ -110,8 +129,9 @@ export function StatsOverview({ stats, trends }: StatsOverviewProps) {
           isPositive: trends.classes > 0
         } : undefined}
         color="text-green-500"
+        onClick={() => onCardClick?.('classes')}
       />
-      
+
       <StatCard
         title="Today's Attendance"
         value={`${stats.attendanceToday}%`}
@@ -122,6 +142,7 @@ export function StatsOverview({ stats, trends }: StatsOverviewProps) {
           isPositive: trends.attendance > 0
         } : undefined}
         color="text-orange-500"
+        onClick={() => onCardClick?.('attendance')}
       />
     </div>
   );
@@ -133,15 +154,19 @@ interface AttendanceStatsProps {
   late: number;
   excused: number;
   total: number;
+  onCardClick?: (status: 'present' | 'absent' | 'late' | 'excused') => void;
 }
 
-export function AttendanceStats({ present, absent, late, excused, total }: AttendanceStatsProps) {
+export function AttendanceStats({ present, absent, late, excused, total, onCardClick }: AttendanceStatsProps) {
   const presentPercentage = total > 0 ? Math.round((present / total) * 100) : 0;
   const absentPercentage = total > 0 ? Math.round((absent / total) * 100) : 0;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card>
+      <Card
+        className="hover:shadow-md transition-shadow cursor-pointer hover:bg-accent/5"
+        onClick={() => onCardClick?.('present')}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Present</CardTitle>
           <UserCheck className="h-4 w-4 text-green-500" />
@@ -154,7 +179,10 @@ export function AttendanceStats({ present, absent, late, excused, total }: Atten
         </CardContent>
       </Card>
 
-      <Card>
+      <Card
+        className="hover:shadow-md transition-shadow cursor-pointer hover:bg-accent/5"
+        onClick={() => onCardClick?.('absent')}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Absent</CardTitle>
           <UserX className="h-4 w-4 text-red-500" />
@@ -167,7 +195,10 @@ export function AttendanceStats({ present, absent, late, excused, total }: Atten
         </CardContent>
       </Card>
 
-      <Card>
+      <Card
+        className="hover:shadow-md transition-shadow cursor-pointer hover:bg-accent/5"
+        onClick={() => onCardClick?.('late')}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Late</CardTitle>
           <Clock className="h-4 w-4 text-yellow-500" />
@@ -180,7 +211,10 @@ export function AttendanceStats({ present, absent, late, excused, total }: Atten
         </CardContent>
       </Card>
 
-      <Card>
+      <Card
+        className="hover:shadow-md transition-shadow cursor-pointer hover:bg-accent/5"
+        onClick={() => onCardClick?.('excused')}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Excused</CardTitle>
           <CalendarCheck className="h-4 w-4 text-blue-500" />
@@ -202,14 +236,20 @@ interface QuickStatsProps {
     value: string | number;
     icon: LucideIcon;
     color?: string;
+    id?: string;
   }>;
+  onCardClick?: (statId: string, index: number) => void;
 }
 
-export function QuickStats({ stats }: QuickStatsProps) {
+export function QuickStats({ stats, onCardClick }: QuickStatsProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {stats.map((stat, index) => (
-        <Card key={index}>
+        <Card
+          key={index}
+          className="hover:shadow-md transition-shadow cursor-pointer hover:bg-accent/5"
+          onClick={() => onCardClick?.(stat.id || `stat-${index}`, index)}
+        >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{stat.label}</CardTitle>
             <stat.icon className={`h-4 w-4 ${stat.color || 'text-primary'}`} />
