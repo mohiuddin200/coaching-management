@@ -27,10 +27,12 @@ export type AggregateStudent = {
 }
 
 export type StudentAvgAggregateOutputType = {
+  monthlyFee: number | null
   previousMarks: number | null
 }
 
 export type StudentSumAggregateOutputType = {
+  monthlyFee: number | null
   previousMarks: number | null
 }
 
@@ -40,7 +42,9 @@ export type StudentMinAggregateOutputType = {
   lastName: string | null
   email: string | null
   phoneNumber: string | null
+  studentPhoneNumber: string | null
   dateOfBirth: Date | null
+  monthlyFee: number | null
   address: string | null
   enrollmentDate: Date | null
   status: $Enums.Status | null
@@ -82,7 +86,9 @@ export type StudentMaxAggregateOutputType = {
   lastName: string | null
   email: string | null
   phoneNumber: string | null
+  studentPhoneNumber: string | null
   dateOfBirth: Date | null
+  monthlyFee: number | null
   address: string | null
   enrollmentDate: Date | null
   status: $Enums.Status | null
@@ -124,7 +130,10 @@ export type StudentCountAggregateOutputType = {
   lastName: number
   email: number
   phoneNumber: number
+  studentPhoneNumber: number
+  whatsappNumbers: number
   dateOfBirth: number
+  monthlyFee: number
   address: number
   enrollmentDate: number
   status: number
@@ -163,10 +172,12 @@ export type StudentCountAggregateOutputType = {
 
 
 export type StudentAvgAggregateInputType = {
+  monthlyFee?: true
   previousMarks?: true
 }
 
 export type StudentSumAggregateInputType = {
+  monthlyFee?: true
   previousMarks?: true
 }
 
@@ -176,7 +187,9 @@ export type StudentMinAggregateInputType = {
   lastName?: true
   email?: true
   phoneNumber?: true
+  studentPhoneNumber?: true
   dateOfBirth?: true
+  monthlyFee?: true
   address?: true
   enrollmentDate?: true
   status?: true
@@ -218,7 +231,9 @@ export type StudentMaxAggregateInputType = {
   lastName?: true
   email?: true
   phoneNumber?: true
+  studentPhoneNumber?: true
   dateOfBirth?: true
+  monthlyFee?: true
   address?: true
   enrollmentDate?: true
   status?: true
@@ -260,7 +275,10 @@ export type StudentCountAggregateInputType = {
   lastName?: true
   email?: true
   phoneNumber?: true
+  studentPhoneNumber?: true
+  whatsappNumbers?: true
   dateOfBirth?: true
+  monthlyFee?: true
   address?: true
   enrollmentDate?: true
   status?: true
@@ -389,7 +407,10 @@ export type StudentGroupByOutputType = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth: Date | null
+  studentPhoneNumber: string | null
+  whatsappNumbers: string[]
+  dateOfBirth: Date
+  monthlyFee: number | null
   address: string
   enrollmentDate: Date
   status: $Enums.Status
@@ -454,7 +475,10 @@ export type StudentWhereInput = {
   lastName?: Prisma.StringFilter<"Student"> | string
   email?: Prisma.StringFilter<"Student"> | string
   phoneNumber?: Prisma.StringFilter<"Student"> | string
-  dateOfBirth?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
+  studentPhoneNumber?: Prisma.StringNullableFilter<"Student"> | string | null
+  whatsappNumbers?: Prisma.StringNullableListFilter<"Student">
+  dateOfBirth?: Prisma.DateTimeFilter<"Student"> | Date | string
+  monthlyFee?: Prisma.FloatNullableFilter<"Student"> | number | null
   address?: Prisma.StringFilter<"Student"> | string
   enrollmentDate?: Prisma.DateTimeFilter<"Student"> | Date | string
   status?: Prisma.EnumStatusFilter<"Student"> | $Enums.Status
@@ -500,7 +524,10 @@ export type StudentOrderByWithRelationInput = {
   lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
-  dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
+  studentPhoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  whatsappNumbers?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  monthlyFee?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrder
   enrollmentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -549,7 +576,10 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringFilter<"Student"> | string
   email?: Prisma.StringFilter<"Student"> | string
   phoneNumber?: Prisma.StringFilter<"Student"> | string
-  dateOfBirth?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
+  studentPhoneNumber?: Prisma.StringNullableFilter<"Student"> | string | null
+  whatsappNumbers?: Prisma.StringNullableListFilter<"Student">
+  dateOfBirth?: Prisma.DateTimeFilter<"Student"> | Date | string
+  monthlyFee?: Prisma.FloatNullableFilter<"Student"> | number | null
   address?: Prisma.StringFilter<"Student"> | string
   enrollmentDate?: Prisma.DateTimeFilter<"Student"> | Date | string
   status?: Prisma.EnumStatusFilter<"Student"> | $Enums.Status
@@ -595,7 +625,10 @@ export type StudentOrderByWithAggregationInput = {
   lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
-  dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
+  studentPhoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  whatsappNumbers?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  monthlyFee?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrder
   enrollmentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -645,7 +678,10 @@ export type StudentScalarWhereWithAggregatesInput = {
   lastName?: Prisma.StringWithAggregatesFilter<"Student"> | string
   email?: Prisma.StringWithAggregatesFilter<"Student"> | string
   phoneNumber?: Prisma.StringWithAggregatesFilter<"Student"> | string
-  dateOfBirth?: Prisma.DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
+  studentPhoneNumber?: Prisma.StringNullableWithAggregatesFilter<"Student"> | string | null
+  whatsappNumbers?: Prisma.StringNullableListFilter<"Student">
+  dateOfBirth?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
+  monthlyFee?: Prisma.FloatNullableWithAggregatesFilter<"Student"> | number | null
   address?: Prisma.StringWithAggregatesFilter<"Student"> | string
   enrollmentDate?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
   status?: Prisma.EnumStatusWithAggregatesFilter<"Student"> | $Enums.Status
@@ -687,7 +723,10 @@ export type StudentCreateInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -732,7 +771,10 @@ export type StudentUncheckedCreateInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -777,7 +819,10 @@ export type StudentUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -822,7 +867,10 @@ export type StudentUncheckedUpdateInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -867,7 +915,10 @@ export type StudentCreateManyInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -909,7 +960,10 @@ export type StudentUpdateManyMutationInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -950,7 +1004,10 @@ export type StudentUncheckedUpdateManyInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -986,13 +1043,24 @@ export type StudentUncheckedUpdateManyInput = {
   deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type StudentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  studentPhoneNumber?: Prisma.SortOrder
+  whatsappNumbers?: Prisma.SortOrder
   dateOfBirth?: Prisma.SortOrder
+  monthlyFee?: Prisma.SortOrder
   address?: Prisma.SortOrder
   enrollmentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -1029,6 +1097,7 @@ export type StudentCountOrderByAggregateInput = {
 }
 
 export type StudentAvgOrderByAggregateInput = {
+  monthlyFee?: Prisma.SortOrder
   previousMarks?: Prisma.SortOrder
 }
 
@@ -1038,7 +1107,9 @@ export type StudentMaxOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  studentPhoneNumber?: Prisma.SortOrder
   dateOfBirth?: Prisma.SortOrder
+  monthlyFee?: Prisma.SortOrder
   address?: Prisma.SortOrder
   enrollmentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -1080,7 +1151,9 @@ export type StudentMinOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  studentPhoneNumber?: Prisma.SortOrder
   dateOfBirth?: Prisma.SortOrder
+  monthlyFee?: Prisma.SortOrder
   address?: Prisma.SortOrder
   enrollmentDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -1117,6 +1190,7 @@ export type StudentMinOrderByAggregateInput = {
 }
 
 export type StudentSumOrderByAggregateInput = {
+  monthlyFee?: Prisma.SortOrder
   previousMarks?: Prisma.SortOrder
 }
 
@@ -1133,6 +1207,15 @@ export type StudentOrderByRelationAggregateInput = {
 export type StudentScalarRelationFilter = {
   is?: Prisma.StudentWhereInput
   isNot?: Prisma.StudentWhereInput
+}
+
+export type StudentCreatewhatsappNumbersInput = {
+  set: string[]
+}
+
+export type StudentUpdatewhatsappNumbersInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type StudentCreateNestedManyWithoutLevelInput = {
@@ -1225,7 +1308,10 @@ export type StudentCreateWithoutLevelInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -1269,7 +1355,10 @@ export type StudentUncheckedCreateWithoutLevelInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -1342,7 +1431,10 @@ export type StudentScalarWhereInput = {
   lastName?: Prisma.StringFilter<"Student"> | string
   email?: Prisma.StringFilter<"Student"> | string
   phoneNumber?: Prisma.StringFilter<"Student"> | string
-  dateOfBirth?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
+  studentPhoneNumber?: Prisma.StringNullableFilter<"Student"> | string | null
+  whatsappNumbers?: Prisma.StringNullableListFilter<"Student">
+  dateOfBirth?: Prisma.DateTimeFilter<"Student"> | Date | string
+  monthlyFee?: Prisma.FloatNullableFilter<"Student"> | number | null
   address?: Prisma.StringFilter<"Student"> | string
   enrollmentDate?: Prisma.DateTimeFilter<"Student"> | Date | string
   status?: Prisma.EnumStatusFilter<"Student"> | $Enums.Status
@@ -1384,7 +1476,10 @@ export type StudentCreateWithoutEnrollmentsInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -1428,7 +1523,10 @@ export type StudentUncheckedCreateWithoutEnrollmentsInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -1488,7 +1586,10 @@ export type StudentUpdateWithoutEnrollmentsInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -1532,7 +1633,10 @@ export type StudentUncheckedUpdateWithoutEnrollmentsInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -1576,7 +1680,10 @@ export type StudentCreateWithoutAttendancesInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -1620,7 +1727,10 @@ export type StudentUncheckedCreateWithoutAttendancesInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -1680,7 +1790,10 @@ export type StudentUpdateWithoutAttendancesInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -1724,7 +1837,10 @@ export type StudentUncheckedUpdateWithoutAttendancesInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -1768,7 +1884,10 @@ export type StudentCreateWithoutPaymentsInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -1812,7 +1931,10 @@ export type StudentUncheckedCreateWithoutPaymentsInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -1872,7 +1994,10 @@ export type StudentUpdateWithoutPaymentsInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -1916,7 +2041,10 @@ export type StudentUncheckedUpdateWithoutPaymentsInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -1960,7 +2088,10 @@ export type StudentCreateManyLevelInput = {
   lastName: string
   email: string
   phoneNumber: string
-  dateOfBirth?: Date | string | null
+  studentPhoneNumber?: string | null
+  whatsappNumbers?: Prisma.StudentCreatewhatsappNumbersInput | string[]
+  dateOfBirth: Date | string
+  monthlyFee?: number | null
   address: string
   enrollmentDate?: Date | string
   status?: $Enums.Status
@@ -2001,7 +2132,10 @@ export type StudentUpdateWithoutLevelInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -2045,7 +2179,10 @@ export type StudentUncheckedUpdateWithoutLevelInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -2089,7 +2226,10 @@ export type StudentUncheckedUpdateManyWithoutLevelInput = {
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  studentPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappNumbers?: Prisma.StudentUpdatewhatsappNumbersInput | string[]
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthlyFee?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -2179,7 +2319,10 @@ export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   lastName?: boolean
   email?: boolean
   phoneNumber?: boolean
+  studentPhoneNumber?: boolean
+  whatsappNumbers?: boolean
   dateOfBirth?: boolean
+  monthlyFee?: boolean
   address?: boolean
   enrollmentDate?: boolean
   status?: boolean
@@ -2226,7 +2369,10 @@ export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   lastName?: boolean
   email?: boolean
   phoneNumber?: boolean
+  studentPhoneNumber?: boolean
+  whatsappNumbers?: boolean
   dateOfBirth?: boolean
+  monthlyFee?: boolean
   address?: boolean
   enrollmentDate?: boolean
   status?: boolean
@@ -2269,7 +2415,10 @@ export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   lastName?: boolean
   email?: boolean
   phoneNumber?: boolean
+  studentPhoneNumber?: boolean
+  whatsappNumbers?: boolean
   dateOfBirth?: boolean
+  monthlyFee?: boolean
   address?: boolean
   enrollmentDate?: boolean
   status?: boolean
@@ -2312,7 +2461,10 @@ export type StudentSelectScalar = {
   lastName?: boolean
   email?: boolean
   phoneNumber?: boolean
+  studentPhoneNumber?: boolean
+  whatsappNumbers?: boolean
   dateOfBirth?: boolean
+  monthlyFee?: boolean
   address?: boolean
   enrollmentDate?: boolean
   status?: boolean
@@ -2348,7 +2500,7 @@ export type StudentSelectScalar = {
   deleteReason?: boolean
 }
 
-export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "dateOfBirth" | "address" | "enrollmentDate" | "status" | "smsEnabled" | "createdAt" | "updatedAt" | "levelId" | "birthCertificate" | "bloodGroup" | "city" | "country" | "emergencyContactName" | "emergencyContactPhone" | "emergencyContactRelation" | "fatherName" | "fatherPhone" | "gender" | "idProof" | "motherName" | "motherPhone" | "nationality" | "postalCode" | "previousClass" | "previousMarks" | "previousSchool" | "profileImage" | "religion" | "state" | "streetAddress" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason", ExtArgs["result"]["student"]>
+export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "studentPhoneNumber" | "whatsappNumbers" | "dateOfBirth" | "monthlyFee" | "address" | "enrollmentDate" | "status" | "smsEnabled" | "createdAt" | "updatedAt" | "levelId" | "birthCertificate" | "bloodGroup" | "city" | "country" | "emergencyContactName" | "emergencyContactPhone" | "emergencyContactRelation" | "fatherName" | "fatherPhone" | "gender" | "idProof" | "motherName" | "motherPhone" | "nationality" | "postalCode" | "previousClass" | "previousMarks" | "previousSchool" | "profileImage" | "religion" | "state" | "streetAddress" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason", ExtArgs["result"]["student"]>
 export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attendances?: boolean | Prisma.Student$attendancesArgs<ExtArgs>
   enrollments?: boolean | Prisma.Student$enrollmentsArgs<ExtArgs>
@@ -2377,7 +2529,10 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     lastName: string
     email: string
     phoneNumber: string
-    dateOfBirth: Date | null
+    studentPhoneNumber: string | null
+    whatsappNumbers: string[]
+    dateOfBirth: Date
+    monthlyFee: number | null
     address: string
     enrollmentDate: Date
     status: $Enums.Status
@@ -2843,7 +2998,10 @@ export interface StudentFieldRefs {
   readonly lastName: Prisma.FieldRef<"Student", 'String'>
   readonly email: Prisma.FieldRef<"Student", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"Student", 'String'>
+  readonly studentPhoneNumber: Prisma.FieldRef<"Student", 'String'>
+  readonly whatsappNumbers: Prisma.FieldRef<"Student", 'String[]'>
   readonly dateOfBirth: Prisma.FieldRef<"Student", 'DateTime'>
+  readonly monthlyFee: Prisma.FieldRef<"Student", 'Float'>
   readonly address: Prisma.FieldRef<"Student", 'String'>
   readonly enrollmentDate: Prisma.FieldRef<"Student", 'DateTime'>
   readonly status: Prisma.FieldRef<"Student", 'Status'>

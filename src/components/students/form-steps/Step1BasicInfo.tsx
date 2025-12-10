@@ -86,9 +86,48 @@ export function Step1BasicInfo({ form, levels, loadingLevels }: Step1BasicInfoPr
         name="phoneNumber"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
+            <FormLabel>Primary Phone Number <span className="text-red-500">*</span></FormLabel>
             <FormControl>
               <Input type="tel" placeholder="+1234567890" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="studentPhoneNumber"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Student Phone Number</FormLabel>
+            <FormControl>
+              <Input type="tel" placeholder="+1234567890" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="whatsappNumbers"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>WhatsApp Numbers (optional)</FormLabel>
+            <FormControl>
+              <Input 
+                type="text" 
+                placeholder="Enter numbers separated by commas (e.g., 01234567898, 01238736789)" 
+                value={field.value?.join(', ') || ''}
+                onChange={(e) => {
+                  const numbers = e.target.value
+                    .split(',')
+                    .map(num => num.trim())
+                    .filter(num => num.length > 0)
+                  field.onChange(numbers)
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -155,19 +194,42 @@ export function Step1BasicInfo({ form, levels, loadingLevels }: Step1BasicInfoPr
         />
       </div>
 
-      <FormField
-        control={form.control}
-        name="dateOfBirth"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Date of Birth</FormLabel>
-            <FormControl>
-              <Input type="date" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <FormField
+          control={form.control}
+          name="dateOfBirth"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Date of Birth <span className="text-red-500">*</span></FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="monthlyFee"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Monthly Fee</FormLabel>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  placeholder="0.00" 
+                  step="0.01"
+                  {...field}
+                  value={field.value || ''}
+                  onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <FormField
         control={form.control}

@@ -23,12 +23,15 @@ export async function PUT(
       firstName, 
       lastName, 
       email, 
-      phoneNumber, 
+      phoneNumber,
+      studentPhoneNumber,
+      whatsappNumbers,
       fatherName,
       fatherPhone,
       motherName,
       motherPhone,
-      dateOfBirth, 
+      dateOfBirth,
+      monthlyFee,
       address, 
       status, 
       smsEnabled,
@@ -53,9 +56,9 @@ export async function PUT(
     } = body;
 
     // Validate required fields
-    if (!firstName || !lastName) {
+    if (!firstName || !lastName || !dateOfBirth) {
       return NextResponse.json(
-        { error: 'First name and last name are required' },
+        { error: 'First name, last name, and date of birth are required' },
         { status: 400 }
       );
     }
@@ -80,11 +83,14 @@ export async function PUT(
         lastName,
         email: email || null,
         phoneNumber: phoneNumber || null,
+        studentPhoneNumber: studentPhoneNumber || null,
+        whatsappNumbers: whatsappNumbers || [],
         fatherName: fatherName || null,
         fatherPhone: fatherPhone || null,
         motherName: motherName || null,
         motherPhone: motherPhone || null,
-        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+        dateOfBirth: new Date(dateOfBirth),
+        monthlyFee: monthlyFee !== undefined ? parseFloat(monthlyFee) : null,
         address: address || null,
         status: status || 'Active',
         smsEnabled: smsEnabled !== undefined ? smsEnabled : false,

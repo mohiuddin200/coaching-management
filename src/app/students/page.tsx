@@ -8,8 +8,15 @@ import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { FullPaginationTable } from "@/components/table/FullPaginationTable"
 import { useMemo } from "react"
 
+interface Level {
+  id: string;
+  name: string;
+  levelNumber: number;
+}
+
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([])
+  const [levels, setLevels] = useState<Level[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -31,6 +38,19 @@ export default function StudentsPage() {
     }
   }
 
+  const fetchLevels = async () => {
+    try {
+      const response = await fetch('/api/levels')
+      if (!response.ok) {
+        throw new Error('Failed to fetch levels')
+      }
+      const data = await response.json()
+      setLevels(data)
+    } catch (err) {
+      console.error('Error fetching levels:', err)
+    }
+  }
+
   useEffect(() => {
     const checkUserRole = async () => {
       const supabase = createClient()
@@ -42,9 +62,27 @@ export default function StudentsPage() {
     
     checkUserRole()
     fetchStudents()
+    fetchLevels()
   }, [])
 
   const columns = useMemo(() => createColumns(fetchStudents, isAdmin), [isAdmin])
+
+  // Create faceted filter options for levels
+  const levelFilterOptions = useMemo(() => 
+    levels.map(level => ({
+      label: level.name,
+      value: level.id,
+    })),
+    [levels]
+  )
+
+  const facetedFilters = levelFilterOptions.length > 0 ? [
+    {
+      column: "levelId",
+      title: "Level",
+      options: levelFilterOptions,
+    },
+  ] : []
 
   if (loading) {
     return (
@@ -98,6 +136,7 @@ export default function StudentsPage() {
           columns={columns} 
           data={students}
           filterColumn="firstName"
+          facetedFilters={facetedFilters}
         />
       </div>
     </DashboardLayout>

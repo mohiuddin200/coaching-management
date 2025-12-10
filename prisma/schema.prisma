@@ -70,7 +70,10 @@ model Student {
   lastName                 String
   email                    String
   phoneNumber              String
-  dateOfBirth              DateTime?
+  studentPhoneNumber       String?
+  whatsappNumbers          String[]         @default([])
+  dateOfBirth              DateTime
+  monthlyFee               Float?
   address                  String
   enrollmentDate           DateTime         @default(now())
   status                   Status           @default(Active)

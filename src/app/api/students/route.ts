@@ -86,11 +86,14 @@ export async function POST(request: Request) {
       lastName,
       email,
       phoneNumber,
+      studentPhoneNumber,
+      whatsappNumbers,
       fatherName,
       fatherPhone,
       motherName,
       motherPhone,
       dateOfBirth,
+      monthlyFee,
       address,
       status,
       smsEnabled,
@@ -125,6 +128,7 @@ export async function POST(request: Request) {
       !fatherPhone ||
       !motherName ||
       !motherPhone ||
+      !dateOfBirth ||
       !address ||
       !levelId
     ) {
@@ -141,11 +145,14 @@ export async function POST(request: Request) {
         lastName,
         email,
         phoneNumber,
+        studentPhoneNumber: studentPhoneNumber || null,
+        whatsappNumbers: whatsappNumbers || [],
         fatherName,
         fatherPhone,
         motherName,
         motherPhone,
-        dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+        dateOfBirth: new Date(dateOfBirth),
+        monthlyFee: monthlyFee !== undefined ? parseFloat(monthlyFee) : null,
         address,
         status: status || "Active",
         smsEnabled: smsEnabled || false,

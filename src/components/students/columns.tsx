@@ -21,6 +21,11 @@ export type Student = {
   enrollmentDate: string;
   smsEnabled: boolean;
   levelId: string;
+  level?: {
+    id: string;
+    name: string;
+    levelNumber: number;
+  } | null;
 
   // Detailed Profile
   gender: "Male" | "Female" | "Other" | null;
@@ -71,6 +76,22 @@ export const createColumns = (
           {firstName} {lastName}
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "levelId",
+    header: "Level",
+    cell: ({ row }) => {
+      const level = row.original.level;
+      return (
+        <div className="font-medium">
+          {level?.name || "-"}
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      if (!value || !Array.isArray(value) || value.length === 0) return true;
+      return value.includes(row.getValue(id));
     },
   },
   {

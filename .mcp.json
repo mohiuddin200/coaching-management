@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "next-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "next-devtools-mcp@latest"
+      ]
+    },
+    "prisma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@prisma/mcp-server"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql://postgres.vfcgrshbrjlcsthcqltx:Fu5Cha6Yxn1w@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+      }
+    },
+    "supabase": {
+			"type": "http",
+			"url": "https://mcp.supabase.com/mcp?project_ref=gmunmxdxnqvwbowgyziz"
+		}
+  }
+}

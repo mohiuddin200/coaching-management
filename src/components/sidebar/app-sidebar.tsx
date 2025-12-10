@@ -12,7 +12,6 @@ import {
   School,
   LogOut,
   Wallet,
-  Archive,
 } from "lucide-react"
 
 import {
@@ -33,9 +32,8 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/",
+      url: "/dashboard",
       icon: LayoutDashboard,
-      isActive: true,
     },
     {
       title: "Students",

@@ -39,16 +39,14 @@ export function NavMain({
   
   // Check if the current path matches any of the item's children
   const isItemActive = (item: typeof items[0]) => {
-    if (item.isActive) return true
     if (item.items) {
-      const isActive = item.items.some((subItem) =>
+      return item.items.some((subItem) =>
         pathname === subItem.url || pathname.startsWith(subItem.url + '/')
       )
-      // Log for debugging Finance section
-      if (item.title === "Finance") {
-        console.log(`Finance section check: pathname=${pathname}, isActive=${isActive}`)
-      }
-      return isActive
+    }
+    // Exact match for root/dashboard, startsWith for other routes
+    if (item.url === '/dashboard' || item.url === '/') {
+      return pathname === item.url
     }
     return pathname === item.url || pathname.startsWith(item.url + '/')
   }
