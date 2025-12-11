@@ -55,10 +55,10 @@ export type Teacher = Prisma.TeacherModel
  */
 export type Student = Prisma.StudentModel
 /**
- * Model Level
+ * Model Class
  * 
  */
-export type Level = Prisma.LevelModel
+export type Class = Prisma.ClassModel
 /**
  * Model Subject
  * 
@@ -75,10 +75,10 @@ export type ClassSection = Prisma.ClassSectionModel
  */
 export type Schedule = Prisma.ScheduleModel
 /**
- * Model Class
+ * Model Session
  * 
  */
-export type Class = Prisma.ClassModel
+export type Session = Prisma.SessionModel
 /**
  * Model Enrollment
  * 

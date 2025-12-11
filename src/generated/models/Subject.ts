@@ -29,7 +29,7 @@ export type SubjectMinAggregateOutputType = {
   name: string | null
   code: string | null
   description: string | null
-  levelId: string | null
+  classId: string | null
   status: $Enums.Status | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -40,7 +40,7 @@ export type SubjectMaxAggregateOutputType = {
   name: string | null
   code: string | null
   description: string | null
-  levelId: string | null
+  classId: string | null
   status: $Enums.Status | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,7 +51,7 @@ export type SubjectCountAggregateOutputType = {
   name: number
   code: number
   description: number
-  levelId: number
+  classId: number
   status: number
   createdAt: number
   updatedAt: number
@@ -64,7 +64,7 @@ export type SubjectMinAggregateInputType = {
   name?: true
   code?: true
   description?: true
-  levelId?: true
+  classId?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -75,7 +75,7 @@ export type SubjectMaxAggregateInputType = {
   name?: true
   code?: true
   description?: true
-  levelId?: true
+  classId?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -86,7 +86,7 @@ export type SubjectCountAggregateInputType = {
   name?: true
   code?: true
   description?: true
-  levelId?: true
+  classId?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -170,7 +170,7 @@ export type SubjectGroupByOutputType = {
   name: string
   code: string | null
   description: string | null
-  levelId: string
+  classId: string
   status: $Enums.Status
   createdAt: Date
   updatedAt: Date
@@ -202,12 +202,12 @@ export type SubjectWhereInput = {
   name?: Prisma.StringFilter<"Subject"> | string
   code?: Prisma.StringNullableFilter<"Subject"> | string | null
   description?: Prisma.StringNullableFilter<"Subject"> | string | null
-  levelId?: Prisma.StringFilter<"Subject"> | string
+  classId?: Prisma.StringFilter<"Subject"> | string
   status?: Prisma.EnumStatusFilter<"Subject"> | $Enums.Status
   createdAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
   classSections?: Prisma.ClassSectionListRelationFilter
-  level?: Prisma.XOR<Prisma.LevelScalarRelationFilter, Prisma.LevelWhereInput>
+  class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
 }
 
 export type SubjectOrderByWithRelationInput = {
@@ -215,37 +215,37 @@ export type SubjectOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  levelId?: Prisma.SortOrder
+  classId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   classSections?: Prisma.ClassSectionOrderByRelationAggregateInput
-  level?: Prisma.LevelOrderByWithRelationInput
+  class?: Prisma.ClassOrderByWithRelationInput
 }
 
 export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  levelId_name?: Prisma.SubjectLevelIdNameCompoundUniqueInput
+  classId_name?: Prisma.SubjectClassIdNameCompoundUniqueInput
   AND?: Prisma.SubjectWhereInput | Prisma.SubjectWhereInput[]
   OR?: Prisma.SubjectWhereInput[]
   NOT?: Prisma.SubjectWhereInput | Prisma.SubjectWhereInput[]
   name?: Prisma.StringFilter<"Subject"> | string
   code?: Prisma.StringNullableFilter<"Subject"> | string | null
   description?: Prisma.StringNullableFilter<"Subject"> | string | null
-  levelId?: Prisma.StringFilter<"Subject"> | string
+  classId?: Prisma.StringFilter<"Subject"> | string
   status?: Prisma.EnumStatusFilter<"Subject"> | $Enums.Status
   createdAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
   classSections?: Prisma.ClassSectionListRelationFilter
-  level?: Prisma.XOR<Prisma.LevelScalarRelationFilter, Prisma.LevelWhereInput>
-}, "id" | "levelId_name">
+  class?: Prisma.XOR<Prisma.ClassScalarRelationFilter, Prisma.ClassWhereInput>
+}, "id" | "classId_name">
 
 export type SubjectOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   code?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  levelId?: Prisma.SortOrder
+  classId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -262,7 +262,7 @@ export type SubjectScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Subject"> | string
   code?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Subject"> | string | null
-  levelId?: Prisma.StringWithAggregatesFilter<"Subject"> | string
+  classId?: Prisma.StringWithAggregatesFilter<"Subject"> | string
   status?: Prisma.EnumStatusWithAggregatesFilter<"Subject"> | $Enums.Status
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Subject"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Subject"> | Date | string
@@ -277,7 +277,7 @@ export type SubjectCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutSubjectInput
-  level: Prisma.LevelCreateNestedOneWithoutSubjectsInput
+  class: Prisma.ClassCreateNestedOneWithoutSubjectsInput
 }
 
 export type SubjectUncheckedCreateInput = {
@@ -285,7 +285,7 @@ export type SubjectUncheckedCreateInput = {
   name: string
   code?: string | null
   description?: string | null
-  levelId: string
+  classId: string
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -301,7 +301,7 @@ export type SubjectUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   classSections?: Prisma.ClassSectionUpdateManyWithoutSubjectNestedInput
-  level?: Prisma.LevelUpdateOneRequiredWithoutSubjectsNestedInput
+  class?: Prisma.ClassUpdateOneRequiredWithoutSubjectsNestedInput
 }
 
 export type SubjectUncheckedUpdateInput = {
@@ -309,7 +309,7 @@ export type SubjectUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  levelId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -321,7 +321,7 @@ export type SubjectCreateManyInput = {
   name: string
   code?: string | null
   description?: string | null
-  levelId: string
+  classId: string
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -342,7 +342,7 @@ export type SubjectUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  levelId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -358,8 +358,8 @@ export type SubjectOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type SubjectLevelIdNameCompoundUniqueInput = {
-  levelId: string
+export type SubjectClassIdNameCompoundUniqueInput = {
+  classId: string
   name: string
 }
 
@@ -368,7 +368,7 @@ export type SubjectCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  levelId?: Prisma.SortOrder
+  classId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -379,7 +379,7 @@ export type SubjectMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  levelId?: Prisma.SortOrder
+  classId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -390,7 +390,7 @@ export type SubjectMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  levelId?: Prisma.SortOrder
+  classId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -401,45 +401,45 @@ export type SubjectScalarRelationFilter = {
   isNot?: Prisma.SubjectWhereInput
 }
 
-export type SubjectCreateNestedManyWithoutLevelInput = {
-  create?: Prisma.XOR<Prisma.SubjectCreateWithoutLevelInput, Prisma.SubjectUncheckedCreateWithoutLevelInput> | Prisma.SubjectCreateWithoutLevelInput[] | Prisma.SubjectUncheckedCreateWithoutLevelInput[]
-  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutLevelInput | Prisma.SubjectCreateOrConnectWithoutLevelInput[]
-  createMany?: Prisma.SubjectCreateManyLevelInputEnvelope
+export type SubjectCreateNestedManyWithoutClassInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutClassInput, Prisma.SubjectUncheckedCreateWithoutClassInput> | Prisma.SubjectCreateWithoutClassInput[] | Prisma.SubjectUncheckedCreateWithoutClassInput[]
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutClassInput | Prisma.SubjectCreateOrConnectWithoutClassInput[]
+  createMany?: Prisma.SubjectCreateManyClassInputEnvelope
   connect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
 }
 
-export type SubjectUncheckedCreateNestedManyWithoutLevelInput = {
-  create?: Prisma.XOR<Prisma.SubjectCreateWithoutLevelInput, Prisma.SubjectUncheckedCreateWithoutLevelInput> | Prisma.SubjectCreateWithoutLevelInput[] | Prisma.SubjectUncheckedCreateWithoutLevelInput[]
-  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutLevelInput | Prisma.SubjectCreateOrConnectWithoutLevelInput[]
-  createMany?: Prisma.SubjectCreateManyLevelInputEnvelope
+export type SubjectUncheckedCreateNestedManyWithoutClassInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutClassInput, Prisma.SubjectUncheckedCreateWithoutClassInput> | Prisma.SubjectCreateWithoutClassInput[] | Prisma.SubjectUncheckedCreateWithoutClassInput[]
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutClassInput | Prisma.SubjectCreateOrConnectWithoutClassInput[]
+  createMany?: Prisma.SubjectCreateManyClassInputEnvelope
   connect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
 }
 
-export type SubjectUpdateManyWithoutLevelNestedInput = {
-  create?: Prisma.XOR<Prisma.SubjectCreateWithoutLevelInput, Prisma.SubjectUncheckedCreateWithoutLevelInput> | Prisma.SubjectCreateWithoutLevelInput[] | Prisma.SubjectUncheckedCreateWithoutLevelInput[]
-  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutLevelInput | Prisma.SubjectCreateOrConnectWithoutLevelInput[]
-  upsert?: Prisma.SubjectUpsertWithWhereUniqueWithoutLevelInput | Prisma.SubjectUpsertWithWhereUniqueWithoutLevelInput[]
-  createMany?: Prisma.SubjectCreateManyLevelInputEnvelope
+export type SubjectUpdateManyWithoutClassNestedInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutClassInput, Prisma.SubjectUncheckedCreateWithoutClassInput> | Prisma.SubjectCreateWithoutClassInput[] | Prisma.SubjectUncheckedCreateWithoutClassInput[]
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutClassInput | Prisma.SubjectCreateOrConnectWithoutClassInput[]
+  upsert?: Prisma.SubjectUpsertWithWhereUniqueWithoutClassInput | Prisma.SubjectUpsertWithWhereUniqueWithoutClassInput[]
+  createMany?: Prisma.SubjectCreateManyClassInputEnvelope
   set?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
   disconnect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
   delete?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
   connect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
-  update?: Prisma.SubjectUpdateWithWhereUniqueWithoutLevelInput | Prisma.SubjectUpdateWithWhereUniqueWithoutLevelInput[]
-  updateMany?: Prisma.SubjectUpdateManyWithWhereWithoutLevelInput | Prisma.SubjectUpdateManyWithWhereWithoutLevelInput[]
+  update?: Prisma.SubjectUpdateWithWhereUniqueWithoutClassInput | Prisma.SubjectUpdateWithWhereUniqueWithoutClassInput[]
+  updateMany?: Prisma.SubjectUpdateManyWithWhereWithoutClassInput | Prisma.SubjectUpdateManyWithWhereWithoutClassInput[]
   deleteMany?: Prisma.SubjectScalarWhereInput | Prisma.SubjectScalarWhereInput[]
 }
 
-export type SubjectUncheckedUpdateManyWithoutLevelNestedInput = {
-  create?: Prisma.XOR<Prisma.SubjectCreateWithoutLevelInput, Prisma.SubjectUncheckedCreateWithoutLevelInput> | Prisma.SubjectCreateWithoutLevelInput[] | Prisma.SubjectUncheckedCreateWithoutLevelInput[]
-  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutLevelInput | Prisma.SubjectCreateOrConnectWithoutLevelInput[]
-  upsert?: Prisma.SubjectUpsertWithWhereUniqueWithoutLevelInput | Prisma.SubjectUpsertWithWhereUniqueWithoutLevelInput[]
-  createMany?: Prisma.SubjectCreateManyLevelInputEnvelope
+export type SubjectUncheckedUpdateManyWithoutClassNestedInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutClassInput, Prisma.SubjectUncheckedCreateWithoutClassInput> | Prisma.SubjectCreateWithoutClassInput[] | Prisma.SubjectUncheckedCreateWithoutClassInput[]
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutClassInput | Prisma.SubjectCreateOrConnectWithoutClassInput[]
+  upsert?: Prisma.SubjectUpsertWithWhereUniqueWithoutClassInput | Prisma.SubjectUpsertWithWhereUniqueWithoutClassInput[]
+  createMany?: Prisma.SubjectCreateManyClassInputEnvelope
   set?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
   disconnect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
   delete?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
   connect?: Prisma.SubjectWhereUniqueInput | Prisma.SubjectWhereUniqueInput[]
-  update?: Prisma.SubjectUpdateWithWhereUniqueWithoutLevelInput | Prisma.SubjectUpdateWithWhereUniqueWithoutLevelInput[]
-  updateMany?: Prisma.SubjectUpdateManyWithWhereWithoutLevelInput | Prisma.SubjectUpdateManyWithWhereWithoutLevelInput[]
+  update?: Prisma.SubjectUpdateWithWhereUniqueWithoutClassInput | Prisma.SubjectUpdateWithWhereUniqueWithoutClassInput[]
+  updateMany?: Prisma.SubjectUpdateManyWithWhereWithoutClassInput | Prisma.SubjectUpdateManyWithWhereWithoutClassInput[]
   deleteMany?: Prisma.SubjectScalarWhereInput | Prisma.SubjectScalarWhereInput[]
 }
 
@@ -457,7 +457,7 @@ export type SubjectUpdateOneRequiredWithoutClassSectionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutClassSectionsInput, Prisma.SubjectUpdateWithoutClassSectionsInput>, Prisma.SubjectUncheckedUpdateWithoutClassSectionsInput>
 }
 
-export type SubjectCreateWithoutLevelInput = {
+export type SubjectCreateWithoutClassInput = {
   id?: string
   name: string
   code?: string | null
@@ -468,7 +468,7 @@ export type SubjectCreateWithoutLevelInput = {
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutSubjectInput
 }
 
-export type SubjectUncheckedCreateWithoutLevelInput = {
+export type SubjectUncheckedCreateWithoutClassInput = {
   id?: string
   name: string
   code?: string | null
@@ -479,30 +479,30 @@ export type SubjectUncheckedCreateWithoutLevelInput = {
   classSections?: Prisma.ClassSectionUncheckedCreateNestedManyWithoutSubjectInput
 }
 
-export type SubjectCreateOrConnectWithoutLevelInput = {
+export type SubjectCreateOrConnectWithoutClassInput = {
   where: Prisma.SubjectWhereUniqueInput
-  create: Prisma.XOR<Prisma.SubjectCreateWithoutLevelInput, Prisma.SubjectUncheckedCreateWithoutLevelInput>
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutClassInput, Prisma.SubjectUncheckedCreateWithoutClassInput>
 }
 
-export type SubjectCreateManyLevelInputEnvelope = {
-  data: Prisma.SubjectCreateManyLevelInput | Prisma.SubjectCreateManyLevelInput[]
+export type SubjectCreateManyClassInputEnvelope = {
+  data: Prisma.SubjectCreateManyClassInput | Prisma.SubjectCreateManyClassInput[]
   skipDuplicates?: boolean
 }
 
-export type SubjectUpsertWithWhereUniqueWithoutLevelInput = {
+export type SubjectUpsertWithWhereUniqueWithoutClassInput = {
   where: Prisma.SubjectWhereUniqueInput
-  update: Prisma.XOR<Prisma.SubjectUpdateWithoutLevelInput, Prisma.SubjectUncheckedUpdateWithoutLevelInput>
-  create: Prisma.XOR<Prisma.SubjectCreateWithoutLevelInput, Prisma.SubjectUncheckedCreateWithoutLevelInput>
+  update: Prisma.XOR<Prisma.SubjectUpdateWithoutClassInput, Prisma.SubjectUncheckedUpdateWithoutClassInput>
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutClassInput, Prisma.SubjectUncheckedCreateWithoutClassInput>
 }
 
-export type SubjectUpdateWithWhereUniqueWithoutLevelInput = {
+export type SubjectUpdateWithWhereUniqueWithoutClassInput = {
   where: Prisma.SubjectWhereUniqueInput
-  data: Prisma.XOR<Prisma.SubjectUpdateWithoutLevelInput, Prisma.SubjectUncheckedUpdateWithoutLevelInput>
+  data: Prisma.XOR<Prisma.SubjectUpdateWithoutClassInput, Prisma.SubjectUncheckedUpdateWithoutClassInput>
 }
 
-export type SubjectUpdateManyWithWhereWithoutLevelInput = {
+export type SubjectUpdateManyWithWhereWithoutClassInput = {
   where: Prisma.SubjectScalarWhereInput
-  data: Prisma.XOR<Prisma.SubjectUpdateManyMutationInput, Prisma.SubjectUncheckedUpdateManyWithoutLevelInput>
+  data: Prisma.XOR<Prisma.SubjectUpdateManyMutationInput, Prisma.SubjectUncheckedUpdateManyWithoutClassInput>
 }
 
 export type SubjectScalarWhereInput = {
@@ -513,7 +513,7 @@ export type SubjectScalarWhereInput = {
   name?: Prisma.StringFilter<"Subject"> | string
   code?: Prisma.StringNullableFilter<"Subject"> | string | null
   description?: Prisma.StringNullableFilter<"Subject"> | string | null
-  levelId?: Prisma.StringFilter<"Subject"> | string
+  classId?: Prisma.StringFilter<"Subject"> | string
   status?: Prisma.EnumStatusFilter<"Subject"> | $Enums.Status
   createdAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
@@ -527,7 +527,7 @@ export type SubjectCreateWithoutClassSectionsInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
-  level: Prisma.LevelCreateNestedOneWithoutSubjectsInput
+  class: Prisma.ClassCreateNestedOneWithoutSubjectsInput
 }
 
 export type SubjectUncheckedCreateWithoutClassSectionsInput = {
@@ -535,7 +535,7 @@ export type SubjectUncheckedCreateWithoutClassSectionsInput = {
   name: string
   code?: string | null
   description?: string | null
-  levelId: string
+  classId: string
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -565,7 +565,7 @@ export type SubjectUpdateWithoutClassSectionsInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  level?: Prisma.LevelUpdateOneRequiredWithoutSubjectsNestedInput
+  class?: Prisma.ClassUpdateOneRequiredWithoutSubjectsNestedInput
 }
 
 export type SubjectUncheckedUpdateWithoutClassSectionsInput = {
@@ -573,13 +573,13 @@ export type SubjectUncheckedUpdateWithoutClassSectionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  levelId?: Prisma.StringFieldUpdateOperationsInput | string
+  classId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type SubjectCreateManyLevelInput = {
+export type SubjectCreateManyClassInput = {
   id?: string
   name: string
   code?: string | null
@@ -589,7 +589,7 @@ export type SubjectCreateManyLevelInput = {
   updatedAt?: Date | string
 }
 
-export type SubjectUpdateWithoutLevelInput = {
+export type SubjectUpdateWithoutClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -600,7 +600,7 @@ export type SubjectUpdateWithoutLevelInput = {
   classSections?: Prisma.ClassSectionUpdateManyWithoutSubjectNestedInput
 }
 
-export type SubjectUncheckedUpdateWithoutLevelInput = {
+export type SubjectUncheckedUpdateWithoutClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -611,7 +611,7 @@ export type SubjectUncheckedUpdateWithoutLevelInput = {
   classSections?: Prisma.ClassSectionUncheckedUpdateManyWithoutSubjectNestedInput
 }
 
-export type SubjectUncheckedUpdateManyWithoutLevelInput = {
+export type SubjectUncheckedUpdateManyWithoutClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -657,12 +657,12 @@ export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name?: boolean
   code?: boolean
   description?: boolean
-  levelId?: boolean
+  classId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   classSections?: boolean | Prisma.Subject$classSectionsArgs<ExtArgs>
-  level?: boolean | Prisma.LevelDefaultArgs<ExtArgs>
+  class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
@@ -671,11 +671,11 @@ export type SubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   code?: boolean
   description?: boolean
-  levelId?: boolean
+  classId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  level?: boolean | Prisma.LevelDefaultArgs<ExtArgs>
+  class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -683,11 +683,11 @@ export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   name?: boolean
   code?: boolean
   description?: boolean
-  levelId?: boolean
+  classId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  level?: boolean | Prisma.LevelDefaultArgs<ExtArgs>
+  class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
 export type SubjectSelectScalar = {
@@ -695,37 +695,37 @@ export type SubjectSelectScalar = {
   name?: boolean
   code?: boolean
   description?: boolean
-  levelId?: boolean
+  classId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "description" | "levelId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["subject"]>
+export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "description" | "classId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["subject"]>
 export type SubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   classSections?: boolean | Prisma.Subject$classSectionsArgs<ExtArgs>
-  level?: boolean | Prisma.LevelDefaultArgs<ExtArgs>
+  class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  level?: boolean | Prisma.LevelDefaultArgs<ExtArgs>
+  class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
 }
 export type SubjectIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  level?: boolean | Prisma.LevelDefaultArgs<ExtArgs>
+  class?: boolean | Prisma.ClassDefaultArgs<ExtArgs>
 }
 
 export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Subject"
   objects: {
     classSections: Prisma.$ClassSectionPayload<ExtArgs>[]
-    level: Prisma.$LevelPayload<ExtArgs>
+    class: Prisma.$ClassPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     code: string | null
     description: string | null
-    levelId: string
+    classId: string
     status: $Enums.Status
     createdAt: Date
     updatedAt: Date
@@ -1124,7 +1124,7 @@ readonly fields: SubjectFieldRefs;
 export interface Prisma__SubjectClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   classSections<T extends Prisma.Subject$classSectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$classSectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassSectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  level<T extends Prisma.LevelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LevelDefaultArgs<ExtArgs>>): Prisma.Prisma__LevelClient<runtime.Types.Result.GetResult<Prisma.$LevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  class<T extends Prisma.ClassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassDefaultArgs<ExtArgs>>): Prisma.Prisma__ClassClient<runtime.Types.Result.GetResult<Prisma.$ClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1158,7 +1158,7 @@ export interface SubjectFieldRefs {
   readonly name: Prisma.FieldRef<"Subject", 'String'>
   readonly code: Prisma.FieldRef<"Subject", 'String'>
   readonly description: Prisma.FieldRef<"Subject", 'String'>
-  readonly levelId: Prisma.FieldRef<"Subject", 'String'>
+  readonly classId: Prisma.FieldRef<"Subject", 'String'>
   readonly status: Prisma.FieldRef<"Subject", 'Status'>
   readonly createdAt: Prisma.FieldRef<"Subject", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Subject", 'DateTime'>

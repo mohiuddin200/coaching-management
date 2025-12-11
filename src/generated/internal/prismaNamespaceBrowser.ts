@@ -54,11 +54,11 @@ export const ModelName = {
   User: 'User',
   Teacher: 'Teacher',
   Student: 'Student',
-  Level: 'Level',
+  Class: 'Class',
   Subject: 'Subject',
   ClassSection: 'ClassSection',
   Schedule: 'Schedule',
-  Class: 'Class',
+  Session: 'Session',
   Enrollment: 'Enrollment',
   Attendance: 'Attendance',
   BiometricDevice: 'BiometricDevice',
@@ -157,7 +157,7 @@ export const StudentScalarFieldEnum = {
   smsEnabled: 'smsEnabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  levelId: 'levelId',
+  classId: 'classId',
   birthCertificate: 'birthCertificate',
   bloodGroup: 'bloodGroup',
   city: 'city',
@@ -189,7 +189,7 @@ export const StudentScalarFieldEnum = {
 export type StudentScalarFieldEnum = (typeof StudentScalarFieldEnum)[keyof typeof StudentScalarFieldEnum]
 
 
-export const LevelScalarFieldEnum = {
+export const ClassScalarFieldEnum = {
   id: 'id',
   name: 'name',
   levelNumber: 'levelNumber',
@@ -199,7 +199,7 @@ export const LevelScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type LevelScalarFieldEnum = (typeof LevelScalarFieldEnum)[keyof typeof LevelScalarFieldEnum]
+export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]
 
 
 export const SubjectScalarFieldEnum = {
@@ -207,7 +207,7 @@ export const SubjectScalarFieldEnum = {
   name: 'name',
   code: 'code',
   description: 'description',
-  levelId: 'levelId',
+  classId: 'classId',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -246,7 +246,7 @@ export const ScheduleScalarFieldEnum = {
 export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
 
 
-export const ClassScalarFieldEnum = {
+export const SessionScalarFieldEnum = {
   id: 'id',
   name: 'name',
   scheduleTime: 'scheduleTime',
@@ -257,7 +257,7 @@ export const ClassScalarFieldEnum = {
   teacherId: 'teacherId'
 } as const
 
-export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
 export const EnrollmentScalarFieldEnum = {
@@ -267,7 +267,7 @@ export const EnrollmentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   studentId: 'studentId',
-  classId: 'classId',
+  sessionId: 'sessionId',
   classSectionId: 'classSectionId'
 } as const
 
@@ -283,7 +283,7 @@ export const AttendanceScalarFieldEnum = {
   studentId: 'studentId',
   classSectionId: 'classSectionId',
   deviceId: 'deviceId',
-  classId: 'classId'
+  sessionId: 'sessionId'
 } as const
 
 export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
@@ -348,7 +348,7 @@ export type FeedbackScalarFieldEnum = (typeof FeedbackScalarFieldEnum)[keyof typ
 export const FeeStructureScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  levelId: 'levelId',
+  classId: 'classId',
   amount: 'amount',
   frequency: 'frequency',
   academicYear: 'academicYear',
