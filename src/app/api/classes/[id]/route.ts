@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/levels/[id] - Get a specific level
+// GET /api/classes/[id] - Get a specific class
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const level = await prisma.level.findUnique({
+    const classData = await prisma.class.findUnique({
       where: { id },
       include: {
         subjects: {
@@ -24,24 +24,24 @@ export async function GET(
       },
     });
 
-    if (!level) {
+    if (!classData) {
       return NextResponse.json(
-        { error: 'Level not found' },
+        { error: 'Class not found' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(level);
+    return NextResponse.json(classData);
   } catch (error) {
-    console.error('Error fetching level:', error);
+    console.error('Error fetching class:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch level' },
+      { error: 'Failed to fetch class' },
       { status: 500 }
     );
   }
 }
 
-// PATCH /api/levels/[id] - Update a level
+// PATCH /api/classes/[id] - Update a class
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -49,44 +49,44 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, levelNumber, description, status } = body;
+    const { name, classNumber, description, status } = body;
 
-    const level = await prisma.level.update({
+    const classData = await prisma.class.update({
       where: { id },
       data: {
         ...(name && { name }),
-        ...(levelNumber && { levelNumber: parseInt(levelNumber) }),
+        ...(classNumber && { classNumber: parseInt(classNumber) }),
         ...(description !== undefined && { description }),
         ...(status && { status }),
       },
     });
 
-    return NextResponse.json(level);
+    return NextResponse.json(classData);
   } catch (error) {
-    console.error('Error updating level:', error);
+    console.error('Error updating class:', error);
     return NextResponse.json(
-      { error: 'Failed to update level' },
+      { error: 'Failed to update class' },
       { status: 500 }
     );
   }
 }
 
-// DELETE /api/levels/[id] - Delete a level
+// DELETE /api/classes/[id] - Delete a class
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    await prisma.level.delete({
+    await prisma.class.delete({
       where: { id },
     });
 
-    return NextResponse.json({ message: 'Level deleted successfully' });
+    return NextResponse.json({ message: 'Class deleted successfully' });
   } catch (error) {
-    console.error('Error deleting level:', error);
+    console.error('Error deleting class:', error);
     return NextResponse.json(
-      { error: 'Failed to delete level' },
+      { error: 'Failed to delete class' },
       { status: 500 }
     );
   }

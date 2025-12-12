@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 async function main() {
   const students = await prisma.student.findMany({
     include: {
-      level: true,
+      class: true,
       enrollments: {
         include: {
           classSection: true,

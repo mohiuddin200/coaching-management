@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// POST /api/class-sections/[id]/schedules - Add a schedule to a class section
+// POST /api/session-sections/[id]/schedules - Add a schedule to a session section
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -38,7 +38,7 @@ export async function POST(
   }
 }
 
-// DELETE /api/class-sections/[id]/schedules - Delete a schedule
+// DELETE /api/session-sections/[id]/schedules - Delete a schedule
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

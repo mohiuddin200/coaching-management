@@ -177,7 +177,7 @@ await prisma.teacher.update({
    - Never expose admin credentials to frontend
    - Use for: listing users, updating metadata
 
-2. **RLS (Row Level Security)**
+2. **RLS (Row Class Security)**
    - Enable on Teacher/Student tables
    - Users can only read their own linked profiles
    - Admins have full access

@@ -23,10 +23,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { InlineLoader } from "@/components/data-loader";
 
-interface Level {
+interface Class {
   id: string;
   name: string;
-  levelNumber: number;
+  classNumber: number;
 }
 
 interface FeeStructure {
@@ -36,11 +36,11 @@ interface FeeStructure {
   frequency: string;
   academicYear: string;
   description: string | null;
-  levelId?: string | null;
-  level?: {
+  classId?: string | null;
+  class?: {
     id: string;
     name: string;
-    levelNumber: number;
+    classNumber: number;
   } | null;
   isActive: boolean;
 }
@@ -67,7 +67,7 @@ export function CreateFeeStructureDialog({
   const setOpen = onOpenChange || setInternalOpen;
   const [loading, setLoading] = useState(false);
   const [loadingLevels, setLoadingLevels] = useState(false);
-  const [levels, setLevels] = useState<Level[]>([]);
+  const [classes, setLevels] = useState<Class[]>([]);
 
   const isEditMode = !!editingFeeStructure;
 
@@ -76,7 +76,7 @@ export function CreateFeeStructureDialog({
     if (editingFeeStructure) {
       setFormData({
         name: editingFeeStructure.name || "",
-        levelId: getLevelId(editingFeeStructure),
+        classId: getLevelId(editingFeeStructure),
         amount: editingFeeStructure.amount?.toString() || "",
         frequency: editingFeeStructure.frequency || "Monthly",
         academicYear: editingFeeStructure.academicYear || "2024-2025",
@@ -91,17 +91,17 @@ export function CreateFeeStructureDialog({
     }
   }, [editingFeeStructure, onOpenChange]);
 
-  // Extract levelId from either levelId property or nested level object
+  // Extract classId from either classId property or nested class object
   const getLevelId = (feeStructure?: FeeStructure): string => {
     if (!feeStructure) return "";
-    if (feeStructure.levelId !== undefined) return feeStructure.levelId || "";
-    if (feeStructure.level?.id) return feeStructure.level.id;
+    if (feeStructure.classId !== undefined) return feeStructure.classId || "";
+    if (feeStructure.class?.id) return feeStructure.class.id;
     return "";
   };
 
   const [formData, setFormData] = useState({
     name: "",
-    levelId: "",
+    classId: "",
     amount: "",
     frequency: "Monthly",
     academicYear: "2024-2025",
@@ -118,13 +118,13 @@ export function CreateFeeStructureDialog({
   const fetchLevels = async () => {
     setLoadingLevels(true);
     try {
-      const response = await fetch("/api/levels");
+      const response = await fetch("/api/classes");
       const data = await response.json();
-      console.log(data, "levels")
+      console.log(data, "classes")
       setLevels(data || []);
     } catch (error) {
-      console.error("Error fetching levels:", error);
-      toast.error("Failed to load levels");
+      console.error("Error fetching classes:", error);
+      toast.error("Failed to load classes");
     } finally {
       setLoadingLevels(false);
     }
@@ -148,7 +148,7 @@ export function CreateFeeStructureDialog({
         },
         body: JSON.stringify({
           ...formData,
-          levelId: formData.levelId || null,
+          classId: formData.classId || null,
           amount: parseFloat(formData.amount),
         }),
       });
@@ -180,7 +180,7 @@ export function CreateFeeStructureDialog({
   const resetForm = () => {
     setFormData({
       name: "",
-      levelId: "",
+      classId: "",
       amount: "",
       frequency: "Monthly",
       academicYear: "2024-2025",
@@ -208,7 +208,7 @@ export function CreateFeeStructureDialog({
           <DialogDescription>
             {isEditMode
               ? "Edit the fee structure details"
-              : "Define a new fee structure for a level or course"
+              : "Define a new fee structure for a class or course"
             }
           </DialogDescription>
         </DialogHeader>
@@ -217,7 +217,7 @@ export function CreateFeeStructureDialog({
             <Label htmlFor="name">Fee Structure Name *</Label>
             <Input
               id="name"
-              placeholder="e.g., Monthly Tuition - Class 8"
+              placeholder="e.g., Monthly Tuition - Session 8"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -227,30 +227,30 @@ export function CreateFeeStructureDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="levelId">Level (Optional)</Label>
+            <Label htmlFor="classId">Class (Optional)</Label>
             <Select
-              value={formData.levelId}
+              value={formData.classId}
               onValueChange={(value) =>
-                setFormData({ ...formData, levelId: value })
+                setFormData({ ...formData, classId: value })
               }
               disabled={loadingLevels}
             >
               <SelectTrigger>
-                <SelectValue placeholder={loadingLevels ? "Loading levels..." : "Select level (optional)"} />
+                <SelectValue placeholder={loadingLevels ? "Loading classes..." : "Select class (optional)"} />
               </SelectTrigger>
               <SelectContent>
                 {loadingLevels ? (
                   <div className="p-4">
-                    <InlineLoader text="Loading levels..." />
+                    <InlineLoader text="Loading classes..." />
                   </div>
-                ) : levels.length === 0 ? (
+                ) : classes.length === 0 ? (
                   <div className="p-4 text-sm text-muted-foreground text-center">
-                    No levels available
+                    No classes available
                   </div>
                 ) : (
-                  levels.map((level) => (
-                    <SelectItem key={level.id} value={level.id}>
-                      {level.name}
+                  classes.map((classData) => (
+                    <SelectItem key={classData.id} value={classData.id}>
+                      {classData.name}
                     </SelectItem>
                   ))
                 )}

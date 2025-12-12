@@ -14,7 +14,7 @@ interface Subject {
   name: string;
   code: string | null;
   description: string | null;
-  levelId: string;
+  classId: string;
   _count?: {
     classSections: number;
   };
@@ -57,7 +57,7 @@ export function SubjectsSection({ selectedLevel, levelName, subjects, onSubjectC
               <CardDescription>
                 {selectedLevel
                   ? `Subjects for ${levelName}`
-                  : 'Select a level to view subjects'}
+                  : 'Select a class to view subjects'}
               </CardDescription>
             </div>
           </div>
@@ -73,7 +73,7 @@ export function SubjectsSection({ selectedLevel, levelName, subjects, onSubjectC
       <CardContent>
         {!selectedLevel ? (
           <p className="text-sm text-muted-foreground text-center py-8">
-            Select a level to view and manage its subjects
+            Select a class to view and manage its subjects
           </p>
         ) : subjects.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-8">
@@ -82,7 +82,7 @@ export function SubjectsSection({ selectedLevel, levelName, subjects, onSubjectC
         ) : (
           <div className="space-y-2">
             {subjects
-              .filter((s) => s.levelId === selectedLevel)
+              .filter((s) => s.classId === selectedLevel)
               .map((subject) => (
                 <div
                   key={subject.id}

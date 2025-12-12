@@ -92,7 +92,7 @@ export function AttendanceTrendChart({ data }: AttendanceTrendChartProps) {
 }
 
 interface EnrollmentData {
-  level: string;
+  class: string;
   students: number;
 }
 
@@ -113,15 +113,15 @@ export function EnrollmentByLevelChart({ data }: EnrollmentByLevelChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Enrollment by Level</CardTitle>
-        <CardDescription>Student distribution across class levels</CardDescription>
+        <CardTitle>Enrollment by Class</CardTitle>
+        <CardDescription>Student distribution across session classes</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={enrollmentChartConfig} className="h-[300px] w-full">
           <BarChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
             <XAxis
-              dataKey="level"
+              dataKey="class"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -249,8 +249,8 @@ export function ClassDistributionChart({ data }: ClassDistributionChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Class Status Distribution</CardTitle>
-        <CardDescription>Distribution of class sections by status</CardDescription>
+        <CardTitle>Session Status Distribution</CardTitle>
+        <CardDescription>Distribution of session sections by status</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -291,7 +291,7 @@ interface TeacherPerformanceChartProps {
 
 const teacherChartConfig = {
   classes: {
-    label: 'Classes',
+    label: 'Sessions',
     color: 'hsl(217 91% 60%)',
   },
   students: {
@@ -311,7 +311,7 @@ export function TeacherPerformanceChart({ data }: TeacherPerformanceChartProps) 
     <Card>
       <CardHeader>
         <CardTitle>Teacher Overview</CardTitle>
-        <CardDescription>Classes and student engagement by teacher</CardDescription>
+        <CardDescription>Sessions and student engagement by teacher</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={teacherChartConfig} className="h-[300px] w-full">

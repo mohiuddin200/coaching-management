@@ -11,7 +11,7 @@ export async function GET(
 
     if (!classSectionId) {
       return NextResponse.json(
-        { error: "Class Section ID is required" },
+        { error: "Session Section ID is required" },
         { status: 400 }
       );
     }
@@ -24,7 +24,7 @@ export async function GET(
       include: {
         student: {
           include: {
-            level: true,
+            class: true,
           },
         },
       },
@@ -41,14 +41,14 @@ export async function GET(
           id: string;
           firstName: string;
           lastName: string;
-          level: { id: string; name: string } | null;
+          class: { id: string; name: string } | null;
         };
       }) => enrollment.student
     );
 
     return NextResponse.json({ students });
   } catch (error) {
-    console.error("Error fetching students for class section:", error);
+    console.error("Error fetching students for session section:", error);
     return NextResponse.json(
       { error: "Failed to fetch students" },
       { status: 500 }

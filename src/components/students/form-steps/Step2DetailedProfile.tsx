@@ -201,9 +201,9 @@ export function Step2DetailedProfile({ form }: Step2DetailedProfileProps) {
           name="previousClass"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Previous Class</FormLabel>
+              <FormLabel>Previous Session</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Class 10" {...field} />
+                <Input placeholder="e.g., Session 10" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

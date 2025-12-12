@@ -63,7 +63,7 @@ export function ViewStudentDetailsDialog({ student }: ViewStudentDetailsDialogPr
 
             <h3 className="col-span-2 text-lg font-semibold text-primary border-b pb-2 mt-4">Previous Education</h3>
             <DetailItem label="Previous School" value={student.previousSchool} />
-            <DetailItem label="Previous Class" value={student.previousClass} />
+            <DetailItem label="Previous Session" value={student.previousClass} />
             <DetailItem label="Previous Marks" value={student.previousMarks?.toString()} />
 
             <h3 className="col-span-2 text-lg font-semibold text-primary border-b pb-2 mt-4">Emergency Contact</h3>

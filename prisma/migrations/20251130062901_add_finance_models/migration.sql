@@ -110,7 +110,7 @@ CREATE TABLE "students" (
     "smsEnabled" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "levelId" TEXT NOT NULL,
+    "classId" TEXT NOT NULL,
     "birthCertificate" TEXT,
     "bloodGroup" "BloodGroup",
     "city" TEXT,
@@ -138,10 +138,10 @@ CREATE TABLE "students" (
 );
 
 -- CreateTable
-CREATE TABLE "levels" (
+CREATE TABLE "classes" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "levelNumber" INTEGER NOT NULL,
+    "classNumber" INTEGER NOT NULL,
     "description" TEXT,
     "status" "Status" NOT NULL DEFAULT 'Active',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -156,7 +156,7 @@ CREATE TABLE "subjects" (
     "name" TEXT NOT NULL,
     "code" TEXT,
     "description" TEXT,
-    "levelId" TEXT NOT NULL,
+    "classId" TEXT NOT NULL,
     "status" "Status" NOT NULL DEFAULT 'Active',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE "enrollments" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "studentId" TEXT NOT NULL,
-    "classId" TEXT,
+    "sessionId" TEXT,
     "classSectionId" TEXT,
 
     CONSTRAINT "enrollments_pkey" PRIMARY KEY ("id")
@@ -232,7 +232,7 @@ CREATE TABLE "attendances" (
     "studentId" TEXT NOT NULL,
     "classSectionId" TEXT,
     "deviceId" TEXT,
-    "classId" TEXT,
+    "sessionId" TEXT,
 
     CONSTRAINT "attendances_pkey" PRIMARY KEY ("id")
 );
@@ -297,7 +297,7 @@ CREATE TABLE "feedbacks" (
 CREATE TABLE "fee_structures" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "levelId" TEXT,
+    "classId" TEXT,
     "amount" DOUBLE PRECISION NOT NULL,
     "frequency" "FeeFrequency" NOT NULL DEFAULT 'Monthly',
     "academicYear" TEXT NOT NULL,
@@ -368,13 +368,13 @@ CREATE UNIQUE INDEX "teachers_userId_key" ON "teachers"("userId");
 CREATE UNIQUE INDEX "teachers_nid_key" ON "teachers"("nid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "levels_name_key" ON "levels"("name");
+CREATE UNIQUE INDEX "levels_name_key" ON "classes"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "levels_levelNumber_key" ON "levels"("levelNumber");
+CREATE UNIQUE INDEX "levels_levelNumber_key" ON "classes"("classNumber");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "subjects_levelId_name_key" ON "subjects"("levelId", "name");
+CREATE UNIQUE INDEX "subjects_levelId_name_key" ON "subjects"("classId", "name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "attendances_studentId_date_key" ON "attendances"("studentId", "date");
@@ -386,10 +386,10 @@ CREATE UNIQUE INDEX "marketing_contacts_phoneNumber_key" ON "marketing_contacts"
 ALTER TABLE "teachers" ADD CONSTRAINT "teachers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "students" ADD CONSTRAINT "students_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "levels"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "students" ADD CONSTRAINT "students_levelId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "subjects" ADD CONSTRAINT "subjects_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "levels"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "subjects" ADD CONSTRAINT "subjects_levelId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "class_sections" ADD CONSTRAINT "class_sections_subjectId_fkey" FOREIGN KEY ("subjectId") REFERENCES "subjects"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -404,7 +404,7 @@ ALTER TABLE "schedules" ADD CONSTRAINT "schedules_classSectionId_fkey" FOREIGN K
 ALTER TABLE "classes" ADD CONSTRAINT "classes_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "teachers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "enrollments" ADD CONSTRAINT "enrollments_classId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "enrollments" ADD CONSTRAINT "enrollments_classId_fkey" FOREIGN KEY ("sessionId") REFERENCES "classes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "enrollments" ADD CONSTRAINT "enrollments_classSectionId_fkey" FOREIGN KEY ("classSectionId") REFERENCES "class_sections"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -422,10 +422,10 @@ ALTER TABLE "attendances" ADD CONSTRAINT "attendances_deviceId_fkey" FOREIGN KEY
 ALTER TABLE "attendances" ADD CONSTRAINT "attendances_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "attendances" ADD CONSTRAINT "attendances_classId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "attendances" ADD CONSTRAINT "attendances_classId_fkey" FOREIGN KEY ("sessionId") REFERENCES "classes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "fee_structures" ADD CONSTRAINT "fee_structures_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "levels"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "fee_structures" ADD CONSTRAINT "fee_structures_levelId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "student_payments" ADD CONSTRAINT "student_payments_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

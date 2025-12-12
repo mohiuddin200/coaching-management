@@ -30,10 +30,10 @@ export async function GET(
             lastName: true,
             email: true,
             phoneNumber: true,
-            level: {
+            class: {
               select: {
                 name: true,
-                levelNumber: true,
+                classNumber: true,
               },
             },
           },
@@ -133,10 +133,10 @@ export async function PUT(
             lastName: true,
             email: true,
             phoneNumber: true,
-            level: {
+            class: {
               select: {
                 name: true,
-                levelNumber: true,
+                classNumber: true,
               },
             },
           },

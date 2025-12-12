@@ -20,11 +20,11 @@ export type Student = {
   status: "Active" | "Inactive";
   enrollmentDate: string;
   smsEnabled: boolean;
-  levelId: string;
-  level?: {
+  classId: string;
+  class?: {
     id: string;
     name: string;
-    levelNumber: number;
+    classNumber: number;
   } | null;
 
   // Detailed Profile
@@ -79,13 +79,13 @@ export const createColumns = (
     },
   },
   {
-    accessorKey: "levelId",
-    header: "Level",
+    accessorKey: "classId",
+    header: "Class",
     cell: ({ row }) => {
-      const level = row.original.level;
+      const classData = row.original.class;
       return (
         <div className="font-medium">
-          {level?.name || "-"}
+          {classData?.name || "-"}
         </div>
       );
     },

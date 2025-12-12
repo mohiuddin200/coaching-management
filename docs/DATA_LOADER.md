@@ -219,7 +219,7 @@ function MyForm() {
 }
 ```
 
-### 5. Page-Level Loading
+### 5. Page-Class Loading
 
 ```tsx
 import { FullPageLoader } from "@workspace/ui/components/data-loader";

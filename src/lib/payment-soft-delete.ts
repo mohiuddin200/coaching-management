@@ -365,10 +365,10 @@ export async function getSoftDeletedStudentPayments(page: number = 1, limit: num
             firstName: true,
             lastName: true,
             email: true,
-            level: {
+            class: {
               select: {
                 name: true,
-                levelNumber: true,
+                classNumber: true,
               },
             },
           },

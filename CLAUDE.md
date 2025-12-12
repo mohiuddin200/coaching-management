@@ -4,11 +4,11 @@ This document provides essential context for AI models interacting with the Coac
 
 ## 1\. Project Overview & Purpose
 
-- **Primary Goal:** Develop a scalable SaaS platform to manage coaching institutes, enabling efficient handling of student profiles, class schedules, attendance (with optional biometric integration), payment collection, and marketing outreach. The system prioritizes user role-based access control (RBAC), data privacy, and real-time functionality.
+- **Primary Goal:** Develop a scalable SaaS platform to manage coaching institutes, enabling efficient handling of student profiles, session schedules, attendance (with optional biometric integration), payment collection, and marketing outreach. The system prioritizes user role-based access control (RBAC), data privacy, and real-time functionality.
 - **Business Domain:** The application serves educational coaching institutes, streamlining operations such as student management, attendance tracking, financial transactions, and targeted marketing to parents. Key features include biometric-based attendance with optional SMS notifications and a marketing module for retargeting prospective clients.
 - **Key Features**:
 
-  - **Student Profiles**: Manage student details, including batch, schedule, parent_phone, and class enrollments.
+  - **Student Profiles**: Manage student details, including batch, schedule, parent_phone, and session enrollments.
   - **Accounts**: Handle payment collection and expense tracking (to be detailed in later phases).
   - **Attendance**: Optional biometric-based attendance system with fingerprint machines, sending real-time SMS notifications to parents (opt-in feature with usage-based pricing).
   - **Exam Module**: Placeholder for generating exam-related functionality (to be defined later).
@@ -80,7 +80,7 @@ This document provides essential context for AI models interacting with the Coac
 2. **Profile Management Without Access**:
    - Admin/Teacher can create Teacher profiles without sending invitations
    - Admin/Teacher can create Student profiles (students never receive invitations)
-   - Profiles exist for operational purposes (class assignment, attendance, records)
+   - Profiles exist for operational purposes (session assignment, attendance, records)
 
 3. **Granting Access Later**:
    - Admin can send invitation to existing Teacher profile
@@ -112,7 +112,7 @@ This document provides essential context for AI models interacting with the Coac
   - **User** (System Access Only): id, email, role (Admin, Teacher, Staff), created_at, updated_at
   - **Teacher** (Profile): id, first_name, last_name, email, phone_number, subject, qualifications, join_date, status, user_id (nullable), timestamps
   - **Student** (Profile): id, first_name, last_name, email, phone_number, parent_name, parent_phone, date_of_birth, address, enrollment_date, status, sms_enabled, timestamps
-  - **Class**: id, name, schedule_time, teacher_id (→Teacher), capacity, status, timestamps
+  - **Session**: id, name, schedule_time, teacher_id (→Teacher), capacity, status, timestamps
   - **Enrollment**: id, student_id (→Student), class_id, enrollment_date, status, timestamps
   - **Attendance**: id, student_id (→Student), class_id, timestamp, entry_type (Entry/Exit), device_id, timestamps
   - **BiometricDevice**: id, name, api_endpoint, api_key, status, timestamps
@@ -212,7 +212,7 @@ To conserve tokens and reduce latency for commands with large outputs (e.g., bui
 
 - **Exam Module Suggestions**:
 
-  - Generate exam schedules based on class enrollments.
+  - Generate exam schedules based on session enrollments.
   - Allow teachers to upload question banks and auto-generate randomized tests.
   - Provide student performance reports with export options (PDF/Excel).
 
@@ -282,19 +282,19 @@ _Risk Buffer: +2-3 days for ORM learning curve_
 - Day 4-5: Student dashboard and profile
 - Day 6-7: Parent contact integration (if needed)
 
-### **Phase 3: Class Management System (Weeks 7-9)**
+### **Phase 3: Session Management System (Weeks 7-9)**
 
-**Week 7: Class CRUD**
+**Week 7: Session CRUD**
 
-- Day 1-3: Create class creation forms
-- Day 4-5: Class scheduling interface
-- Day 6-7: Class listing and filtering
+- Day 1-3: Create session creation forms
+- Day 4-5: Session scheduling interface
+- Day 6-7: Session listing and filtering
 
-**Week 8: Class-Teacher Assignment**
+**Week 8: Session-Teacher Assignment**
 
 - Day 1-3: Teacher assignment functionality
 - Day 4-5: Schedule conflict detection (basic)
-- Day 6-7: Class capacity management
+- Day 6-7: Session capacity management
 
 **Week 8.5: SMS Foundation** _(Add 3-4 days)_
 
@@ -303,9 +303,9 @@ _Risk Buffer: +2-3 days for ORM learning curve_
 
 **Week 9: Student Enrollment**
 
-- Day 1-3: Student-class enrollment system
+- Day 1-3: Student-session enrollment system
 - Day 4-5: Enrollment management dashboard
-- Day 6-7: Class roster views
+- Day 6-7: Session roster views
 
 ### **Phase 4: Basic Attendance System (Weeks 10-12)**
 
@@ -339,7 +339,7 @@ _High Risk Week: May need additional support/research time_
 **Week 13: Basic Reporting**
 
 - Day 1-3: Attendance summary reports
-- Day 4-5: Class performance metrics
+- Day 4-5: Session performance metrics
 - Day 6-7: Export functionality (CSV/PDF)
 
 **Week 14: Dashboard Enhancement**

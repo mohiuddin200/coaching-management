@@ -19,9 +19,9 @@ A SaaS platform for managing coaching institutes, handling users, classes, atten
 ## Features
 
 - **User Management**: Role-based access control (Admin, Teachers, Students, Employees)
-- **Class Management**: Scheduling with conflict detection, enrollment, and capacity management
+- **Session Management**: Scheduling with conflict detection, enrollment, and capacity management
 - **Attendance Tracking**: Biometric integration for real-time attendance
-- **SMS Notifications**: Alerts for attendance, class updates, and fee reminders
+- **SMS Notifications**: Alerts for attendance, session updates, and fee reminders
 - **Future Scope**: Financial management system for payments and invoicing
 - **Scalability**: Designed for high concurrency with caching and indexing
 - **Security**: GDPR-compliant biometric data handling, encrypted storage, and audit trails
@@ -92,8 +92,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 The database schema includes the following core tables:
 
 - **Users**: Stores user details (email, role, contact info)
-- **Classes**: Manages class schedules, teacher assignments, and capacity
-- **Enrollments**: Tracks student-class relationships
+- **Sessions**: Manages session schedules, teacher assignments, and capacity
+- **Enrollments**: Tracks student-session relationships
 - **Attendance**: Records biometric-based attendance data
 - **BiometricDevices**: Stores device configurations
 - **SMS Tables**: `SmsTemplates`, `SmsLogs`, `SmsSettings`, `NotificationPreferences`, `SmsQueues` for handling SMS notifications
@@ -108,11 +108,11 @@ Run `npx prisma studio` to view and manage the database schema.
 - `GET /api/users/:id` - Fetch user details
 - `PUT /api/users/:id` - Update user information
 
-### Class Management
+### Session Management
 
-- `POST /api/classes` - Create a new class
+- `POST /api/classes` - Create a new session
 - `GET /api/classes` - List all classes with filters
-- `POST /api/enrollments` - Enroll a student in a class
+- `POST /api/enrollments` - Enroll a student in a session
 
 ### Attendance
 
@@ -137,7 +137,7 @@ Run `npx prisma studio` to view and manage the database schema.
 
 - Attendance alerts (e.g., student absent after 15 minutes)
 - Daily attendance summaries for parents
-- Fee reminders and class schedule updates
+- Fee reminders and session schedule updates
 
 ### Features
 
@@ -149,7 +149,7 @@ Run `npx prisma studio` to view and manage the database schema.
 ### Phase 1: Core Foundation
 
 - Set up Next.js, authentication, and database schema
-- Implement user and class CRUD operations
+- Implement user and session CRUD operations
 - Build responsive dashboard UI
 
 ### Phase 2: Biometric Integration
@@ -159,7 +159,7 @@ Run `npx prisma studio` to view and manage the database schema.
 
 ### Phase 3: Advanced Features
 
-- Add class scheduling with conflict detection
+- Add session scheduling with conflict detection
 - Implement SMS notifications and financial management
 
 ## Contributing

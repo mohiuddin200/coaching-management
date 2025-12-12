@@ -53,7 +53,7 @@ export async function GET() {
     const fullQueryStudents = await prisma.student.findMany({
       where: { isDeleted: false },
       include: {
-        level: true,
+        class: true,
         enrollments: {
           where: { status: "Active" },
           include: {

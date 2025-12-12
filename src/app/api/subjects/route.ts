@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/subjects - Get all subjects (optional levelId query param)
+// GET /api/subjects - Get all subjects (optional classId query param)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const levelId = searchParams.get('levelId');
+    const classId = searchParams.get('classId');
 
     const subjects = await prisma.subject.findMany({
-      where: levelId ? { levelId } : undefined,
+      where: classId ? { classId } : undefined,
       include: {
-        level: true,
+        class: true,
         _count: {
           select: { classSections: true },
         },
       },
       orderBy: [
-        { level: { levelNumber: 'asc' } },
+        { class: { classNumber: 'asc' } },
         { name: 'asc' },
       ],
     });
@@ -35,11 +35,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, code, description, levelId, status } = body;
+    const { name, code, description, classId, status } = body;
 
-    if (!name || !levelId) {
+    if (!name || !classId) {
       return NextResponse.json(
-        { error: 'Name and levelId are required' },
+        { error: 'Name and classId are required' },
         { status: 400 }
       );
     }
@@ -49,10 +49,10 @@ export async function POST(request: NextRequest) {
         name,
         code,
         description,
-        levelId,
+        classId,
         status: status || 'Active',
       },
-      include: { level: true },
+      include: { class: true },
     });
 
     return NextResponse.json(subject, { status: 201 });

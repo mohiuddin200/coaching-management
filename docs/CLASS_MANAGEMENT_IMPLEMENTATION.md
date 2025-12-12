@@ -1,115 +1,115 @@
-# Class Management System - Implementation Summary
+# Session Management System - Implementation Summary
 
 ## Overview
-A complete class management system for a school-level coaching institution (Class 1-10) has been implemented. The system supports levels, subjects, class sections, teacher assignments, scheduling, and automatic student enrollment.
+A complete session management system for a school-class coaching institution (Session 1-10) has been implemented. The system supports classes, subjects, session sections, teacher assignments, scheduling, and automatic student enrollment.
 
 ## Architecture
 
 ### Database Structure
 
 #### New Models Added:
-1. **Level** - Represents class levels (1-10)
-   - Fields: id, name, levelNumber, description, status
+1. **Class** - Represents session classes (1-10)
+   - Fields: id, name, classNumber, description, status
    - Relations: Has many subjects and students
 
-2. **Subject** - Academic subjects for each level
-   - Fields: id, name, code, description, levelId, status
-   - Relations: Belongs to Level, has many ClassSections
-   - Unique constraint: (levelId, name)
+2. **Subject** - Academic subjects for each class
+   - Fields: id, name, code, description, classId, status
+   - Relations: Belongs to Class, has many ClassSections
+   - Unique constraint: (classId, name)
 
 3. **ClassSection** - Actual teaching groups (main entity)
    - Fields: id, name, subjectId, teacherId, capacity, roomNumber, academicYear, status
    - Relations: Belongs to Subject and Teacher, has many Schedules, Enrollments, and Attendances
 
-4. **Schedule** - Time slots for class sections
+4. **Schedule** - Time slots for session sections
    - Fields: id, classSectionId, dayOfWeek, startTime, endTime, status
    - Relations: Belongs to ClassSection
 
 #### Modified Models:
-- **Student**: Added `levelId` field to assign students to a class level
-- **Enrollment**: Added `classSectionId` field (keeping `classId` for backward compatibility)
-- **Attendance**: Added `classSectionId` field (keeping `classId` for backward compatibility)
+- **Student**: Added `classId` field to assign students to a session class
+- **Enrollment**: Added `classSectionId` field (keeping `sessionId` for backward compatibility)
+- **Attendance**: Added `classSectionId` field (keeping `sessionId` for backward compatibility)
 - **Teacher**: Added `classSections` relation
 
 ## Features Implemented
 
-### 1. Level Management
-- **Initialize Levels**: One-click setup of Class 1-10
-- **View Levels**: Display all levels with student and subject counts
-- **Status Management**: Active/Inactive levels
+### 1. Class Management
+- **Initialize Classes**: One-click setup of Session 1-10
+- **View Classes**: Display all classes with student and subject counts
+- **Status Management**: Active/Inactive classes
 
 ### 2. Subject Management
-- **Create Subjects**: Add subjects to specific levels
+- **Create Subjects**: Add subjects to specific classes
 - **Subject Details**: Name, code, description
-- **View Subjects**: See subjects grouped by level with class section counts
+- **View Subjects**: See subjects grouped by class with session section counts
 
-### 3. Class Section Management (Core Feature)
-- **Create Class Sections**: 
-  - Select level and subject (cascading)
+### 3. Session Section Management (Core Feature)
+- **Create Session Sections**: 
+  - Select class and subject (cascading)
   - Assign teacher
   - Set capacity and room number
   - Define academic year
   - Add multiple schedules (day, start time, end time)
-- **View Class Sections**:
-  - Grouped by level
+- **View Session Sections**:
+  - Grouped by class
   - Shows teacher, enrollment count, capacity
   - Displays schedules
   - Status badges
-- **Filter Options**: By level, subject, or teacher
+- **Filter Options**: By class, subject, or teacher
 
 ### 4. Student Enrollment
-- **Level Selection**: Students can be assigned to a level during creation
-- **Auto-Enrollment**: When a student is assigned to a level, they are automatically enrolled in ALL class sections for that level
-- **Enrollment Tracking**: View enrollment counts per class section
+- **Class Selection**: Students can be assigned to a class during creation
+- **Auto-Enrollment**: When a student is assigned to a class, they are automatically enrolled in ALL session sections for that class
+- **Enrollment Tracking**: View enrollment counts per session section
 
 ## API Endpoints Created
 
-### Levels
-- `GET /api/levels` - Get all levels with counts
-- `POST /api/levels` - Create a new level
-- `GET /api/levels/[id]` - Get specific level with details
-- `PATCH /api/levels/[id]` - Update a level
-- `DELETE /api/levels/[id]` - Delete a level
-- `POST /api/levels/initialize` - Initialize default 10 levels
+### Classes
+- `GET /api/classes` - Get all classes with counts
+- `POST /api/classes` - Create a new class
+- `GET /api/classes/[id]` - Get specific class with details
+- `PATCH /api/classes/[id]` - Update a class
+- `DELETE /api/classes/[id]` - Delete a class
+- `POST /api/classes/initialize` - Initialize default 10 classes
 
 ### Subjects
-- `GET /api/subjects?levelId={id}` - Get subjects (optionally filter by level)
+- `GET /api/subjects?classId={id}` - Get subjects (optionally filter by class)
 - `POST /api/subjects` - Create a new subject
-- `GET /api/subjects/[id]` - Get specific subject with class sections
+- `GET /api/subjects/[id]` - Get specific subject with session sections
 - `PATCH /api/subjects/[id]` - Update a subject
 - `DELETE /api/subjects/[id]` - Delete a subject
 
-### Class Sections
-- `GET /api/class-sections?levelId={id}&subjectId={id}&teacherId={id}` - Get class sections (with filters)
-- `POST /api/class-sections` - Create class section with schedules
-- `GET /api/class-sections/[id]` - Get specific section with enrollments
-- `PATCH /api/class-sections/[id]` - Update a class section
-- `DELETE /api/class-sections/[id]` - Delete a class section
-- `POST /api/class-sections/[id]/schedules` - Add schedule to section
-- `DELETE /api/class-sections/[id]/schedules?scheduleId={id}` - Delete schedule
+### Session Sections
+- `GET /api/session-sections?classId={id}&subjectId={id}&teacherId={id}` - Get session sections (with filters)
+- `POST /api/session-sections` - Create session section with schedules
+- `GET /api/session-sections/[id]` - Get specific section with enrollments
+- `PATCH /api/session-sections/[id]` - Update a session section
+- `DELETE /api/session-sections/[id]` - Delete a session section
+- `POST /api/session-sections/[id]/schedules` - Add schedule to section
+- `DELETE /api/session-sections/[id]/schedules?scheduleId={id}` - Delete schedule
 
 ### Students (Modified)
-- `GET /api/students` - Now includes level information
-- `POST /api/students` - Now accepts levelId and auto-enrolls in class sections
+- `GET /api/students` - Now includes class information
+- `POST /api/students` - Now accepts classId and auto-enrolls in session sections
 
 ## UI Pages
 
-### 1. Levels & Subjects Page (`/levels`)
+### 1. Classes & Subjects Page (`/classes`)
 - Split-view interface
-- Left: List of all 10 class levels with counts
-- Right: Subjects for selected level
+- Left: List of all 10 session classes with counts
+- Right: Subjects for selected class
 - Quick subject creation dialog
-- Initialize levels button (if not set up)
+- Initialize classes button (if not set up)
 
-### 2. Class Sections Page (`/classes`)
+### 2. Session Sections Page (`/classes`)
 - Main management page
-- Create class section dialog with:
-  - Level and subject cascading selectors
+- Create session section dialog with:
+  - Class and subject cascading selectors
   - Teacher dropdown
   - Capacity and room number fields
   - Academic year input
   - Dynamic schedule builder (add/remove schedules)
-- View class sections grouped by level
+- View session sections grouped by class
 - Cards showing:
   - Section name and status
   - Subject
@@ -119,49 +119,49 @@ A complete class management system for a school-level coaching institution (Clas
   - Room number
 
 ### 3. Student Form (Modified)
-- Added "Class Level" dropdown
-- Fetches levels from API
+- Added "Session Class" dropdown
+- Fetches classes from API
 - Optional field
 - When selected, student is auto-enrolled in all sections
 
 ## Navigation Updates
-- Added "Levels & Subjects" menu item under Classes
-- Renamed "All Classes" to "Class Sections"
+- Added "Classes & Subjects" menu item under Sessions
+- Renamed "All Sessions" to "Session Sections"
 
 ## Workflow
 
 ### Setting Up the System:
-1. **Initialize Levels**: Click "Initialize Levels" button to create Class 1-10
-2. **Add Subjects**: For each level, add relevant subjects (Math, English, Science, etc.)
-3. **Create Class Sections**: 
-   - Select level and subject
+1. **Initialize Classes**: Click "Initialize Classes" button to create Session 1-10
+2. **Add Subjects**: For each class, add relevant subjects (Math, English, Science, etc.)
+3. **Create Session Sections**: 
+   - Select class and subject
    - Assign teacher
    - Set schedules
-4. **Add Students**: Create students and assign them to a level (auto-enrolled in all sections)
+4. **Add Students**: Create students and assign them to a class (auto-enrolled in all sections)
 
 ### Day-to-Day Usage:
-1. Teachers view their assigned class sections
-2. Students are automatically enrolled in all subjects of their level
-3. Attendance is tracked per class section
+1. Teachers view their assigned session sections
+2. Students are automatically enrolled in all subjects of their class
+3. Attendance is tracked per session section
 4. Schedules are visible for each section
 
 ## Migration Applied
 - Migration: `20251031200449_add_class_management_structure`
-- Added: Level, Subject, ClassSection, Schedule models
+- Added: Class, Subject, ClassSection, Schedule models
 - Modified: Student, Enrollment, Attendance, Teacher models
-- Backward compatible with existing Class model
+- Backward compatible with existing Session model
 
 ## Key Design Decisions
 
 ### Why This Structure?
-1. **Level + Subject = ClassSection**: Clear hierarchy matching school structure
+1. **Class + Subject = ClassSection**: Clear hierarchy matching school structure
 2. **Auto-enrollment**: Simplifies onboarding, students get all subjects automatically
 3. **Multiple Schedules**: Flexible scheduling (e.g., Monday 9-10, Wednesday 2-3)
-4. **Backward Compatibility**: Old Class model retained for migration safety
+4. **Backward Compatibility**: Old Session model retained for migration safety
 
 ### MVP Simplifications:
 - No manual enrollment/unenrollment (happens automatically)
-- Single teacher per class section
+- Single teacher per session section
 - Simple schedule format (day + time)
 - No room conflict detection (future enhancement)
 - No capacity enforcement (future enhancement)
@@ -173,17 +173,17 @@ A complete class management system for a school-level coaching institution (Clas
 4. Schedule conflict detection
 5. Capacity limits and waitlists
 6. Academic year archiving
-7. Class section cloning
+7. Session section cloning
 8. Bulk operations
 
 ## Testing Checklist
-- [ ] Initialize levels (creates 10 levels)
-- [ ] Add subjects to multiple levels
-- [ ] Create class section with schedules
-- [ ] Create student with level assigned
-- [ ] Verify auto-enrollment in class sections
-- [ ] View class sections grouped by level
-- [ ] Update class section details
+- [ ] Initialize classes (creates 10 classes)
+- [ ] Add subjects to multiple classes
+- [ ] Create session section with schedules
+- [ ] Create student with class assigned
+- [ ] Verify auto-enrollment in session sections
+- [ ] View session sections grouped by class
+- [ ] Update session section details
 - [ ] Add/remove schedules
 
 ## Notes

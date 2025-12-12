@@ -351,7 +351,7 @@ export async function permanentDeleteTeacher(teacherId: string): Promise<SoftDel
       where: { teacherId }
     });
 
-    await prisma.class.deleteMany({
+    await prisma.session.deleteMany({
       where: { teacherId }
     });
 
@@ -397,7 +397,7 @@ export async function getSoftDeletedStudents(page: number = 1, limit: number = 1
       take: limit,
       orderBy: { deletedAt: 'desc' },
       include: {
-        level: {
+        class: {
           select: { name: true }
         }
       }

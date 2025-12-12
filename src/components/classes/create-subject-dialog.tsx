@@ -37,7 +37,7 @@ export function CreateSubjectDialog({
   const handleCreateSubject = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedLevel) {
-      toast.error('Please select a level first');
+      toast.error('Please select a class first');
       return;
     }
 
@@ -47,7 +47,7 @@ export function CreateSubjectDialog({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...newSubject,
-          levelId: selectedLevel,
+          classId: selectedLevel,
         }),
       });
 

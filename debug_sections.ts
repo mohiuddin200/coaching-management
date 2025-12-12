@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
 async function main() {
-  const levels = await prisma.level.findMany({
+  const classes = await prisma.class.findMany({
     include: {
       subjects: {
         include: {
@@ -11,7 +11,7 @@ async function main() {
     },
   });
 
-  console.log(JSON.stringify(levels, null, 2));
+  console.log(JSON.stringify(classes, null, 2));
 }
 
 main()

@@ -169,7 +169,7 @@ export function Step3ContactFinance({ form }: Step3ContactFinanceProps) {
                 <SelectContent>
                   <SelectItem value="SALARIED">Salaried</SelectItem>
                   <SelectItem value="HOURLY">Hourly</SelectItem>
-                  <SelectItem value="PER_CLASS">Per Class</SelectItem>
+                  <SelectItem value="PER_CLASS">Per Session</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

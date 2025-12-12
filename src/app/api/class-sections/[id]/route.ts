@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/class-sections/[id] - Get a specific class section
+// GET /api/session-sections/[id] - Get a specific session section
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -11,7 +11,7 @@ export async function GET(
     const classSection = await prisma.classSection.findUnique({
       where: { id },
       include: {
-        subject: { include: { level: true } },
+        subject: { include: { class: true } },
         teacher: true,
         schedules: {
           orderBy: { dayOfWeek: 'asc' },
@@ -26,22 +26,22 @@ export async function GET(
 
     if (!classSection) {
       return NextResponse.json(
-        { error: 'Class section not found' },
+        { error: 'Session section not found' },
         { status: 404 }
       );
     }
 
     return NextResponse.json(classSection);
   } catch (error) {
-    console.error('Error fetching class section:', error);
+    console.error('Error fetching session section:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch class section' },
+      { error: 'Failed to fetch session section' },
       { status: 500 }
     );
   }
 }
 
-// PATCH /api/class-sections/[id] - Update a class section
+// PATCH /api/session-sections/[id] - Update a session section
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -69,7 +69,7 @@ export async function PATCH(
         ...(status && { status }),
       },
       include: {
-        subject: { include: { level: true } },
+        subject: { include: { class: true } },
         teacher: true,
         schedules: true,
       },
@@ -77,15 +77,15 @@ export async function PATCH(
 
     return NextResponse.json(classSection);
   } catch (error) {
-    console.error('Error updating class section:', error);
+    console.error('Error updating session section:', error);
     return NextResponse.json(
-      { error: 'Failed to update class section' },
+      { error: 'Failed to update session section' },
       { status: 500 }
     );
   }
 }
 
-// DELETE /api/class-sections/[id] - Delete a class section
+// DELETE /api/session-sections/[id] - Delete a session section
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -96,11 +96,11 @@ export async function DELETE(
       where: { id },
     });
 
-    return NextResponse.json({ message: 'Class section deleted successfully' });
+    return NextResponse.json({ message: 'Session section deleted successfully' });
   } catch (error) {
-    console.error('Error deleting class section:', error);
+    console.error('Error deleting session section:', error);
     return NextResponse.json(
-      { error: 'Failed to delete class section' },
+      { error: 'Failed to delete session section' },
       { status: 500 }
     );
   }

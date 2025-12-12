@@ -43,7 +43,7 @@ const studentFormSchema = z.object({
   address: z.string().min(1, "Address is required"),
   status: z.enum(["Active", "Inactive"]),
   smsEnabled: z.boolean(),
-  levelId: z.string().min(1, "Class Level is required"),
+  classId: z.string().min(1, "Session Class is required"),
 
   // Detailed Profile
   gender: GenderEnum.optional(),
@@ -78,17 +78,17 @@ interface StudentDialogProps {
   onSuccess?: () => void
 }
 
-interface Level {
+interface Class {
   id: string
   name: string
-  levelNumber: number
+  classNumber: number
 }
 
 export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProps) {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loadingLevels, setLoadingLevels] = useState(false)
-  const [levels, setLevels] = useState<Level[]>([])
+  const [classes, setLevels] = useState<Class[]>([])
   const [currentStep, setCurrentStep] = useState(0)
   const isEditMode = !!student
 
@@ -98,16 +98,16 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
     "Additional Information",
   ]
 
-  // Fetch levels when dialog opens
+  // Fetch classes when dialog opens
   useEffect(() => {
     if (open) {
       setLoadingLevels(true)
-      fetch('/api/levels')
+      fetch('/api/classes')
         .then(res => res.json())
         .then(data => setLevels(data))
         .catch(err => {
-          console.error('Error fetching levels:', err)
-          toast.error('Failed to load class levels')
+          console.error('Error fetching classes:', err)
+          toast.error('Failed to load session classes')
         })
         .finally(() => setLoadingLevels(false))
     }
@@ -131,7 +131,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
       address: student?.address || "",
       status: student?.status || "Active",
       smsEnabled: student?.smsEnabled || false,
-      levelId: (student as Student & { levelId?: string })?.levelId || "",
+      classId: (student as Student & { classId?: string })?.classId || "",
 
       // Detailed Profile
       gender: student?.gender || undefined,
@@ -178,7 +178,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
         address: student?.address || "",
         status: student?.status || "Active",
         smsEnabled: student?.smsEnabled || false,
-        levelId: (student as Student & { levelId?: string })?.levelId || "",
+        classId: (student as Student & { classId?: string })?.classId || "",
 
         // Detailed Profile
         gender: student?.gender || undefined,
@@ -320,7 +320,7 @@ export function StudentDialog({ student, trigger, onSuccess }: StudentDialogProp
               ))}
             </div>
 
-            {currentStep === 0 && <Step1BasicInfo form={form} levels={levels} loadingLevels={loadingLevels} />}
+            {currentStep === 0 && <Step1BasicInfo form={form} classes={classes} loadingLevels={loadingLevels} />}
             {currentStep === 1 && <Step2DetailedProfile form={form} />}
             {currentStep === 2 && <Step3AdditionalInfo form={form} />}
 

@@ -35,7 +35,7 @@ The database follows these key principles:
 
 1. **Separation of Concerns**: User authentication (User table) is separate from entity profiles (Teacher, Student tables)
 2. **Soft Delete Pattern**: Critical entities use soft delete with audit trail
-3. **Hierarchical Structure**: Clear relationships between levels → subjects → class sections → enrollments
+3. **Hierarchical Structure**: Clear relationships between classes → subjects → session sections → enrollments
 4. **Audit Fields**: All entities include createdAt, updatedAt, and soft delete fields where applicable
 
 ### Core Database Models
@@ -74,10 +74,10 @@ model Teacher {
 
 ```prisma
 // Academic hierarchy
-model Level {
+model Class {
   id          String    @id @default(cuid())
   name        String    @unique
-  levelNumber Int       @unique
+  classNumber Int       @unique
   subjects    Subject[]
   students    Student[]
 }
@@ -85,8 +85,8 @@ model Level {
 model Subject {
   id       String   @id @default(cuid())
   name     String
-  levelId  String
-  level    Level    @relation(fields: [levelId], references: [id])
+  classId  String
+  class    Class    @relation(fields: [classId], references: [id])
   classSections ClassSection[]
 }
 
@@ -110,13 +110,13 @@ model Student {
   firstName     String
   lastName      String
   email         String   @unique
-  levelId       String
+  classId       String
   // ... extensive profile fields
   isDeleted     Boolean  @default(false)
   deletedAt     DateTime?
   deletedBy     String?
   deleteReason  DeleteReason?
-  level         Level    @relation(fields: [levelId], references: [id])
+  class         Class    @relation(fields: [classId], references: [id])
   enrollments   Enrollment[]
   attendances   Attendance[]
   payments      StudentPayment[]
@@ -126,11 +126,11 @@ model Enrollment {
   id             String           @id @default(cuid())
   studentId      String
   classSectionId String?
-  classId        String?
+  sessionId        String?
   status         EnrollmentStatus @default(Active)
   student        Student          @relation(fields: [studentId], references: [id])
   classSection   ClassSection?    @relation(fields: [classSectionId], references: [id])
-  class          Class?           @relation(fields: [classId], references: [id])
+  session          Session?           @relation(fields: [sessionId], references: [id])
 }
 ```
 
@@ -198,7 +198,7 @@ src/app/api/
 │   ├── teachers/
 │   └── student-payments/
 ├── attendance/               # Attendance management
-├── class-sections/          # Class management
+├── session-sections/          # Session management
 │   └── [id]/
 │       ├── schedules/
 │       └── students/
@@ -208,7 +208,7 @@ src/app/api/
 │   ├── fee-structures/
 │   ├── expenses/
 │   └── stats/
-├── levels/                  # Academic levels
+├── classes/                  # Academic classes
 ├── students/                # Student CRUD
 │   └── [id]/
 │       ├── related-records/
@@ -236,9 +236,9 @@ src/app/api/
 #### 2. Nested Resource Pattern
 
 ```typescript
-// GET /api/class-sections/[id]/students - Get students in class
-// GET /api/class-sections/[id]/schedules - Get class schedules
-// POST /api/class-sections/[id]/schedules - Add schedule
+// GET /api/session-sections/[id]/students - Get students in session
+// GET /api/session-sections/[id]/schedules - Get session schedules
+// POST /api/session-sections/[id]/schedules - Add schedule
 ```
 
 #### 3. Action-Specific Pattern
@@ -279,7 +279,7 @@ export async function createAdminClient() {
 
 1. **Middleware Protection**: Global middleware in `src/middleware.ts` handles authentication
 2. **Per-Route Authorization**: Individual routes check user permissions
-3. **Role-Based Access**: Different access levels for Admin, Teacher, and Staff
+3. **Role-Based Access**: Different access classes for Admin, Teacher, and Staff
 
 ### Authorization Pattern Example
 
@@ -323,7 +323,7 @@ export async function GET() {
         isDeleted: false, // Filter out soft-deleted records
       },
       include: {
-        level: true,  // Include related level data
+        class: true,  // Include related class data
         enrollments: {
           where: { status: "Active" },
           include: {
@@ -352,8 +352,8 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     // Validate required fields
-    const { firstName, lastName, email, phoneNumber, levelId } = body;
-    if (!firstName || !lastName || !email || !levelId) {
+    const { firstName, lastName, email, phoneNumber, classId } = body;
+    if (!firstName || !lastName || !email || !classId) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -367,17 +367,17 @@ export async function POST(request: Request) {
         lastName,
         email,
         phoneNumber,
-        levelId,
+        classId,
         // ... other fields
       },
-      include: { level: true },
+      include: { class: true },
     });
 
-    // Auto-enroll in all classes of the student's level
-    if (levelId) {
+    // Auto-enroll in all classes of the student's class
+    if (classId) {
       const classSections = await prisma.classSection.findMany({
         where: {
-          subject: { levelId },
+          subject: { classId },
           status: "Scheduled",
         },
       });
@@ -403,9 +403,9 @@ export async function POST(request: Request) {
 }
 ```
 
-### Example 2: Nested Resources - Class Students
+### Example 2: Nested Resources - Session Students
 
-File: `src/app/api/class-sections/[id]/students/route.ts`
+File: `src/app/api/session-sections/[id]/students/route.ts`
 
 ```typescript
 import { prisma } from "@/lib/prisma";
@@ -415,20 +415,20 @@ interface Params {
   params: { id: string };
 }
 
-// GET /api/class-sections/[id]/students
+// GET /api/session-sections/[id]/students
 export async function GET(request: Request, { params }: Params) {
   try {
     const { id } = params;
 
-    // Validate class section exists
+    // Validate session section exists
     const classSection = await prisma.classSection.findUnique({
       where: { id },
-      include: { subject: { include: { level: true } } },
+      include: { subject: { include: { class: true } } },
     });
 
     if (!classSection) {
       return NextResponse.json(
-        { error: "Class section not found" },
+        { error: "Session section not found" },
         { status: 404 }
       );
     }
@@ -442,7 +442,7 @@ export async function GET(request: Request, { params }: Params) {
       include: {
         student: {
           where: { isDeleted: false },
-          include: { level: true },
+          include: { class: true },
         },
       },
     });
@@ -456,7 +456,7 @@ export async function GET(request: Request, { params }: Params) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch class students" },
+      { error: "Failed to fetch session students" },
       { status: 500 }
     );
   }
@@ -496,7 +496,7 @@ export async function GET(request: Request) {
             firstName: true,
             lastName: true,
             email: true,
-            level: { select: { name: true } },
+            class: { select: { name: true } },
           },
         },
       },
@@ -784,7 +784,7 @@ const students = await prisma.student.findMany({
     firstName: true,
     lastName: true,
     email: true,
-    level: { select: { name: true } },
+    class: { select: { name: true } },
     // Only select needed fields
   },
 });
@@ -925,7 +925,7 @@ for (const envVar of requiredEnvVars) {
 // Structured logging for debugging
 console.log(`Fetching students - Query:`, {
   isDeleted: false,
-  includeRelations: ['level', 'enrollments'],
+  includeRelations: ['class', 'enrollments'],
 });
 
 // Error logging with context

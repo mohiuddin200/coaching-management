@@ -18,7 +18,7 @@ interface RecentStudent {
   id: string;
   firstName: string;
   lastName: string;
-  level?: string;
+  class?: string;
   enrollmentDate: Date | string;
   status: string;
 }
@@ -53,7 +53,7 @@ export function RecentStudents({ students }: RecentStudentsProps) {
                     {student.firstName} {student.lastName}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {student.level || 'No level assigned'}
+                    {student.class || 'No class assigned'}
                   </p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
@@ -78,7 +78,7 @@ interface RecentClass {
   name: string;
   subject: string;
   teacher: string;
-  level: string;
+  class: string;
   enrollmentCount: number;
   capacity: number;
   status: string;
@@ -92,14 +92,14 @@ export function RecentClasses({ classes }: RecentClassesProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Active Class Sections</CardTitle>
+        <CardTitle>Active Session Sections</CardTitle>
         <CardDescription>Currently scheduled classes</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {classes.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              No active class sections
+              No active session sections
             </p>
           ) : (
             classes.map((classSection) => (
@@ -110,7 +110,7 @@ export function RecentClasses({ classes }: RecentClassesProps) {
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium leading-none">
-                      {classSection.level} - {classSection.subject}
+                      {classSection.class} - {classSection.subject}
                     </p>
                     <Badge variant={classSection.status === 'Scheduled' ? 'default' : 'secondary'} className="ml-2">
                       {classSection.status}
@@ -142,7 +142,7 @@ export function RecentClasses({ classes }: RecentClassesProps) {
 
 interface Activity {
   id: string;
-  type: 'enrollment' | 'attendance' | 'class' | 'teacher';
+  type: 'enrollment' | 'attendance' | 'session' | 'teacher';
   title: string;
   description: string;
   timestamp: Date | string;
@@ -164,7 +164,7 @@ export function RecentActivity({ activities }: RecentActivityProps) {
         return <UserPlus className="h-4 w-4 text-blue-500" />;
       case 'attendance':
         return <CalendarCheck className="h-4 w-4 text-green-500" />;
-      case 'class':
+      case 'session':
         return <BookOpen className="h-4 w-4 text-purple-500" />;
       case 'teacher':
         return <UserPlus className="h-4 w-4 text-orange-500" />;

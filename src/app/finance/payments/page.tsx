@@ -29,9 +29,9 @@ interface StudentPayment {
     lastName: string;
     email: string;
     phoneNumber: string;
-    level: {
+    class: {
       name: string;
-      levelNumber: number;
+      classNumber: number;
     };
   };
   createdAt: string;
@@ -96,7 +96,7 @@ export default function StudentPaymentsPage() {
               {student.firstName} {student.lastName}
             </div>
             <div className="text-sm text-muted-foreground">
-              {student.level.name}
+              {student.class.name}
             </div>
           </div>
         );

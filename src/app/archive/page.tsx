@@ -21,7 +21,7 @@ interface ArchivedStudent {
   deletedAt: string;
   deletedBy?: string;
   deleteReason?: string;
-  level?: { name: string };
+  class?: { name: string };
 }
 
 interface ArchivedTeacher {
@@ -176,7 +176,7 @@ export default function ArchivePage() {
                       <TableRow>
                         <TableHead>Name</TableHead>
                         <TableHead>Email</TableHead>
-                        <TableHead>Level</TableHead>
+                        <TableHead>Class</TableHead>
                         <TableHead>Deleted Date</TableHead>
                         <TableHead>Reason</TableHead>
                         <TableHead>Actions</TableHead>
@@ -190,8 +190,8 @@ export default function ArchivePage() {
                           </TableCell>
                           <TableCell>{entity.email}</TableCell>
                           <TableCell>
-                            {'level' in entity && entity.level?.name && (
-                              <Badge variant="secondary">{entity.level.name}</Badge>
+                            {'class' in entity && entity.class?.name && (
+                              <Badge variant="secondary">{entity.class.name}</Badge>
                             )}
                           </TableCell>
                           <TableCell>

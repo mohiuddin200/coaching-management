@@ -56,16 +56,16 @@ export default async function DashboardPage() {
   ];
 
   const enrollmentByLevelData = [
-    { level: 'Class 1', students: 28 },
-    { level: 'Class 2', students: 32 },
-    { level: 'Class 3', students: 25 },
-    { level: 'Class 4', students: 30 },
-    { level: 'Class 5', students: 27 },
-    { level: 'Class 6', students: 24 },
-    { level: 'Class 7', students: 22 },
-    { level: 'Class 8', students: 20 },
-    { level: 'Class 9', students: 19 },
-    { level: 'Class 10', students: 18 },
+    { class: 'Session 1', students: 28 },
+    { class: 'Session 2', students: 32 },
+    { class: 'Session 3', students: 25 },
+    { class: 'Session 4', students: 30 },
+    { class: 'Session 5', students: 27 },
+    { class: 'Session 6', students: 24 },
+    { class: 'Session 7', students: 22 },
+    { class: 'Session 8', students: 20 },
+    { class: 'Session 9', students: 19 },
+    { class: 'Session 10', students: 18 },
   ];
 
   const revenueData = [
@@ -97,7 +97,7 @@ export default async function DashboardPage() {
       id: '1',
       firstName: 'Ahmed',
       lastName: 'Rahman',
-      level: 'Class 8',
+      class: 'Session 8',
       enrollmentDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
       status: 'Active',
     },
@@ -105,7 +105,7 @@ export default async function DashboardPage() {
       id: '2',
       firstName: 'Fatima',
       lastName: 'Khan',
-      level: 'Class 6',
+      class: 'Session 6',
       enrollmentDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
       status: 'Active',
     },
@@ -113,7 +113,7 @@ export default async function DashboardPage() {
       id: '3',
       firstName: 'Mohammad',
       lastName: 'Ali',
-      level: 'Class 9',
+      class: 'Session 9',
       enrollmentDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
       status: 'Active',
     },
@@ -121,7 +121,7 @@ export default async function DashboardPage() {
       id: '4',
       firstName: 'Ayesha',
       lastName: 'Hossain',
-      level: 'Class 7',
+      class: 'Session 7',
       enrollmentDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       status: 'Active',
     },
@@ -133,7 +133,7 @@ export default async function DashboardPage() {
       name: 'Section A',
       subject: 'Mathematics',
       teacher: 'John Doe',
-      level: 'Class 8',
+      class: 'Session 8',
       enrollmentCount: 28,
       capacity: 30,
       status: 'Scheduled',
@@ -143,7 +143,7 @@ export default async function DashboardPage() {
       name: 'Morning Batch',
       subject: 'English',
       teacher: 'Sarah Miller',
-      level: 'Class 9',
+      class: 'Session 9',
       enrollmentCount: 25,
       capacity: 30,
       status: 'Scheduled',
@@ -153,7 +153,7 @@ export default async function DashboardPage() {
       name: 'Section B',
       subject: 'Physics',
       teacher: 'Mike Roberts',
-      level: 'Class 10',
+      class: 'Session 10',
       enrollmentCount: 22,
       capacity: 25,
       status: 'InProgress',
@@ -165,7 +165,7 @@ export default async function DashboardPage() {
       id: '1',
       type: 'enrollment' as const,
       title: 'New Student Enrolled',
-      description: 'Ahmed Rahman enrolled in Class 8',
+      description: 'Ahmed Rahman enrolled in Session 8',
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
       status: 'success' as const,
     },
@@ -173,22 +173,22 @@ export default async function DashboardPage() {
       id: '2',
       type: 'attendance' as const,
       title: 'Attendance Marked',
-      description: 'Class 8 Math - 28/30 students present',
+      description: 'Session 8 Math - 28/30 students present',
       timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
       status: 'success' as const,
     },
     {
       id: '3',
-      type: 'class' as const,
-      title: 'Class Scheduled',
-      description: 'New Physics class section created for Class 10',
+      type: 'session' as const,
+      title: 'Session Scheduled',
+      description: 'New Physics session section created for Session 10',
       timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
     },
     {
       id: '4',
       type: 'attendance' as const,
       title: 'Low Attendance Alert',
-      description: 'Class 9 English - Only 18/25 students present',
+      description: 'Session 9 English - Only 18/25 students present',
       timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000),
       status: 'warning' as const,
     },
@@ -268,7 +268,7 @@ export default async function DashboardPage() {
               <RecentStudents students={recentStudents} />
             </div>
 
-            {/* Active Classes */}
+            {/* Active Sessions */}
             <RecentClasses classes={recentClasses} />
           </TabsContent>
 

@@ -11,7 +11,7 @@ export async function GET(
     const subject = await prisma.subject.findUnique({
       where: { id },
       include: {
-        level: true,
+        class: true,
         classSections: {
           include: {
             teacher: true,
@@ -59,7 +59,7 @@ export async function PATCH(
         ...(description !== undefined && { description }),
         ...(status && { status }),
       },
-      include: { level: true },
+      include: { class: true },
     });
 
     return NextResponse.json(subject);

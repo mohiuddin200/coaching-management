@@ -80,7 +80,7 @@ Successfully implemented a comprehensive, production-ready soft delete system fo
 
 ## 🔧 Key Features
 
-### 1. Multi-Level Deletion Options
+### 1. Multi-Class Deletion Options
 - **Soft Delete (Archive)**: Default option, preserves data for future reference
 - **Hard Delete (Permanent)**: Complete removal with cascade for related records
 - **Reassign**: Transfer responsibilities to another user (teachers only)

@@ -29,7 +29,7 @@ interface Student {
   firstName: string;
   lastName: string;
   email: string;
-  level: {
+  class: {
     name: string;
   };
 }
@@ -176,7 +176,7 @@ export function RecordPaymentDialog({ onCreated }: RecordPaymentDialogProps) {
                   ) : (
                     filteredStudents.map((student) => (
                       <SelectItem key={student.id} value={student.id}>
-                        {student.firstName} {student.lastName} - {student.level.name}
+                        {student.firstName} {student.lastName} - {student.class.name}
                       </SelectItem>
                     ))
                   )}

@@ -120,9 +120,9 @@ export function StatsOverview({ stats, trends, onCardClick }: StatsOverviewProps
       />
 
       <StatCard
-        title="Class Sections"
+        title="Session Sections"
         value={stats.totalClasses}
-        description="Active class sections"
+        description="Active session sections"
         icon={BookOpen}
         trend={trends?.classes ? {
           value: trends.classes,

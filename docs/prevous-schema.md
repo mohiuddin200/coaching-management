@@ -57,7 +57,7 @@ model Teacher {
   deletedBy                String?          @map("deleted_by")
   deleteReason             DeleteReason?    @map("delete_reason")
   classSections            ClassSection[]   @relation("TeacherToClassSection")
-  sessions                 Session[]          @relation("TeacherToSession")
+  classes                  Class[]          @relation("TeacherToClass")
   payments                 TeacherPayment[]
   user                     User?            @relation("UserToTeacher", fields: [userId], references: [id])
 
@@ -80,7 +80,7 @@ model Student {
   smsEnabled               Boolean          @default(false)
   createdAt                DateTime         @default(now())
   updatedAt                DateTime         @updatedAt
-  classId                  String
+  levelId                  String
   birthCertificate         String?
   bloodGroup               BloodGroup?
   city                     String?
@@ -110,12 +110,12 @@ model Student {
   attendances              Attendance[]
   enrollments              Enrollment[]
   payments                 StudentPayment[]
-  class                    Class            @relation(fields: [classId], references: [id])
+  level                    Level            @relation(fields: [levelId], references: [id])
 
   @@map("students")
 }
 
-model Class {
+model Level {
   id            String         @id @default(cuid())
   name          String         @unique
   levelNumber   Int            @unique
@@ -135,14 +135,14 @@ model Subject {
   name          String
   code          String?
   description   String?
-  classId       String
+  levelId       String
   status        Status         @default(Active)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   classSections ClassSection[]
-  class         Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  level         Level          @relation(fields: [levelId], references: [id], onDelete: Cascade)
 
-  @@unique([classId, name])
+  @@unique([levelId, name])
   @@map("subjects")
 }
 
@@ -180,7 +180,7 @@ model Schedule {
   @@map("schedules")
 }
 
-model Session {
+model Class {
   id           String       @id @default(cuid())
   name         String
   scheduleTime DateTime
@@ -190,10 +190,10 @@ model Session {
   updatedAt    DateTime     @updatedAt
   teacherId    String
   attendances  Attendance[]
-  teacher      Teacher      @relation("TeacherToSession", fields: [teacherId], references: [id])
+  teacher      Teacher      @relation("TeacherToClass", fields: [teacherId], references: [id])
   enrollments  Enrollment[]
 
-  @@map("sessions")
+  @@map("classes")
 }
 
 model Enrollment {
@@ -203,9 +203,9 @@ model Enrollment {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   studentId      String
-  sessionId      String?
+  classId        String?
   classSectionId String?
-  session        Session?           @relation(fields: [sessionId], references: [id])
+  class          Class?           @relation(fields: [classId], references: [id])
   classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   student        Student          @relation(fields: [studentId], references: [id])
 
@@ -224,8 +224,8 @@ model Attendance {
   classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   device         BiometricDevice? @relation(fields: [deviceId], references: [id])
   student        Student          @relation(fields: [studentId], references: [id])
-  session        Session?           @relation(fields: [sessionId], references: [id])
-  sessionId      String?
+  class          Class?           @relation(fields: [classId], references: [id])
+  classId        String?
 
   @@unique([studentId, date])
   @@map("attendances")
@@ -287,7 +287,7 @@ model Feedback {
 model FeeStructure {
   id           String       @id @default(cuid())
   name         String
-  classId      String?
+  levelId      String?
   amount       Float
   frequency    FeeFrequency @default(Monthly)
   academicYear String
@@ -295,7 +295,7 @@ model FeeStructure {
   isActive     Boolean      @default(true)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  class        Class?       @relation(fields: [classId], references: [id])
+  level        Level?       @relation(fields: [levelId], references: [id])
 
   @@map("fee_structures")
 }

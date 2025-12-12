@@ -36,7 +36,7 @@ interface Student {
   lastName: string
   phoneNumber?: string
   parentPhone: string
-  level?: {
+  class?: {
     id: string
     name: string
   }
@@ -54,10 +54,10 @@ interface Student {
   }[]
 }
 
-interface Level {
+interface Class {
   id: string
   name: string
-  levelNumber: number
+  classNumber: number
 }
 
 interface ClassSection {
@@ -73,7 +73,7 @@ type AttendanceStatus = "present" | "absent"
 export default function AttendancePage() {
   const [students, setStudents] = useState<Student[]>([])
   const [filteredStudents, setFilteredStudents] = useState<Student[]>([])
-  const [levels, setLevels] = useState<Level[]>([])
+  const [classes, setLevels] = useState<Class[]>([])
   const [classSections, setClassSections] = useState<ClassSection[]>([])
   const [selectedLevel, setSelectedLevel] = useState<string>("")
   const [selectedClassSection, setSelectedClassSection] = useState<string>("")
@@ -87,21 +87,21 @@ export default function AttendancePage() {
   const [loadingStudents, setLoadingStudents] = useState(false)
   const debounceTimeouts = useRef<Map<string, NodeJS.Timeout>>(new Map())
 
-  // Fetch initial levels
+  // Fetch initial classes
   useEffect(() => {
     const fetchLevels = async () => {
       try {
         setLoading(true)
-        const levelsRes = await fetch("/api/levels")
+        const levelsRes = await fetch("/api/classes")
         const levelsData = await levelsRes.json()
         console.log(levelsData)
         if (!levelsRes.ok) {
-          throw new Error(levelsData.error || "Failed to fetch levels")
+          throw new Error(levelsData.error || "Failed to fetch classes")
         }
         setLevels(levelsData || [])
       } catch (error) {
-        console.error("Error fetching levels:", error)
-        toast.error("Failed to load levels")
+        console.error("Error fetching classes:", error)
+        toast.error("Failed to load classes")
       } finally {
         setLoading(false)
       }
@@ -109,7 +109,7 @@ export default function AttendancePage() {
     fetchLevels()
   }, [])
 
-  // Fetch class sections when level changes
+  // Fetch session sections when class changes
   useEffect(() => {
     if (!selectedLevel) {
       setClassSections([])
@@ -121,13 +121,13 @@ export default function AttendancePage() {
       setLoadingClassSections(true)
       try {
         const res = await fetch(
-          `/api/class-sections?levelId=${selectedLevel}`
+          `/api/session-sections?classId=${selectedLevel}`
         )
         const data = await res.json()
         setClassSections(data || [])
       } catch (error) {
-        console.error("Error fetching class sections:", error)
-        toast.error("Failed to load class sections")
+        console.error("Error fetching session sections:", error)
+        toast.error("Failed to load session sections")
       } finally {
         setLoadingClassSections(false)
       }
@@ -153,12 +153,12 @@ export default function AttendancePage() {
     fetchStudents()
   }, [])
 
-  // Filter students based on search query, level, and class section
+  // Filter students based on search query, class, and session section
   useEffect(() => {
     let filtered = students
 
     if (selectedLevel) {
-      filtered = filtered.filter(student => student.level?.id === selectedLevel)
+      filtered = filtered.filter(student => student.class?.id === selectedLevel)
     }
 
     if (selectedClassSection) {
@@ -178,7 +178,7 @@ export default function AttendancePage() {
 
 
 
-  // Fetch attendance records when date changes (and optionally class section)
+  // Fetch attendance records when date changes (and optionally session section)
   useEffect(() => {
     if (!selectedDate) {
       setAttendance(new Map())
@@ -327,7 +327,7 @@ export default function AttendancePage() {
           <CardHeader>
             <CardTitle>Attendance Details</CardTitle>
             <CardDescription>
-              Select a date, level, and class section to mark attendance.
+              Select a date, class, and session section to mark attendance.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -363,15 +363,15 @@ export default function AttendancePage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Select Level</Label>
+                <Label>Select Class</Label>
                 <Select value={selectedLevel} onValueChange={setSelectedLevel}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a Level" />
+                    <SelectValue placeholder="Select a Class" />
                   </SelectTrigger>
                   <SelectContent>
-                    {levels.map(level => (
-                      <SelectItem key={level.id} value={level.id}>
-                        {level.name}
+                    {classes.map(classData => (
+                      <SelectItem key={classData.id} value={classData.id}>
+                        {classData.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -379,14 +379,14 @@ export default function AttendancePage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Select Class Section</Label>
+                <Label>Select Session Section</Label>
                 <Select
                   value={selectedClassSection}
                   onValueChange={setSelectedClassSection}
                   disabled={!selectedLevel || loadingClassSections}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="All Class Sections" />
+                    <SelectValue placeholder="All Session Sections" />
                   </SelectTrigger>
                   <SelectContent>
                     {loadingClassSections ? (
@@ -482,9 +482,9 @@ export default function AttendancePage() {
                           )}
                         </div>
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          {student.level && (
+                          {student.class && (
                             <span className="text-xs bg-secondary px-2 py-0.5 rounded">
-                              {student.level.name}
+                              {student.class.name}
                             </span>
                           )}
                           <span>{student.parentPhone}</span>

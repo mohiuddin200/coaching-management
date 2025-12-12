@@ -29,18 +29,18 @@ export async function GET() {
       take: 5,
       orderBy: { enrollmentDate: "desc" },
       include: {
-        level: true,
+        class: true,
       },
     });
 
-    // Get class sections with enrollment counts
+    // Get session sections with enrollment counts
     const classSections = await prisma.classSection.findMany({
       take: 10,
       where: { status: "Scheduled" },
       include: {
         subject: {
           include: {
-            level: true,
+            class: true,
           },
         },
         teacher: true,
@@ -53,8 +53,8 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    // Get enrollment by level
-    const enrollmentsByLevel = await prisma.level.findMany({
+    // Get enrollment by class
+    const enrollmentsByLevel = await prisma.class.findMany({
       include: {
         _count: {
           select: {
@@ -62,7 +62,7 @@ export async function GET() {
           },
         },
       },
-      orderBy: { levelNumber: "asc" },
+      orderBy: { classNumber: "asc" },
     });
 
     // Calculate today's attendance (placeholder - will be dynamic)
@@ -90,14 +90,14 @@ export async function GET() {
           id: string;
           firstName: string;
           lastName: string;
-          level: { name: string } | null;
+          class: { name: string } | null;
           enrollmentDate: Date;
           status: string;
         }) => ({
           id: student.id,
           firstName: student.firstName,
           lastName: student.lastName,
-          level: student.level?.name || null,
+          class: student.class?.name || null,
           enrollmentDate: student.enrollmentDate,
           status: student.status,
         })
@@ -106,7 +106,7 @@ export async function GET() {
         (section: {
           id: string;
           name: string;
-          subject: { name: string; level: { name: string } | null };
+          subject: { name: string; class: { name: string } | null };
           teacher: { firstName: string; lastName: string };
           _count: { enrollments: number };
           capacity: number;
@@ -116,16 +116,16 @@ export async function GET() {
           name: section.name,
           subject: section.subject.name,
           teacher: `${section.teacher.firstName} ${section.teacher.lastName}`,
-          level: section.subject.level?.name || null,
+          class: section.subject.class?.name || null,
           enrollmentCount: section._count.enrollments,
           capacity: section.capacity,
           status: section.status,
         })
       ),
       enrollmentByLevel: enrollmentsByLevel.map(
-        (level: { name: string; _count: { students: number } }) => ({
-          level: level.name,
-          students: level._count.students,
+        (classData: { name: string; _count: { students: number } }) => ({
+          class: classData.name,
+          students: classData._count.students,
         })
       ),
     };

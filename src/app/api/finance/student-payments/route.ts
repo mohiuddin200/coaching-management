@@ -31,10 +31,10 @@ export async function GET(request: NextRequest) {
             lastName: true,
             email: true,
             phoneNumber: true,
-            level: {
+            class: {
               select: {
                 name: true,
-                levelNumber: true,
+                classNumber: true,
               },
             },
           },
@@ -85,10 +85,10 @@ export async function GET(request: NextRequest) {
               lastName: true,
               email: true,
               phoneNumber: true,
-              level: {
+              class: {
                 select: {
                   name: true,
-                  levelNumber: true,
+                  classNumber: true,
                 },
               },
             },
@@ -186,10 +186,10 @@ export async function POST(request: Request) {
             lastName: true,
             email: true,
             phoneNumber: true,
-            level: {
+            class: {
               select: {
                 name: true,
-                levelNumber: true,
+                classNumber: true,
               },
             },
           },
@@ -298,10 +298,10 @@ export async function PUT(request: NextRequest) {
             lastName: true,
             email: true,
             phoneNumber: true,
-            level: {
+            class: {
               select: {
                 name: true,
-                levelNumber: true,
+                classNumber: true,
               },
             },
           },

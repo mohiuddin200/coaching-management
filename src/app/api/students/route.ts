@@ -13,7 +13,7 @@ export async function GET() {
         isDeleted: false, // Filter out soft-deleted records
       },
       include: {
-        level: true,
+        class: true,
         enrollments: {
           where: {
             status: "Active",
@@ -53,7 +53,7 @@ export async function GET() {
           phoneNumber: true,
           status: true,
           enrollmentDate: true,
-          levelId: true,
+          classId: true,
         },
         orderBy: {
           createdAt: "desc",
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
       address,
       status,
       smsEnabled,
-      levelId,
+      classId,
       gender,
       bloodGroup,
       nationality,
@@ -130,7 +130,7 @@ export async function POST(request: Request) {
       !motherPhone ||
       !dateOfBirth ||
       !address ||
-      !levelId
+      !classId
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -156,7 +156,7 @@ export async function POST(request: Request) {
         address,
         status: status || "Active",
         smsEnabled: smsEnabled || false,
-        levelId,
+        classId,
         gender: gender || null,
         bloodGroup: bloodGroup || null,
         nationality: nationality || null,
@@ -178,16 +178,16 @@ export async function POST(request: Request) {
         idProof: idProof || null,
       },
       include: {
-        level: true,
+        class: true,
       },
     });
 
-    // If levelId is provided, auto-enroll student in all class sections of that level
-    if (levelId) {
+    // If classId is provided, auto-enroll student in all session sections of that class
+    if (classId) {
       const classSections = await prisma.classSection.findMany({
         where: {
           subject: {
-            levelId: levelId,
+            classId: classId,
           },
           status: "Scheduled",
         },

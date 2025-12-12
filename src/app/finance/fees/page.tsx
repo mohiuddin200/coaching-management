@@ -35,10 +35,10 @@ interface FeeStructure {
   academicYear: string;
   description: string | null;
   isActive: boolean;
-  level: {
+  class: {
     id: string;
     name: string;
-    levelNumber: number;
+    classNumber: number;
   } | null;
   createdAt: string;
 }
@@ -111,14 +111,14 @@ export default function FeeStructuresPage() {
       ),
     },
     {
-      accessorKey: "level",
-      header: "Level",
+      accessorKey: "class",
+      header: "Class",
       cell: ({ row }) => {
-        const level = row.original.level;
-        return level ? (
-          <Badge variant="secondary">{level.name}</Badge>
+        const classData = row.original.class;
+        return classData ? (
+          <Badge variant="secondary">{classData.name}</Badge>
         ) : (
-          <span className="text-muted-foreground">All Levels</span>
+          <span className="text-muted-foreground">All Classes</span>
         );
       },
     },
@@ -221,7 +221,7 @@ export default function FeeStructuresPage() {
               Fee Structures
             </h1>
             <p className="text-muted-foreground">
-              Manage fee structures for different levels and courses
+              Manage fee structures for different classes and courses
             </p>
           </div>
           <CreateFeeStructureDialog onCreated={fetchFeeStructures}>

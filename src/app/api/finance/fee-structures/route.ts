@@ -5,21 +5,21 @@ import { prisma } from "@/lib/prisma";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const levelId = searchParams.get("levelId");
+    const classId = searchParams.get("classId");
     const academicYear = searchParams.get("academicYear");
 
     const feeStructures = await prisma.feeStructure.findMany({
       where: {
-        ...(levelId && { levelId }),
+        ...(classId && { classId }),
         ...(academicYear && { academicYear }),
         isActive: true,
       },
       include: {
-        level: {
+        class: {
           select: {
             id: true,
             name: true,
-            levelNumber: true,
+            classNumber: true,
           },
         },
       },
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, levelId, amount, frequency, academicYear, description } =
+    const { name, classId, amount, frequency, academicYear, description } =
       body;
 
     // Validation
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     const feeStructure = await prisma.feeStructure.create({
       data: {
         name,
-        levelId: levelId || null,
+        classId: classId || null,
         amount: parseFloat(amount),
         frequency: frequency || "Monthly",
         academicYear,
@@ -71,11 +71,11 @@ export async function POST(request: Request) {
         isActive: true,
       },
       include: {
-        level: {
+        class: {
           select: {
             id: true,
             name: true,
-            levelNumber: true,
+            classNumber: true,
           },
         },
       },

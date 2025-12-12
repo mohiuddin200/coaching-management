@@ -11,11 +11,11 @@ export async function GET(
     const feeStructure = await prisma.feeStructure.findUnique({
       where: { id },
       include: {
-        level: {
+        class: {
           select: {
             id: true,
             name: true,
-            levelNumber: true,
+            classNumber: true,
           },
         },
       },
@@ -46,7 +46,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, levelId, amount, frequency, academicYear, description, isActive } = body;
+    const { name, classId, amount, frequency, academicYear, description, isActive } = body;
 
     // Check if fee structure exists
     const existingFeeStructure = await prisma.feeStructure.findUnique({
@@ -79,7 +79,7 @@ export async function PUT(
       where: { id },
       data: {
         name,
-        levelId: levelId || null,
+        classId: classId || null,
         amount: parseFloat(amount),
         frequency: frequency || "Monthly",
         academicYear,
@@ -87,11 +87,11 @@ export async function PUT(
         isActive: isActive !== undefined ? isActive : true,
       },
       include: {
-        level: {
+        class: {
           select: {
             id: true,
             name: true,
-            levelNumber: true,
+            classNumber: true,
           },
         },
       },

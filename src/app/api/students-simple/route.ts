@@ -23,7 +23,7 @@ export async function GET() {
         phoneNumber: true,
         status: true,
         enrollmentDate: true,
-        levelId: true,
+        classId: true,
       },
       orderBy: {
         createdAt: 'desc'

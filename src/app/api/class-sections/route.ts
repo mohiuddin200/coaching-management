@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/class-sections - Get all class sections (optional subjectId, teacherId query params)
+// GET /api/session-sections - Get all session sections (optional subjectId, teacherId query params)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const subjectId = searchParams.get('subjectId');
     const teacherId = searchParams.get('teacherId');
-    const levelId = searchParams.get('levelId');
+    const classId = searchParams.get('classId');
 
     const classSections = await prisma.classSection.findMany({
       where: {
         ...(subjectId && { subjectId }),
         ...(teacherId && { teacherId }),
-        ...(levelId && { subject: { levelId } }),
+        ...(classId && { subject: { classId } }),
       },
       include: {
         subject: {
-          include: { level: true },
+          include: { class: true },
         },
         teacher: true,
         schedules: {
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
         },
       },
       orderBy: [
-        { subject: { level: { levelNumber: 'asc' } } },
+        { subject: { session: { classNumber: 'asc' } } },
         { subject: { name: 'asc' } },
         { name: 'asc' },
       ],
@@ -40,15 +40,15 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(classSections);
   } catch (error) {
-    console.error('Error fetching class sections:', error);
+    console.error('Error fetching session sections:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch class sections' },
+      { error: 'Failed to fetch session sections' },
       { status: 500 }
     );
   }
 }
 
-// POST /api/class-sections - Create a new class section with schedules
+// POST /api/session-sections - Create a new session section with schedules
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
           : undefined,
       },
       include: {
-        subject: { include: { level: true } },
+        subject: { include: { class: true } },
         teacher: true,
         schedules: true,
       },
@@ -105,9 +105,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(classSection, { status: 201 });
   } catch (error) {
-    console.error('Error creating class section:', error);
+    console.error('Error creating session section:', error);
     return NextResponse.json(
-      { error: 'Failed to create class section' },
+      { error: 'Failed to create session section' },
       { status: 500 }
     );
   }

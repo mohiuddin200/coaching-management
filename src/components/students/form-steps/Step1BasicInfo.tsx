@@ -19,18 +19,18 @@ import { UseFormReturn } from "react-hook-form"
 import { StudentFormValues } from "../create-student-dialog"
 import { InlineLoader } from "@/components/data-loader"
 
-interface Level {
+interface Class {
   id: string
   name: string
 }
 
 interface Step1BasicInfoProps {
   form: UseFormReturn<StudentFormValues>
-  levels: Level[]
+  classes: Class[]
   loadingLevels?: boolean
 }
 
-export function Step1BasicInfo({ form, levels, loadingLevels }: Step1BasicInfoProps) {
+export function Step1BasicInfo({ form, classes, loadingLevels }: Step1BasicInfoProps) {
   return (
     <>
       <div className="grid grid-cols-2 gap-4">
@@ -247,10 +247,10 @@ export function Step1BasicInfo({ form, levels, loadingLevels }: Step1BasicInfoPr
 
       <FormField
         control={form.control}
-        name="levelId"
+        name="classId"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Class Level <span className="text-red-500">*</span></FormLabel>
+            <FormLabel>Session Class <span className="text-red-500">*</span></FormLabel>
             <Select
               onValueChange={field.onChange}
               value={field.value}
@@ -258,22 +258,22 @@ export function Step1BasicInfo({ form, levels, loadingLevels }: Step1BasicInfoPr
             >
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder={loadingLevels ? "Loading levels..." : "Select class level"} />
+                  <SelectValue placeholder={loadingLevels ? "Loading classes..." : "Select session class"} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
                 {loadingLevels ? (
                   <div className="p-4">
-                    <InlineLoader text="Loading levels..." />
+                    <InlineLoader text="Loading classes..." />
                   </div>
-                ) : levels.length === 0 ? (
+                ) : classes.length === 0 ? (
                   <div className="p-4 text-sm text-muted-foreground text-center">
-                    No levels available
+                    No classes available
                   </div>
                 ) : (
-                  levels.map((level) => (
-                    <SelectItem key={level.id} value={level.id}>
-                      {level.name}
+                  classes.map((classData) => (
+                    <SelectItem key={classData.id} value={classData.id}>
+                      {classData.name}
                     </SelectItem>
                   ))
                 )}

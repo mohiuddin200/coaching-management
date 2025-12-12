@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/levels - Get all levels
+// GET /api/classes - Get all classes
 export async function GET() {
   try {
-    const levels = await prisma.level.findMany({
-      orderBy: { levelNumber: 'asc' },
+    const classes = await prisma.class.findMany({
+      orderBy: { classNumber: 'asc' },
       include: {
         _count: {
           select: {
@@ -16,43 +16,43 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(levels);
+    return NextResponse.json(classes);
   } catch (error) {
-    console.error('Error fetching levels:', error);
+    console.error('Error fetching classes:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch levels' },
+      { error: 'Failed to fetch classes' },
       { status: 500 }
     );
   }
 }
 
-// POST /api/levels - Create a new level
+// POST /api/classes - Create a new class
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, levelNumber, description, status } = body;
+    const { name, classNumber, description, status } = body;
 
-    if (!name || !levelNumber) {
+    if (!name || !classNumber) {
       return NextResponse.json(
-        { error: 'Name and level number are required' },
+        { error: 'Name and class number are required' },
         { status: 400 }
       );
     }
 
-    const level = await prisma.level.create({
+    const classData = await prisma.class.create({
       data: {
         name,
-        levelNumber: parseInt(levelNumber),
+        classNumber: parseInt(classNumber),
         description,
         status: status || 'Active',
       },
     });
 
-    return NextResponse.json(level, { status: 201 });
+    return NextResponse.json(classData, { status: 201 });
   } catch (error) {
-    console.error('Error creating level:', error);
+    console.error('Error creating class:', error);
     return NextResponse.json(
-      { error: 'Failed to create level' },
+      { error: 'Failed to create class' },
       { status: 500 }
     );
   }

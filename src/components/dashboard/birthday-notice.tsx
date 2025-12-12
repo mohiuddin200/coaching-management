@@ -9,7 +9,7 @@ interface BirthdayStudent {
   id: string;
   firstName: string;
   lastName: string;
-  level: string;
+  class: string;
   age: number;
   profileImage?: string;
 }
@@ -50,7 +50,7 @@ export function BirthdayNotice({ students }: BirthdayNoticeProps) {
                       {student.firstName} {student.lastName}
                     </span>
                     <span className="text-xs text-muted-foreground">
-                      ({student.level}, {student.age} years)
+                      ({student.class}, {student.age} years)
                     </span>
                   </div>
                 </div>
