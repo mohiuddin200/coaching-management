@@ -15,7 +15,7 @@
  4. Attendance and Enrollment models have conflicting optional fields
  5. Table mapping inconsistency: Class model maps to "levels" table
 
- Detailed Schema Changes
+ Detailed Schema Changes.
 
  1. Fix Class Model Mapping
 
