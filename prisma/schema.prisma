@@ -57,7 +57,6 @@ model Teacher {
   deletedBy                String?          @map("deleted_by")
   deleteReason             DeleteReason?    @map("delete_reason")
   classSections            ClassSection[]   @relation("TeacherToClassSection")
-  classes                  Class[]          @relation("TeacherToClass")
   payments                 TeacherPayment[]
   user                     User?            @relation("UserToTeacher", fields: [userId], references: [id])
 
@@ -180,22 +179,6 @@ model Schedule {
   @@map("schedules")
 }
 
-model Class {
-  id           String       @id @default(cuid())
-  name         String
-  scheduleTime DateTime
-  capacity     Int
-  status       ClassStatus  @default(Scheduled)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  teacherId    String
-  attendances  Attendance[]
-  teacher      Teacher      @relation("TeacherToClass", fields: [teacherId], references: [id])
-  enrollments  Enrollment[]
-
-  @@map("classes")
-}
-
 model Enrollment {
   id             String           @id @default(cuid())
   enrollmentDate DateTime         @default(now())
@@ -203,9 +186,7 @@ model Enrollment {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   studentId      String
-  classId        String?
   classSectionId String?
-  class          Class?           @relation(fields: [classId], references: [id])
   classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   student        Student          @relation(fields: [studentId], references: [id])
 
@@ -224,8 +205,6 @@ model Attendance {
   classSection   ClassSection?    @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   device         BiometricDevice? @relation(fields: [deviceId], references: [id])
   student        Student          @relation(fields: [studentId], references: [id])
-  class          Class?           @relation(fields: [classId], references: [id])
-  classId        String?
 
   @@unique([studentId, date])
   @@map("attendances")

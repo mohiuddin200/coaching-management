@@ -75,11 +75,6 @@ export type ClassSection = Prisma.ClassSectionModel
  */
 export type Schedule = Prisma.ScheduleModel
 /**
- * Model Class
- * 
- */
-export type Class = Prisma.ClassModel
-/**
  * Model Enrollment
  * 
  */

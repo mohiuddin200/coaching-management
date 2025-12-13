@@ -51,12 +51,12 @@ const data = {
       icon: Users,
     },
     {
-      title: "Classes",
+      title: "Classes Schedule",
       url: "/classes",
       icon: BookOpen,
     },
     {
-      title: "Levels & Subjects",
+      title: "Grade & Subjects",
       url: "/levels",
       icon: School,
     },

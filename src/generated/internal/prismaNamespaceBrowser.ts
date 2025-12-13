@@ -58,7 +58,6 @@ export const ModelName = {
   Subject: 'Subject',
   ClassSection: 'ClassSection',
   Schedule: 'Schedule',
-  Class: 'Class',
   Enrollment: 'Enrollment',
   Attendance: 'Attendance',
   BiometricDevice: 'BiometricDevice',
@@ -246,20 +245,6 @@ export const ScheduleScalarFieldEnum = {
 export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
 
 
-export const ClassScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  scheduleTime: 'scheduleTime',
-  capacity: 'capacity',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  teacherId: 'teacherId'
-} as const
-
-export type ClassScalarFieldEnum = (typeof ClassScalarFieldEnum)[keyof typeof ClassScalarFieldEnum]
-
-
 export const EnrollmentScalarFieldEnum = {
   id: 'id',
   enrollmentDate: 'enrollmentDate',
@@ -267,7 +252,6 @@ export const EnrollmentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   studentId: 'studentId',
-  classId: 'classId',
   classSectionId: 'classSectionId'
 } as const
 
@@ -282,8 +266,7 @@ export const AttendanceScalarFieldEnum = {
   updatedAt: 'updatedAt',
   studentId: 'studentId',
   classSectionId: 'classSectionId',
-  deviceId: 'deviceId',
-  classId: 'classId'
+  deviceId: 'deviceId'
 } as const
 
 export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
