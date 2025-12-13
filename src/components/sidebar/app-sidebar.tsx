@@ -56,7 +56,7 @@ const data = {
       icon: BookOpen,
     },
     {
-      title: "Levels & Subjects",
+      title: "Grade & Subjects",
       url: "/levels",
       icon: School,
     },

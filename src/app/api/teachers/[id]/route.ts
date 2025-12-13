@@ -115,11 +115,6 @@ export async function DELETE(
         logDeletionAttempt('teacher', id, 'success', { deletedRecords: 'classSections', count: relatedRecords.classSections });
       }
       
-      if (relatedRecords.classes > 0) {
-        await prisma.class.deleteMany({ where: { teacherId: id } });
-        logDeletionAttempt('teacher', id, 'success', { deletedRecords: 'classes', count: relatedRecords.classes });
-      }
-      
       if (relatedRecords.payments > 0) {
         await prisma.teacherPayment.deleteMany({ where: { teacherId: id } });
         logDeletionAttempt('teacher', id, 'success', { deletedRecords: 'payments', count: relatedRecords.payments });
