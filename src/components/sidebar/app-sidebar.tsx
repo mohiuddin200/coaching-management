@@ -51,7 +51,7 @@ const data = {
       icon: Users,
     },
     {
-      title: "Classes",
+      title: "Classes Schedule",
       url: "/classes",
       icon: BookOpen,
     },
