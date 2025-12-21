@@ -440,3 +440,155 @@ export async function getSoftDeletedTeachers(page: number = 1, limit: number = 1
     totalPages: Math.ceil(total / limit)
   };
 }
+
+/**
+ * Soft deletes an exam by marking it as deleted
+ */
+export async function softDeleteExam(
+  examId: string,
+  options: SoftDeleteOptions = {}
+): Promise<SoftDeleteResult> {
+  try {
+    logDeletionAttempt('exam', examId, 'attempt', { action: 'soft_delete', options });
+
+    // Check if exam exists and is not already deleted
+    const existingExam = await prisma.exam.findUnique({
+      where: { id: examId }
+    });
+
+    if (!existingExam) {
+      return {
+        success: false,
+        message: 'Exam not found'
+      };
+    }
+
+    if (existingExam.isDeleted) {
+      return {
+        success: false,
+        message: 'Exam is already deleted'
+      };
+    }
+
+    // Soft delete the exam
+    await prisma.exam.update({
+      where: { id: examId },
+      data: {
+        isDeleted: true,
+        deletedAt: new Date(),
+        deletedBy: options.deletedBy,
+        deleteReason: options.deleteReason || 'CANCELLED'
+      }
+    });
+    
+    logDeletionAttempt('exam', examId, 'success', {
+      action: 'soft_delete',
+      deleteReason: options.deleteReason,
+      deletedBy: options.deletedBy
+    });
+
+    return {
+      success: true,
+      message: 'Exam soft deleted successfully'
+    };
+  } catch (error) {
+    logDeletionAttempt('exam', examId, 'error', {
+      action: 'soft_delete',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    
+    return {
+      success: false,
+      message: 'Failed to soft delete exam',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
+}
+
+/**
+ * Restores a soft-deleted exam
+ */
+export async function restoreSoftDeletedExam(examId: string): Promise<SoftDeleteResult> {
+  try {
+    logDeletionAttempt('exam', examId, 'attempt', { action: 'restore' });
+
+    // Check if exam exists and is deleted
+    const existingExam = await prisma.exam.findUnique({
+      where: { id: examId }
+    });
+
+    if (!existingExam) {
+      return {
+        success: false,
+        message: 'Exam not found'
+      };
+    }
+
+    if (!existingExam.isDeleted) {
+      return {
+        success: false,
+        message: 'Exam is not deleted'
+      };
+    }
+
+    // Restore the exam
+    await prisma.exam.update({
+      where: { id: examId },
+      data: {
+        isDeleted: false,
+        deletedAt: null,
+        deletedBy: null,
+        deleteReason: null
+      }
+    });
+
+    logDeletionAttempt('exam', examId, 'success', { action: 'restore' });
+
+    return {
+      success: true,
+      message: 'Exam restored successfully'
+    };
+  } catch (error) {
+    logDeletionAttempt('exam', examId, 'error', {
+      action: 'restore',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+    
+    return {
+      success: false,
+      message: 'Failed to restore exam',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
+}
+
+/**
+ * Gets soft deleted exams with pagination
+ */
+export async function getSoftDeletedExams(page: number = 1, limit: number = 10) {
+  const skip = (page - 1) * limit;
+  
+  const [exams, total] = await Promise.all([
+    prisma.exam.findMany({
+      where: { isDeleted: true },
+      skip,
+      take: limit,
+      orderBy: { deletedAt: 'desc' },
+      include: {
+        subject: { select: { name: true } },
+        level: { select: { name: true } },
+        teacher: { select: { firstName: true, lastName: true } }
+      }
+    }),
+    prisma.exam.count({
+      where: { isDeleted: true }
+    })
+  ]);
+
+  return {
+    exams,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit)
+  };
+}

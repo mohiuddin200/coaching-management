@@ -12,6 +12,7 @@ import {
   School,
   LogOut,
   Wallet,
+  FileText,
 } from "lucide-react"
 
 import {
@@ -64,6 +65,11 @@ const data = {
       title: "Attendance",
       url: "/attendance",
       icon: UserCheck,
+    },
+    {
+      title: "Exams",
+      url: "/exams",
+      icon: FileText,
     },
     {
       title: "Finance",

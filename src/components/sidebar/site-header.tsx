@@ -2,7 +2,6 @@
 
 import { SidebarIcon } from "lucide-react";
 
-import { SearchForm } from "@/components/sidebar/search-form";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSidebar } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { NotificationBell } from "@/components/layout/notification-bell";
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar();
@@ -42,7 +42,8 @@ export function SiteHeader() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="w-full sm:ml-auto sm:w-auto">
+        <div className="ml-auto flex items-center gap-2">
+          <NotificationBell />
           <ThemeToggle />
         </div>
       </div>

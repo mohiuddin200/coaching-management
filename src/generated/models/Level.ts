@@ -235,6 +235,7 @@ export type LevelWhereInput = {
   students?: Prisma.StudentListRelationFilter
   subjects?: Prisma.SubjectListRelationFilter
   feeStructures?: Prisma.FeeStructureListRelationFilter
+  exams?: Prisma.ExamListRelationFilter
 }
 
 export type LevelOrderByWithRelationInput = {
@@ -248,6 +249,7 @@ export type LevelOrderByWithRelationInput = {
   students?: Prisma.StudentOrderByRelationAggregateInput
   subjects?: Prisma.SubjectOrderByRelationAggregateInput
   feeStructures?: Prisma.FeeStructureOrderByRelationAggregateInput
+  exams?: Prisma.ExamOrderByRelationAggregateInput
 }
 
 export type LevelWhereUniqueInput = Prisma.AtLeast<{
@@ -264,6 +266,7 @@ export type LevelWhereUniqueInput = Prisma.AtLeast<{
   students?: Prisma.StudentListRelationFilter
   subjects?: Prisma.SubjectListRelationFilter
   feeStructures?: Prisma.FeeStructureListRelationFilter
+  exams?: Prisma.ExamListRelationFilter
 }, "id" | "name" | "levelNumber">
 
 export type LevelOrderByWithAggregationInput = {
@@ -305,6 +308,7 @@ export type LevelCreateInput = {
   students?: Prisma.StudentCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUncheckedCreateInput = {
@@ -318,6 +322,7 @@ export type LevelUncheckedCreateInput = {
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUpdateInput = {
@@ -331,6 +336,7 @@ export type LevelUpdateInput = {
   students?: Prisma.StudentUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelUncheckedUpdateInput = {
@@ -344,6 +350,7 @@ export type LevelUncheckedUpdateInput = {
   students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelCreateManyInput = {
@@ -476,6 +483,20 @@ export type LevelUpdateOneWithoutFeeStructuresNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LevelUpdateToOneWithWhereWithoutFeeStructuresInput, Prisma.LevelUpdateWithoutFeeStructuresInput>, Prisma.LevelUncheckedUpdateWithoutFeeStructuresInput>
 }
 
+export type LevelCreateNestedOneWithoutExamsInput = {
+  create?: Prisma.XOR<Prisma.LevelCreateWithoutExamsInput, Prisma.LevelUncheckedCreateWithoutExamsInput>
+  connectOrCreate?: Prisma.LevelCreateOrConnectWithoutExamsInput
+  connect?: Prisma.LevelWhereUniqueInput
+}
+
+export type LevelUpdateOneRequiredWithoutExamsNestedInput = {
+  create?: Prisma.XOR<Prisma.LevelCreateWithoutExamsInput, Prisma.LevelUncheckedCreateWithoutExamsInput>
+  connectOrCreate?: Prisma.LevelCreateOrConnectWithoutExamsInput
+  upsert?: Prisma.LevelUpsertWithoutExamsInput
+  connect?: Prisma.LevelWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LevelUpdateToOneWithWhereWithoutExamsInput, Prisma.LevelUpdateWithoutExamsInput>, Prisma.LevelUncheckedUpdateWithoutExamsInput>
+}
+
 export type LevelCreateWithoutStudentsInput = {
   id?: string
   name: string
@@ -486,6 +507,7 @@ export type LevelCreateWithoutStudentsInput = {
   updatedAt?: Date | string
   subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUncheckedCreateWithoutStudentsInput = {
@@ -498,6 +520,7 @@ export type LevelUncheckedCreateWithoutStudentsInput = {
   updatedAt?: Date | string
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutLevelInput
 }
 
 export type LevelCreateOrConnectWithoutStudentsInput = {
@@ -526,6 +549,7 @@ export type LevelUpdateWithoutStudentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutStudentsInput = {
@@ -538,6 +562,7 @@ export type LevelUncheckedUpdateWithoutStudentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelCreateWithoutSubjectsInput = {
@@ -550,6 +575,7 @@ export type LevelCreateWithoutSubjectsInput = {
   updatedAt?: Date | string
   students?: Prisma.StudentCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUncheckedCreateWithoutSubjectsInput = {
@@ -562,6 +588,7 @@ export type LevelUncheckedCreateWithoutSubjectsInput = {
   updatedAt?: Date | string
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutLevelInput
 }
 
 export type LevelCreateOrConnectWithoutSubjectsInput = {
@@ -590,6 +617,7 @@ export type LevelUpdateWithoutSubjectsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutSubjectsInput = {
@@ -602,6 +630,7 @@ export type LevelUncheckedUpdateWithoutSubjectsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelCreateWithoutFeeStructuresInput = {
@@ -614,6 +643,7 @@ export type LevelCreateWithoutFeeStructuresInput = {
   updatedAt?: Date | string
   students?: Prisma.StudentCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUncheckedCreateWithoutFeeStructuresInput = {
@@ -626,6 +656,7 @@ export type LevelUncheckedCreateWithoutFeeStructuresInput = {
   updatedAt?: Date | string
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutLevelInput
 }
 
 export type LevelCreateOrConnectWithoutFeeStructuresInput = {
@@ -654,6 +685,7 @@ export type LevelUpdateWithoutFeeStructuresInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutFeeStructuresInput = {
@@ -666,6 +698,75 @@ export type LevelUncheckedUpdateWithoutFeeStructuresInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutLevelNestedInput
+}
+
+export type LevelCreateWithoutExamsInput = {
+  id?: string
+  name: string
+  levelNumber: number
+  description?: string | null
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  students?: Prisma.StudentCreateNestedManyWithoutLevelInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
+  feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
+}
+
+export type LevelUncheckedCreateWithoutExamsInput = {
+  id?: string
+  name: string
+  levelNumber: number
+  description?: string | null
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
+  feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
+}
+
+export type LevelCreateOrConnectWithoutExamsInput = {
+  where: Prisma.LevelWhereUniqueInput
+  create: Prisma.XOR<Prisma.LevelCreateWithoutExamsInput, Prisma.LevelUncheckedCreateWithoutExamsInput>
+}
+
+export type LevelUpsertWithoutExamsInput = {
+  update: Prisma.XOR<Prisma.LevelUpdateWithoutExamsInput, Prisma.LevelUncheckedUpdateWithoutExamsInput>
+  create: Prisma.XOR<Prisma.LevelCreateWithoutExamsInput, Prisma.LevelUncheckedCreateWithoutExamsInput>
+  where?: Prisma.LevelWhereInput
+}
+
+export type LevelUpdateToOneWithWhereWithoutExamsInput = {
+  where?: Prisma.LevelWhereInput
+  data: Prisma.XOR<Prisma.LevelUpdateWithoutExamsInput, Prisma.LevelUncheckedUpdateWithoutExamsInput>
+}
+
+export type LevelUpdateWithoutExamsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  levelNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  students?: Prisma.StudentUpdateManyWithoutLevelNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
+  feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
+}
+
+export type LevelUncheckedUpdateWithoutExamsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  levelNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
+  feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
 }
 
 
@@ -677,12 +778,14 @@ export type LevelCountOutputType = {
   students: number
   subjects: number
   feeStructures: number
+  exams: number
 }
 
 export type LevelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   students?: boolean | LevelCountOutputTypeCountStudentsArgs
   subjects?: boolean | LevelCountOutputTypeCountSubjectsArgs
   feeStructures?: boolean | LevelCountOutputTypeCountFeeStructuresArgs
+  exams?: boolean | LevelCountOutputTypeCountExamsArgs
 }
 
 /**
@@ -716,6 +819,13 @@ export type LevelCountOutputTypeCountFeeStructuresArgs<ExtArgs extends runtime.T
   where?: Prisma.FeeStructureWhereInput
 }
 
+/**
+ * LevelCountOutputType without action
+ */
+export type LevelCountOutputTypeCountExamsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExamWhereInput
+}
+
 
 export type LevelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -728,6 +838,7 @@ export type LevelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   students?: boolean | Prisma.Level$studentsArgs<ExtArgs>
   subjects?: boolean | Prisma.Level$subjectsArgs<ExtArgs>
   feeStructures?: boolean | Prisma.Level$feeStructuresArgs<ExtArgs>
+  exams?: boolean | Prisma.Level$examsArgs<ExtArgs>
   _count?: boolean | Prisma.LevelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["level"]>
 
@@ -766,6 +877,7 @@ export type LevelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   students?: boolean | Prisma.Level$studentsArgs<ExtArgs>
   subjects?: boolean | Prisma.Level$subjectsArgs<ExtArgs>
   feeStructures?: boolean | Prisma.Level$feeStructuresArgs<ExtArgs>
+  exams?: boolean | Prisma.Level$examsArgs<ExtArgs>
   _count?: boolean | Prisma.LevelCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LevelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -777,6 +889,7 @@ export type $LevelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     students: Prisma.$StudentPayload<ExtArgs>[]
     subjects: Prisma.$SubjectPayload<ExtArgs>[]
     feeStructures: Prisma.$FeeStructurePayload<ExtArgs>[]
+    exams: Prisma.$ExamPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1183,6 +1296,7 @@ export interface Prisma__LevelClient<T, Null = never, ExtArgs extends runtime.Ty
   students<T extends Prisma.Level$studentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subjects<T extends Prisma.Level$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   feeStructures<T extends Prisma.Level$feeStructuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$feeStructuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeeStructurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  exams<T extends Prisma.Level$examsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$examsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1676,6 +1790,30 @@ export type Level$feeStructuresArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.FeeStructureScalarFieldEnum | Prisma.FeeStructureScalarFieldEnum[]
+}
+
+/**
+ * Level.exams
+ */
+export type Level$examsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Exam
+   */
+  select?: Prisma.ExamSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Exam
+   */
+  omit?: Prisma.ExamOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExamInclude<ExtArgs> | null
+  where?: Prisma.ExamWhereInput
+  orderBy?: Prisma.ExamOrderByWithRelationInput | Prisma.ExamOrderByWithRelationInput[]
+  cursor?: Prisma.ExamWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExamScalarFieldEnum | Prisma.ExamScalarFieldEnum[]
 }
 
 /**

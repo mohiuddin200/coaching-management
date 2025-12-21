@@ -10,6 +10,7 @@ import {
   RecentActivity,
   UpcomingClasses
 } from "@/components/dashboard/recent-activity";
+import { ExamAnalytics } from "@/components/dashboard/exam-analytics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function DashboardPage() {
@@ -272,6 +273,9 @@ export default async function DashboardPage() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
+            {/* Exam Analytics */}
+            <ExamAnalytics />
+            
             {/* Charts Row 1 */}
             <div className="grid gap-4 md:grid-cols-2">
               <ChartWrapper type="attendance" data={attendanceTrendData} />

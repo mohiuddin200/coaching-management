@@ -58,6 +58,7 @@ model Teacher {
   deleteReason             DeleteReason?    @map("delete_reason")
   classSections            ClassSection[]   @relation("TeacherToClassSection")
   payments                 TeacherPayment[]
+  exams                    Exam[]
   user                     User?            @relation("UserToTeacher", fields: [userId], references: [id])
 
   @@map("teachers")
@@ -109,6 +110,7 @@ model Student {
   attendances              Attendance[]
   enrollments              Enrollment[]
   payments                 StudentPayment[]
+  examResults              ExamResult[]
   level                    Level            @relation(fields: [levelId], references: [id])
 
   @@map("students")
@@ -125,6 +127,7 @@ model Level {
   students      Student[]
   subjects      Subject[]
   feeStructures FeeStructure[]
+  exams         Exam[]
 
   @@map("levels")
 }
@@ -139,6 +142,7 @@ model Subject {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   classSections ClassSection[]
+  exams         Exam[]
   level         Level          @relation(fields: [levelId], references: [id], onDelete: Cascade)
 
   @@unique([levelId, name])
@@ -337,6 +341,113 @@ model Expense {
   updatedAt   DateTime        @updatedAt
 
   @@map("expenses")
+}
+
+model Exam {
+  id               String        @id @default(cuid())
+  name             String
+  type             ExamType      @default(Monthly)
+  description      String?
+  subjectId        String
+  subject          Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  levelId          String
+  level            Level         @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  teacherId        String
+  teacher          Teacher       @relation(fields: [teacherId], references: [id])
+  totalMarks       Float
+  passingMarks     Float?
+  examDate         DateTime
+  duration         Int?
+  questionPaperUrl String?
+  answerKeyUrl     String?
+  startTime        String?
+  endTime          String?
+  roomNumber       String?
+  academicYear     String
+  status           ExamStatus    @default(Scheduled)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  createdBy        String?
+  isDeleted        Boolean       @default(false) @map("is_deleted")
+  deletedAt        DateTime?     @map("deleted_at")
+  deletedBy        String?       @map("deleted_by")
+  deleteReason     DeleteReason? @map("delete_reason")
+  results          ExamResult[]
+  notifications    Notification[]
+
+  @@index([isDeleted])
+  @@index([deletedAt])
+  @@index([examDate])
+  @@index([subjectId])
+  @@index([levelId])
+  @@map("exams")
+}
+
+model ExamResult {
+  id            String    @id @default(cuid())
+  examId        String
+  exam          Exam      @relation(fields: [examId], references: [id], onDelete: Cascade)
+  studentId     String
+  student       Student   @relation(fields: [studentId], references: [id])
+  marksObtained Float?
+  grade         String?
+  remarks       String?
+  attended      Boolean   @default(false)
+  absentReason  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  gradedBy      String?
+  gradedAt      DateTime?
+
+  @@unique([examId, studentId])
+  @@index([studentId])
+  @@index([examId])
+  @@map("exam_results")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  title     String
+  message   String
+  userId    String?
+  examId    String?
+  exam      Exam?            @relation(fields: [examId], references: [id], onDelete: Cascade)
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+enum ExamType {
+  Monthly
+  Weekly
+  OpenBook
+  Midterm
+  Final
+  Quiz
+  Assignment
+}
+
+enum ExamStatus {
+  Scheduled
+  InProgress
+  Completed
+  Cancelled
+  Postponed
+}
+
+enum NotificationType {
+  ExamScheduled
+  ExamReminder
+  ResultPublished
+  ExamCancelled
+  ExamPostponed
+  System
 }
 
 enum Gender {

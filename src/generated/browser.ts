@@ -102,3 +102,18 @@ export type TeacherPayment = Prisma.TeacherPaymentModel
  * 
  */
 export type Expense = Prisma.ExpenseModel
+/**
+ * Model Exam
+ * 
+ */
+export type Exam = Prisma.ExamModel
+/**
+ * Model ExamResult
+ * 
+ */
+export type ExamResult = Prisma.ExamResultModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

@@ -9,6 +9,42 @@
 * 🟢 You can import this file directly.
 */
 
+export const ExamType = {
+  Monthly: 'Monthly',
+  Weekly: 'Weekly',
+  OpenBook: 'OpenBook',
+  Midterm: 'Midterm',
+  Final: 'Final',
+  Quiz: 'Quiz',
+  Assignment: 'Assignment'
+} as const
+
+export type ExamType = (typeof ExamType)[keyof typeof ExamType]
+
+
+export const ExamStatus = {
+  Scheduled: 'Scheduled',
+  InProgress: 'InProgress',
+  Completed: 'Completed',
+  Cancelled: 'Cancelled',
+  Postponed: 'Postponed'
+} as const
+
+export type ExamStatus = (typeof ExamStatus)[keyof typeof ExamStatus]
+
+
+export const NotificationType = {
+  ExamScheduled: 'ExamScheduled',
+  ExamReminder: 'ExamReminder',
+  ResultPublished: 'ResultPublished',
+  ExamCancelled: 'ExamCancelled',
+  ExamPostponed: 'ExamPostponed',
+  System: 'System'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
 export const Gender = {
   Male: 'Male',
   Female: 'Female',

@@ -67,7 +67,10 @@ export const ModelName = {
   FeeStructure: 'FeeStructure',
   StudentPayment: 'StudentPayment',
   TeacherPayment: 'TeacherPayment',
-  Expense: 'Expense'
+  Expense: 'Expense',
+  Exam: 'Exam',
+  ExamResult: 'ExamResult',
+  Notification: 'Notification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -399,6 +402,70 @@ export const ExpenseScalarFieldEnum = {
 } as const
 
 export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
+
+
+export const ExamScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  description: 'description',
+  subjectId: 'subjectId',
+  levelId: 'levelId',
+  teacherId: 'teacherId',
+  totalMarks: 'totalMarks',
+  passingMarks: 'passingMarks',
+  examDate: 'examDate',
+  duration: 'duration',
+  questionPaperUrl: 'questionPaperUrl',
+  answerKeyUrl: 'answerKeyUrl',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  roomNumber: 'roomNumber',
+  academicYear: 'academicYear',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  deleteReason: 'deleteReason'
+} as const
+
+export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]
+
+
+export const ExamResultScalarFieldEnum = {
+  id: 'id',
+  examId: 'examId',
+  studentId: 'studentId',
+  marksObtained: 'marksObtained',
+  grade: 'grade',
+  remarks: 'remarks',
+  attended: 'attended',
+  absentReason: 'absentReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  gradedBy: 'gradedBy',
+  gradedAt: 'gradedAt'
+} as const
+
+export type ExamResultScalarFieldEnum = (typeof ExamResultScalarFieldEnum)[keyof typeof ExamResultScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  userId: 'userId',
+  examId: 'examId',
+  isRead: 'isRead',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SortOrder = {
