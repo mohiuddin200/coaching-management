@@ -212,7 +212,7 @@ export function GradeExamDialog({ exam, onGraded }: GradeExamDialogProps) {
           <Edit className="w-4 h-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="min-w-[800px] max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle>Grade Exam: {exam.name}</DialogTitle>
           <DialogDescription>
@@ -220,22 +220,22 @@ export function GradeExamDialog({ exam, onGraded }: GradeExamDialogProps) {
             {exam.passingMarks && ` | Passing marks: ${exam.passingMarks}`}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
           {students.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               No students found for this level
             </div>
           ) : (
-            <div className="rounded-md border">
+            <div className="rounded-md border overflow-x-auto flex-1">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Student Name</TableHead>
+                    <TableHead className="min-w-[180px]">Student Name</TableHead>
                     <TableHead className="w-24">Attended</TableHead>
-                    <TableHead className="w-32">Marks</TableHead>
+                    <TableHead className="w-28">Marks</TableHead>
                     <TableHead className="w-24">Grade</TableHead>
-                    <TableHead className="w-48">Remarks</TableHead>
-                    <TableHead className="w-48">Absent Reason</TableHead>
+                    <TableHead className="min-w-[150px]">Remarks</TableHead>
+                    <TableHead className="min-w-[150px]">Absent Reason</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -328,7 +328,7 @@ export function GradeExamDialog({ exam, onGraded }: GradeExamDialogProps) {
             </div>
           )}
 
-          <div className="flex justify-end gap-2 mt-4">
+          <div className="flex justify-end gap-2 mt-4 pt-4 border-t">
             <Button
               type="button"
               variant="outline"

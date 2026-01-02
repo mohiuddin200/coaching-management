@@ -99,6 +99,22 @@ MarketingContact
 - **API Design**: Next.js API routes for type-safe endpoints
 - **Error Handling**: Try/catch for async operations, validate inputs with Zod
 
+### API Response Structure
+
+API responses return data directly, not wrapped in a `data` property. When consuming APIs:
+
+```javascript
+// Wrong approach
+const response = await fetch("/api/teachers");
+const data = await response.json();
+setTeachers(data.data || []); // ❌ Don't use data.data
+
+// Right approach
+const response = await fetch("/api/teachers");
+const data = await response.json();
+setTeachers(data || []); // ✅ Use data directly
+```
+
 ## Development Commands
 
 ```bash

@@ -95,7 +95,7 @@ export function CreateExamDialog({ onCreated }: CreateExamDialogProps) {
     try {
       const response = await fetch("/api/levels");
       const data = await response.json();
-      setLevels(data.data || []);
+      setLevels(data || []);
     } catch (error) {
       console.error("Error fetching levels:", error);
       toast.error("Failed to load levels");
@@ -117,7 +117,8 @@ export function CreateExamDialog({ onCreated }: CreateExamDialogProps) {
     try {
       const response = await fetch("/api/teachers");
       const data = await response.json();
-      setTeachers(data.data || []);
+      console.log(data, "teacher")
+      setTeachers(data.teachers || []);
     } catch (error) {
       console.error("Error fetching teachers:", error);
       toast.error("Failed to load teachers");
@@ -244,16 +245,23 @@ export function CreateExamDialog({ onCreated }: CreateExamDialogProps) {
                 onValueChange={(value) =>
                   setFormData({ ...formData, levelId: value })
                 }
+                disabled={levels.length === 0}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select level" />
+                  <SelectValue placeholder={levels.length === 0 ? "No levels found" : "Select level"} />
                 </SelectTrigger>
                 <SelectContent>
-                  {levels.map((level) => (
-                    <SelectItem key={level.id} value={level.id}>
-                      {level.name}
-                    </SelectItem>
-                  ))}
+                  {levels.length === 0 ? (
+                    <div className="p-2 text-sm text-muted-foreground text-center">
+                      No data found
+                    </div>
+                  ) : (
+                    levels.map((level) => (
+                      <SelectItem key={level.id} value={level.id}>
+                        {level.name}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -267,17 +275,29 @@ export function CreateExamDialog({ onCreated }: CreateExamDialogProps) {
                 onValueChange={(value) =>
                   setFormData({ ...formData, subjectId: value })
                 }
-                disabled={!formData.levelId}
+                disabled={!formData.levelId || subjects.length === 0}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select subject" />
+                  <SelectValue placeholder={
+                    !formData.levelId
+                      ? "Select level first"
+                      : subjects.length === 0
+                      ? "No subjects found"
+                      : "Select subject"
+                  } />
                 </SelectTrigger>
                 <SelectContent>
-                  {subjects.map((subject) => (
-                    <SelectItem key={subject.id} value={subject.id}>
-                      {subject.name}
-                    </SelectItem>
-                  ))}
+                  {subjects.length === 0 ? (
+                    <div className="p-2 text-sm text-muted-foreground text-center">
+                      No data found
+                    </div>
+                  ) : (
+                    subjects.map((subject) => (
+                      <SelectItem key={subject.id} value={subject.id}>
+                        {subject.name}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -291,16 +311,23 @@ export function CreateExamDialog({ onCreated }: CreateExamDialogProps) {
                 onValueChange={(value) =>
                   setFormData({ ...formData, teacherId: value })
                 }
+                disabled={!teachers || teachers.length === 0}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select teacher" />
+                  <SelectValue placeholder={!teachers || teachers.length === 0 ? "No teachers found" : "Select teacher"} />
                 </SelectTrigger>
                 <SelectContent>
-                  {teachers.map((teacher) => (
-                    <SelectItem key={teacher.id} value={teacher.id}>
-                      {teacher.firstName} {teacher.lastName}
-                    </SelectItem>
-                  ))}
+                  {!teachers || teachers.length === 0 ? (
+                    <div className="p-2 text-sm text-muted-foreground text-center">
+                      No data found
+                    </div>
+                  ) : (
+                    teachers.map((teacher) => (
+                      <SelectItem key={teacher.id} value={teacher.id}>
+                        {teacher.firstName} {teacher.lastName}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
             </div>
