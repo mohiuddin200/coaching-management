@@ -7,8 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Search, Archive, RotateCcw, Trash2, Users, UserCheck } from 'lucide-react';
-import { ProgressiveDeletionDialog } from '@/components/deletion/progressive-deletion-dialog';
+import { Search, Archive, RotateCcw, Users, UserCheck } from 'lucide-react';
 import { format } from 'date-fns';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 
@@ -45,8 +44,6 @@ export default function ArchivePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [selectedEntity, setSelectedEntity] = useState<{ type: 'student' | 'teacher'; name: string; id: string } | null>(null);
-  const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
   const fetchArchivedData = async (page: number = 1) => {
     setLoading(true);
@@ -92,21 +89,7 @@ export default function ArchivePage() {
     }
   };
 
-  const handlePermanentDelete = async (entityId: string) => {
-    try {
-      const endpoint = activeTab === 'students' ? 'students' : 'teachers';
-      const response = await fetch(`/api/${endpoint}/${entityId}?cascade=true`, {
-        method: 'DELETE',
-      });
 
-      if (response.ok) {
-        // Refresh the data
-        fetchArchivedData(currentPage);
-      }
-    } catch (error) {
-      console.error('Failed to permanently delete:', error);
-    }
-  };
 
   const filteredStudents = archivedStudents.filter(student =>
     `${student.firstName} ${student.lastName} ${student.email}`.toLowerCase().includes(searchTerm.toLowerCase())
@@ -150,7 +133,7 @@ export default function ArchivePage() {
                 Archived Students
               </CardTitle>
               <CardDescription>
-                Students who have been archived and can be restored or permanently deleted
+                Students who have been archived and can be restored
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -202,33 +185,15 @@ export default function ArchivePage() {
                             )}
                           </TableCell>
                           <TableCell>
-                            <div className="flex space-x-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleRestore(entity.id)}
-                                className="flex items-center gap-1"
-                              >
-                                <RotateCcw className="h-3 w-3" />
-                                Restore
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => {
-                                  setSelectedEntity({
-                                    type: 'student',
-                                    name: `${entity.firstName} ${entity.lastName}`,
-                                    id: entity.id
-                                  });
-                                  setShowDeletionDialog(true);
-                                }}
-                                className="flex items-center gap-1"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                                Delete
-                              </Button>
-                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleRestore(entity.id)}
+                              className="flex items-center gap-1"
+                            >
+                              <RotateCcw className="h-3 w-3" />
+                              Restore
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -254,7 +219,7 @@ export default function ArchivePage() {
                 Archived Teachers
               </CardTitle>
               <CardDescription>
-                Teachers who have been archived and can be restored or permanently deleted
+                Teachers who have been archived and can be restored
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -306,33 +271,15 @@ export default function ArchivePage() {
                             )}
                           </TableCell>
                           <TableCell>
-                            <div className="flex space-x-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleRestore(entity.id)}
-                                className="flex items-center gap-1"
-                              >
-                                <RotateCcw className="h-3 w-3" />
-                                Restore
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => {
-                                  setSelectedEntity({
-                                    type: 'teacher',
-                                    name: `${entity.firstName} ${entity.lastName}`,
-                                    id: entity.id
-                                  });
-                                  setShowDeletionDialog(true);
-                                }}
-                                className="flex items-center gap-1"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                                Delete
-                              </Button>
-                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleRestore(entity.id)}
+                              className="flex items-center gap-1"
+                            >
+                              <RotateCcw className="h-3 w-3" />
+                              Restore
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -374,24 +321,6 @@ export default function ArchivePage() {
         </div>
       )}
 
-      {/* Deletion Dialog */}
-      {selectedEntity && (
-        <ProgressiveDeletionDialog
-          isOpen={showDeletionDialog}
-          onClose={() => {
-            setShowDeletionDialog(false);
-            setSelectedEntity(null);
-          }}
-          entityType={selectedEntity.type}
-          entityName={selectedEntity.name}
-          entityId={selectedEntity.id}
-          onConfirm={async (options) => {
-            if (options.type === 'HARD_DELETE') {
-              await handlePermanentDelete(selectedEntity.id);
-            }
-          }}
-        />
-      )}
     </div>
     </DashboardLayout>
   );
