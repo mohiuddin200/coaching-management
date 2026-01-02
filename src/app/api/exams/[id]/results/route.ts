@@ -109,7 +109,7 @@ export async function POST(
           },
         },
         update: {
-          marksObtained: marksObtained ? parseFloat(marksObtained) : null,
+          marksObtained: marksObtained ?? null,
           grade,
           remarks,
           attended: attended ?? false,
@@ -120,7 +120,7 @@ export async function POST(
         create: {
           examId,
           studentId,
-          marksObtained: marksObtained ? parseFloat(marksObtained) : null,
+          marksObtained: marksObtained ?? null,
           grade,
           remarks,
           attended: attended ?? false,

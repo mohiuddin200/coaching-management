@@ -117,7 +117,6 @@ export default function ArchivePage() {
   );
 
   const currentData = activeTab === 'students' ? filteredStudents : filteredTeachers;
-  const currentEntity = activeTab === 'students' ? 'student' : 'teacher';
 
   return (
     <DashboardLayout>

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileText, ClipboardCheck, Calendar, TrendingUp } from "lucide-react";
+import { FileText, ClipboardCheck, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 

@@ -151,7 +151,7 @@ export function Step2FamilyPersonal({ form }: Step2DetailedProfileProps) {
           name="fatherName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Father's Name</FormLabel>
+              <FormLabel>Father&apos;s Name</FormLabel>
               <FormControl>
                 <Input placeholder="Father's full name" {...field} />
               </FormControl>
@@ -165,7 +165,7 @@ export function Step2FamilyPersonal({ form }: Step2DetailedProfileProps) {
           name="motherName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mother's Name</FormLabel>
+              <FormLabel>Mother&apos;s Name</FormLabel>
               <FormControl>
                 <Input placeholder="Mother's full name" {...field} />
               </FormControl>

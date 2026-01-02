@@ -1,19 +1,17 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
-  BookOpen,
   LayoutDashboard,
   Settings2,
   Users,
   UserCheck,
-  GraduationCap,
   LifeBuoy,
   School,
   LogOut,
   Wallet,
   FileText,
-} from "lucide-react"
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -23,11 +21,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { NavMain } from "./ nav-main"
-import { NavSecondary } from "./nav-secondary"
-import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/sidebar";
+import { NavMain } from "./ nav-main";
+import { NavSecondary } from "./nav-secondary";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const data = {
   navMain: [
@@ -37,29 +36,32 @@ const data = {
       icon: LayoutDashboard,
     },
     {
-      title: "Students",
-      url: "/students",
-      icon: GraduationCap,
-    },
-    {
-      title: "Teachers",
-      url: "/teachers",
-      icon: Users,
-    },
-    {
-      title: "Users",
+      title: "People",
       url: "/users",
       icon: Users,
+      items: [
+        {
+          title: "Students",
+          url: "/students",
+        },
+        { title: "Teachers", url: "/teachers" },
+        // { title: "Team Members", url: "/admins" },
+      ],
     },
     {
-      title: "Schedule",
-      url: "/classes",
-      icon: BookOpen,
-    },
-    {
-      title: "Class & Subjects",
+      title: "Class Management",
       url: "/levels",
       icon: School,
+      items: [
+        {
+          title: "Class & Subjects",
+          url: "/levels",
+        },
+        {
+          title: "Schedule",
+          url: "/classes",
+        },
+      ],
     },
     {
       title: "Attendance",
@@ -98,7 +100,7 @@ const data = {
         },
       ],
     },
-  
+
     {
       title: "Settings",
       url: "/settings",
@@ -122,16 +124,16 @@ const data = {
       icon: LifeBuoy,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/signin')
-  }
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/signin");
+  };
 
   return (
     <Sidebar
@@ -142,15 +144,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/dashboard">
+              <Link href="/dashboard">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <School className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Coaching Management</span>
+                  <span className="truncate font-medium">
+                    Coaching Management
+                  </span>
                   <span className="truncate text-xs">Institute Portal</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -170,5 +174,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

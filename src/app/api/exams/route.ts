@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
-import type { ExamStatus, ExamType } from "@/generated/enums";
+import { ExamStatus, ExamType } from "@/generated/enums";
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
         ...(levelId && { levelId }),
         ...(subjectId && { subjectId }),
         ...(teacherId && { teacherId }),
-        ...(status && { status: status as any }),
-        ...(type && { type: type as any }),
+        ...(status && { status: status as ExamStatus }),
+        ...(type && { type: type as ExamType }),
         ...(fromDate && {
           examDate: {
             gte: new Date(fromDate),

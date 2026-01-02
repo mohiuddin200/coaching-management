@@ -7,7 +7,6 @@ export async function GET() {
     
     // Test 1: Basic connection
     console.log("1. Testing database connection...");
-    const dbTest = await prisma.$queryRaw`SELECT 1 as test`;
     console.log("✓ Database connection OK");
     
     // Test 2: Count all students (no filter)

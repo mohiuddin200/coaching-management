@@ -37,7 +37,9 @@ interface Exam {
   type: string;
   examDate: string;
   totalMarks: number;
+  passingMarks?: number;
   status: string;
+  levelId: string;
   subject: {
     id: string;
     name: string;
@@ -53,7 +55,7 @@ interface Exam {
     lastName: string;
   };
   questionPaperUrl?: string;
-  results: Array<{
+  results?: Array<{
     id: string;
     marksObtained: number | null;
     attended: boolean;
@@ -90,10 +92,12 @@ export function ExamsList({ refreshTrigger }: ExamsListProps) {
   useEffect(() => {
     fetchExams();
     fetchLevels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshTrigger]);
 
   useEffect(() => {
     fetchExams();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   useEffect(() => {
@@ -196,10 +200,10 @@ export function ExamsList({ refreshTrigger }: ExamsListProps) {
   };
 
   const getGradingProgress = (exam: Exam) => {
-    const totalStudents = exam.results.length;
+    const totalStudents = exam.results?.length || 0;
     if (totalStudents === 0) return { graded: 0, total: 0, percentage: 0 };
 
-    const graded = exam.results.filter(
+    const graded = exam.results!.filter(
       (r) => r.marksObtained !== null || !r.attended
     ).length;
     const percentage = Math.round((graded / totalStudents) * 100);
@@ -385,7 +389,16 @@ export function ExamsList({ refreshTrigger }: ExamsListProps) {
                               <ExternalLink className="w-4 h-4" />
                             </Button>
                           )}
-                          <GradeExamDialog exam={exam} onGraded={fetchExams} />
+                          <GradeExamDialog 
+                            exam={{
+                              id: exam.id,
+                              name: exam.name,
+                              totalMarks: exam.totalMarks,
+                              passingMarks: exam.passingMarks,
+                              levelId: exam.levelId,
+                            }} 
+                            onGraded={fetchExams} 
+                          />
                           <Button
                             variant="ghost"
                             size="sm"
