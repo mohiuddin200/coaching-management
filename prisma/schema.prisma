@@ -52,6 +52,27 @@ model Teacher {
   state                    String?
   streetAddress            String?
   universityName           String?
+  // Family Information
+  fatherName               String?          @map("father_name")
+  motherName               String?          @map("mother_name")
+  // Address Information
+  presentAddress           String?          @map("present_address")
+  permanentAddress         String?          @map("permanent_address")
+  // Educational & Professional Background
+  previousInstitute        String?          @map("previous_institute")
+  experience               Float?           @default(0) @map("experience")
+  passedSchool             String?          @map("passed_school")
+  passedCollege            String?          @map("passed_college")
+  reference                String?
+  // Image URLs
+  nidImageUrl              String?          @map("nid_image_url")
+  teacherPhotoUrl          String?          @map("teacher_photo_url")
+  universityIdCardUrl      String?          @map("university_id_card_url")
+  // Social Media Links
+  facebookLink             String?          @map("facebook_link")
+  instagramLink            String?          @map("instagram_link")
+  linkedinLink             String?          @map("linkedin_link")
+  // Soft Delete
   isDeleted                Boolean          @default(false) @map("is_deleted")
   deletedAt                DateTime?        @map("deleted_at")
   deletedBy                String?          @map("deleted_by")

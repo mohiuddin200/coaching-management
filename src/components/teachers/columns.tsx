@@ -49,6 +49,31 @@ export type Teacher = {
   // Finance
   salary?: number | null;
   paymentType?: "SALARIED" | "HOURLY" | "PER_CLASS" | null;
+
+  // Family & Personal Details
+  fatherName?: string | null;
+  motherName?: string | null;
+
+  // Education & Experience
+  passedSchool?: string | null;
+  passedCollege?: string | null;
+  previousInstitute?: string | null;
+  experience?: number | null;
+  reference?: string | null;
+
+  // Address
+  presentAddress?: string | null;
+  permanentAddress?: string | null;
+
+  // Document URLs
+  nidImageUrl?: string | null;
+  teacherPhotoUrl?: string | null;
+  universityIdCardUrl?: string | null;
+
+  // Social Links
+  facebookLink?: string | null;
+  instagramLink?: string | null;
+  linkedinLink?: string | null;
 };
 
 export const createColumns = (

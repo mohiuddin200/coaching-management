@@ -19,35 +19,47 @@ import { Plus } from "lucide-react"
 import { toast } from "sonner"
 import { Teacher } from "./columns"
 import { Step1BasicInfo } from "./form-steps/Step1BasicInfo"
-import { Step2DetailedProfile } from "./form-steps/Step2DetailedProfile"
-import { Step3ContactFinance } from "./form-steps/Step3ContactFinance"
+import { Step2FamilyPersonal } from "./form-steps/Step2DetailedProfile"
+import { Step3ContactAddress } from "./form-steps/Step3ContactFinance"
+import { Step4EducationBackground } from "./form-steps/Step4EducationBackground"
+import { Step5DocumentsAndSocial } from "./form-steps/Step5DocumentsAndSocial"
 
 const GenderEnum = z.enum(["Male", "Female", "Other"]);
 const BloodGroupEnum = z.enum(["A_Positive", "A_Negative", "B_Positive", "B_Negative", "AB_Positive", "AB_Negative", "O_Positive", "O_Negative"]);
 const PaymentTypeEnum = z.enum(["SALARIED", "HOURLY", "PER_CLASS"]);
 
 const teacherFormSchema = z.object({
-  // Step 1
+  // Step 1 - Basic Information
   firstName: z.string().min(1, "First name is required").max(100),
   lastName: z.string().min(1, "Last name is required").max(100),
   email: z.string().email("Invalid email address").optional().or(z.literal("")),
   phoneNumber: z.string().min(1, "Phone number is required"),
   subject: z.string().optional(),
-  qualifications: z.string().optional(),
   status: z.enum(["Active", "Inactive"]),
 
-  // Step 2
+  // Step 2 - Family & Personal Details
   gender: GenderEnum.optional(),
   dateOfBirth: z.date().optional(),
-  nid: z.string().optional(),
+  fatherName: z.string().optional(),
+  motherName: z.string().optional(),
   bloodGroup: BloodGroupEnum.optional(),
   nationality: z.string().optional(),
   religion: z.string().optional(),
+
+  // Step 3 - Educational & Professional Background
+  qualifications: z.string().optional(),
   universityName: z.string().optional(),
   cgpa: z.coerce.number().optional(),
+  passedSchool: z.string().optional(),
+  passedCollege: z.string().optional(),
+  previousInstitute: z.string().optional(),
+  experience: z.coerce.number().optional(),
+  reference: z.string().optional(),
 
-  // Step 3
+  // Step 4 - Contact & Address
   streetAddress: z.string().optional(),
+  presentAddress: z.string().optional(),
+  permanentAddress: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
   postalCode: z.string().optional(),
@@ -55,8 +67,17 @@ const teacherFormSchema = z.object({
   emergencyContactName: z.string().optional(),
   emergencyContactPhone: z.string().optional(),
   emergencyContactRelation: z.string().optional(),
+
+  // Step 5 - Finance & Documents
   salary: z.coerce.number().optional(),
   paymentType: PaymentTypeEnum.optional(),
+  nid: z.string().optional(),
+  nidImageUrl: z.string().optional(),
+  teacherPhotoUrl: z.string().optional(),
+  universityIdCardUrl: z.string().optional(),
+  facebookLink: z.string().optional(),
+  instagramLink: z.string().optional(),
+  linkedinLink: z.string().optional(),
 })
 
 type TeacherFormValues = z.infer<typeof teacherFormSchema>
@@ -75,35 +96,47 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
 
   const STEPS = [
     "Basic Information",
-    "Detailed Profile",
-    "Contact & Finance",
+    "Family & Personal",
+    "Contact & Address",
+    "Education & Experience",
+    "Documents & Finance",
   ]
 
   const form = useForm<TeacherFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(teacherFormSchema) as any,
     defaultValues: {
-      // Step 1
+      // Step 1 - Basic Information
       firstName: teacher?.firstName || "",
       lastName: teacher?.lastName || "",
       email: teacher?.email || "",
       phoneNumber: teacher?.phoneNumber || "",
       subject: teacher?.subject || "",
-      qualifications: teacher?.qualifications || "",
       status: teacher?.status || "Active",
 
-      // Step 2
+      // Step 2 - Family & Personal Details
       gender: teacher?.gender || undefined,
       dateOfBirth: teacher?.dateOfBirth ? new Date(teacher.dateOfBirth) : undefined,
-      nid: teacher?.nid || "",
+      fatherName: teacher?.fatherName || "",
+      motherName: teacher?.motherName || "",
       bloodGroup: teacher?.bloodGroup || undefined,
       nationality: teacher?.nationality || "",
       religion: teacher?.religion || "",
+
+      // Step 3 - Educational & Professional Background
+      qualifications: teacher?.qualifications || "",
       universityName: teacher?.universityName || "",
       cgpa: teacher?.cgpa || undefined,
+      passedSchool: teacher?.passedSchool || "",
+      passedCollege: teacher?.passedCollege || "",
+      previousInstitute: teacher?.previousInstitute || "",
+      experience: teacher?.experience || undefined,
+      reference: teacher?.reference || "",
 
-      // Step 3
+      // Step 4 - Contact & Address
       streetAddress: teacher?.streetAddress || "",
+      presentAddress: teacher?.presentAddress || "",
+      permanentAddress: teacher?.permanentAddress || "",
       city: teacher?.city || "",
       state: teacher?.state || "",
       postalCode: teacher?.postalCode || "",
@@ -111,35 +144,54 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
       emergencyContactName: teacher?.emergencyContactName || "",
       emergencyContactPhone: teacher?.emergencyContactPhone || "",
       emergencyContactRelation: teacher?.emergencyContactRelation || "",
+
+      // Step 5 - Finance & Documents
       salary: teacher?.salary || undefined,
       paymentType: teacher?.paymentType || undefined,
+      nid: teacher?.nid || "",
+      nidImageUrl: teacher?.nidImageUrl || "",
+      teacherPhotoUrl: teacher?.teacherPhotoUrl || "",
+      universityIdCardUrl: teacher?.universityIdCardUrl || "",
+      facebookLink: teacher?.facebookLink || "",
+      instagramLink: teacher?.instagramLink || "",
+      linkedinLink: teacher?.linkedinLink || "",
     },
   })
 
   useEffect(() => {
     if (open) {
       form.reset({
-        // Step 1
+        // Step 1 - Basic Information
         firstName: teacher?.firstName || "",
         lastName: teacher?.lastName || "",
         email: teacher?.email || "",
         phoneNumber: teacher?.phoneNumber || "",
         subject: teacher?.subject || "",
-        qualifications: teacher?.qualifications || "",
         status: teacher?.status || "Active",
 
-        // Step 2
+        // Step 2 - Family & Personal Details
         gender: teacher?.gender || undefined,
         dateOfBirth: teacher?.dateOfBirth ? new Date(teacher.dateOfBirth) : undefined,
-        nid: teacher?.nid || "",
+        fatherName: teacher?.fatherName || "",
+        motherName: teacher?.motherName || "",
         bloodGroup: teacher?.bloodGroup || undefined,
         nationality: teacher?.nationality || "",
         religion: teacher?.religion || "",
+
+        // Step 3 - Educational & Professional Background
+        qualifications: teacher?.qualifications || "",
         universityName: teacher?.universityName || "",
         cgpa: teacher?.cgpa || undefined,
+        passedSchool: teacher?.passedSchool || "",
+        passedCollege: teacher?.passedCollege || "",
+        previousInstitute: teacher?.previousInstitute || "",
+        experience: teacher?.experience || undefined,
+        reference: teacher?.reference || "",
 
-        // Step 3
+        // Step 4 - Contact & Address
         streetAddress: teacher?.streetAddress || "",
+        presentAddress: teacher?.presentAddress || "",
+        permanentAddress: teacher?.permanentAddress || "",
         city: teacher?.city || "",
         state: teacher?.state || "",
         postalCode: teacher?.postalCode || "",
@@ -147,8 +199,17 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
         emergencyContactName: teacher?.emergencyContactName || "",
         emergencyContactPhone: teacher?.emergencyContactPhone || "",
         emergencyContactRelation: teacher?.emergencyContactRelation || "",
+
+        // Step 5 - Finance & Documents
         salary: teacher?.salary || undefined,
         paymentType: teacher?.paymentType || undefined,
+        nid: teacher?.nid || "",
+        nidImageUrl: teacher?.nidImageUrl || "",
+        teacherPhotoUrl: teacher?.teacherPhotoUrl || "",
+        universityIdCardUrl: teacher?.universityIdCardUrl || "",
+        facebookLink: teacher?.facebookLink || "",
+        instagramLink: teacher?.instagramLink || "",
+        linkedinLink: teacher?.linkedinLink || "",
       })
       setCurrentStep(0)
     }
@@ -262,8 +323,10 @@ export function TeacherDialog({ teacher, trigger, onSuccess }: TeacherDialogProp
             </div>
             
             {currentStep === 0 && <Step1BasicInfo form={form} />}
-            {currentStep === 1 && <Step2DetailedProfile form={form} />}
-            {currentStep === 2 && <Step3ContactFinance form={form} />}
+            {currentStep === 1 && <Step2FamilyPersonal form={form} />}
+            {currentStep === 2 && <Step3ContactAddress form={form} />}
+            {currentStep === 3 && <Step4EducationBackground form={form} />}
+            {currentStep === 4 && <Step5DocumentsAndSocial form={form} />}
 
             <DialogFooter className="flex justify-between pt-4">
               {currentStep > 0 ? (

@@ -8,13 +8,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { UseFormReturn } from "react-hook-form"
 
 interface Step3ContactFinanceProps {
@@ -22,7 +15,7 @@ interface Step3ContactFinanceProps {
   form: UseFormReturn<any>
 }
 
-export function Step3ContactFinance({ form }: Step3ContactFinanceProps) {
+export function Step3ContactAddress({ form }: Step3ContactFinanceProps) {
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-medium">Address Details</h3>
@@ -39,6 +32,35 @@ export function Step3ContactFinance({ form }: Step3ContactFinanceProps) {
           </FormItem>
         )}
       />
+
+      <FormField
+        control={form.control}
+        name="presentAddress"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Present Address</FormLabel>
+            <FormControl>
+              <Input placeholder="Current residence address" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="permanentAddress"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Permanent Address</FormLabel>
+            <FormControl>
+              <Input placeholder="Permanent residence address" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <div className="grid grid-cols-2 gap-4">
         <FormField
           control={form.control}
@@ -67,6 +89,7 @@ export function Step3ContactFinance({ form }: Step3ContactFinanceProps) {
           )}
         />
       </div>
+
       <div className="grid grid-cols-2 gap-4">
         <FormField
           control={form.control}
@@ -110,6 +133,7 @@ export function Step3ContactFinance({ form }: Step3ContactFinanceProps) {
           </FormItem>
         )}
       />
+
       <div className="grid grid-cols-2 gap-4">
         <FormField
           control={form.control}
@@ -133,45 +157,6 @@ export function Step3ContactFinance({ form }: Step3ContactFinanceProps) {
               <FormControl>
                 <Input placeholder="Spouse, Sibling, etc." {...field} />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <h3 className="text-lg font-medium pt-4">Financial Details</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="salary"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Salary</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="50000" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="paymentType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Payment Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select payment type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="SALARIED">Salaried</SelectItem>
-                  <SelectItem value="HOURLY">Hourly</SelectItem>
-                  <SelectItem value="PER_CLASS">Per Class</SelectItem>
-                </SelectContent>
-              </Select>
               <FormMessage />
             </FormItem>
           )}

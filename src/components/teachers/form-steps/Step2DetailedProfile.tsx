@@ -32,7 +32,7 @@ interface Step2DetailedProfileProps {
   form: UseFormReturn<any>
 }
 
-export function Step2DetailedProfile({ form }: Step2DetailedProfileProps) {
+export function Step2FamilyPersonal({ form }: Step2DetailedProfileProps) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
@@ -144,6 +144,38 @@ export function Step2DetailedProfile({ form }: Step2DetailedProfileProps) {
         )}
       />
 
+      <h3 className="text-lg font-medium">Family Information</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <FormField
+          control={form.control}
+          name="fatherName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Father's Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Father's full name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="motherName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mother's Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Mother's full name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <h3 className="text-lg font-medium pt-4">Other Details</h3>
       <div className="grid grid-cols-2 gap-4">
         <FormField
           control={form.control}
@@ -172,34 +204,6 @@ export function Step2DetailedProfile({ form }: Step2DetailedProfileProps) {
           )}
         />
       </div>
-
-      <FormField
-        control={form.control}
-        name="universityName"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>University Name</FormLabel>
-            <FormControl>
-              <Input placeholder="e.g. Harvard University" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="cgpa"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>CGPA</FormLabel>
-            <FormControl>
-              <Input type="number" placeholder="e.g. 3.8" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
     </div>
   )
 }

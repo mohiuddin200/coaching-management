@@ -109,20 +109,6 @@ export function Step1BasicInfo({ form }: Step1BasicInfoProps) {
 
       <FormField
         control={form.control}
-        name="qualifications"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Qualifications</FormLabel>
-            <FormControl>
-              <Input placeholder="B.Ed, M.Sc, etc." {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
         name="status"
         render={({ field }) => (
           <FormItem>

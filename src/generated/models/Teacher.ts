@@ -29,11 +29,13 @@ export type AggregateTeacher = {
 export type TeacherAvgAggregateOutputType = {
   cgpa: number | null
   salary: number | null
+  experience: number | null
 }
 
 export type TeacherSumAggregateOutputType = {
   cgpa: number | null
   salary: number | null
+  experience: number | null
 }
 
 export type TeacherMinAggregateOutputType = {
@@ -70,6 +72,21 @@ export type TeacherMinAggregateOutputType = {
   state: string | null
   streetAddress: string | null
   universityName: string | null
+  fatherName: string | null
+  motherName: string | null
+  presentAddress: string | null
+  permanentAddress: string | null
+  previousInstitute: string | null
+  experience: number | null
+  passedSchool: string | null
+  passedCollege: string | null
+  reference: string | null
+  nidImageUrl: string | null
+  teacherPhotoUrl: string | null
+  universityIdCardUrl: string | null
+  facebookLink: string | null
+  instagramLink: string | null
+  linkedinLink: string | null
   isDeleted: boolean | null
   deletedAt: Date | null
   deletedBy: string | null
@@ -110,6 +127,21 @@ export type TeacherMaxAggregateOutputType = {
   state: string | null
   streetAddress: string | null
   universityName: string | null
+  fatherName: string | null
+  motherName: string | null
+  presentAddress: string | null
+  permanentAddress: string | null
+  previousInstitute: string | null
+  experience: number | null
+  passedSchool: string | null
+  passedCollege: string | null
+  reference: string | null
+  nidImageUrl: string | null
+  teacherPhotoUrl: string | null
+  universityIdCardUrl: string | null
+  facebookLink: string | null
+  instagramLink: string | null
+  linkedinLink: string | null
   isDeleted: boolean | null
   deletedAt: Date | null
   deletedBy: string | null
@@ -150,6 +182,21 @@ export type TeacherCountAggregateOutputType = {
   state: number
   streetAddress: number
   universityName: number
+  fatherName: number
+  motherName: number
+  presentAddress: number
+  permanentAddress: number
+  previousInstitute: number
+  experience: number
+  passedSchool: number
+  passedCollege: number
+  reference: number
+  nidImageUrl: number
+  teacherPhotoUrl: number
+  universityIdCardUrl: number
+  facebookLink: number
+  instagramLink: number
+  linkedinLink: number
   isDeleted: number
   deletedAt: number
   deletedBy: number
@@ -161,11 +208,13 @@ export type TeacherCountAggregateOutputType = {
 export type TeacherAvgAggregateInputType = {
   cgpa?: true
   salary?: true
+  experience?: true
 }
 
 export type TeacherSumAggregateInputType = {
   cgpa?: true
   salary?: true
+  experience?: true
 }
 
 export type TeacherMinAggregateInputType = {
@@ -202,6 +251,21 @@ export type TeacherMinAggregateInputType = {
   state?: true
   streetAddress?: true
   universityName?: true
+  fatherName?: true
+  motherName?: true
+  presentAddress?: true
+  permanentAddress?: true
+  previousInstitute?: true
+  experience?: true
+  passedSchool?: true
+  passedCollege?: true
+  reference?: true
+  nidImageUrl?: true
+  teacherPhotoUrl?: true
+  universityIdCardUrl?: true
+  facebookLink?: true
+  instagramLink?: true
+  linkedinLink?: true
   isDeleted?: true
   deletedAt?: true
   deletedBy?: true
@@ -242,6 +306,21 @@ export type TeacherMaxAggregateInputType = {
   state?: true
   streetAddress?: true
   universityName?: true
+  fatherName?: true
+  motherName?: true
+  presentAddress?: true
+  permanentAddress?: true
+  previousInstitute?: true
+  experience?: true
+  passedSchool?: true
+  passedCollege?: true
+  reference?: true
+  nidImageUrl?: true
+  teacherPhotoUrl?: true
+  universityIdCardUrl?: true
+  facebookLink?: true
+  instagramLink?: true
+  linkedinLink?: true
   isDeleted?: true
   deletedAt?: true
   deletedBy?: true
@@ -282,6 +361,21 @@ export type TeacherCountAggregateInputType = {
   state?: true
   streetAddress?: true
   universityName?: true
+  fatherName?: true
+  motherName?: true
+  presentAddress?: true
+  permanentAddress?: true
+  previousInstitute?: true
+  experience?: true
+  passedSchool?: true
+  passedCollege?: true
+  reference?: true
+  nidImageUrl?: true
+  teacherPhotoUrl?: true
+  universityIdCardUrl?: true
+  facebookLink?: true
+  instagramLink?: true
+  linkedinLink?: true
   isDeleted?: true
   deletedAt?: true
   deletedBy?: true
@@ -409,6 +503,21 @@ export type TeacherGroupByOutputType = {
   state: string | null
   streetAddress: string | null
   universityName: string | null
+  fatherName: string | null
+  motherName: string | null
+  presentAddress: string | null
+  permanentAddress: string | null
+  previousInstitute: string | null
+  experience: number | null
+  passedSchool: string | null
+  passedCollege: string | null
+  reference: string | null
+  nidImageUrl: string | null
+  teacherPhotoUrl: string | null
+  universityIdCardUrl: string | null
+  facebookLink: string | null
+  instagramLink: string | null
+  linkedinLink: string | null
   isDeleted: boolean
   deletedAt: Date | null
   deletedBy: string | null
@@ -472,6 +581,21 @@ export type TeacherWhereInput = {
   state?: Prisma.StringNullableFilter<"Teacher"> | string | null
   streetAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
   universityName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  fatherName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  motherName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  presentAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  permanentAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  previousInstitute?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  experience?: Prisma.FloatNullableFilter<"Teacher"> | number | null
+  passedSchool?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  passedCollege?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  reference?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  nidImageUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  teacherPhotoUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  universityIdCardUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  facebookLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  instagramLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  linkedinLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
   isDeleted?: Prisma.BoolFilter<"Teacher"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Teacher"> | Date | string | null
   deletedBy?: Prisma.StringNullableFilter<"Teacher"> | string | null
@@ -516,6 +640,21 @@ export type TeacherOrderByWithRelationInput = {
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   streetAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   universityName?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatherName?: Prisma.SortOrderInput | Prisma.SortOrder
+  motherName?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  previousInstitute?: Prisma.SortOrderInput | Prisma.SortOrder
+  experience?: Prisma.SortOrderInput | Prisma.SortOrder
+  passedSchool?: Prisma.SortOrderInput | Prisma.SortOrder
+  passedCollege?: Prisma.SortOrderInput | Prisma.SortOrder
+  reference?: Prisma.SortOrderInput | Prisma.SortOrder
+  nidImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  teacherPhotoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  universityIdCardUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  facebookLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  instagramLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  linkedinLink?: Prisma.SortOrderInput | Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -563,6 +702,21 @@ export type TeacherWhereUniqueInput = Prisma.AtLeast<{
   state?: Prisma.StringNullableFilter<"Teacher"> | string | null
   streetAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
   universityName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  fatherName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  motherName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  presentAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  permanentAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  previousInstitute?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  experience?: Prisma.FloatNullableFilter<"Teacher"> | number | null
+  passedSchool?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  passedCollege?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  reference?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  nidImageUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  teacherPhotoUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  universityIdCardUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  facebookLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  instagramLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  linkedinLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
   isDeleted?: Prisma.BoolFilter<"Teacher"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Teacher"> | Date | string | null
   deletedBy?: Prisma.StringNullableFilter<"Teacher"> | string | null
@@ -607,6 +761,21 @@ export type TeacherOrderByWithAggregationInput = {
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   streetAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   universityName?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatherName?: Prisma.SortOrderInput | Prisma.SortOrder
+  motherName?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  previousInstitute?: Prisma.SortOrderInput | Prisma.SortOrder
+  experience?: Prisma.SortOrderInput | Prisma.SortOrder
+  passedSchool?: Prisma.SortOrderInput | Prisma.SortOrder
+  passedCollege?: Prisma.SortOrderInput | Prisma.SortOrder
+  reference?: Prisma.SortOrderInput | Prisma.SortOrder
+  nidImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  teacherPhotoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  universityIdCardUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  facebookLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  instagramLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  linkedinLink?: Prisma.SortOrderInput | Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -655,6 +824,21 @@ export type TeacherScalarWhereWithAggregatesInput = {
   state?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
   streetAddress?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
   universityName?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  fatherName?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  motherName?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  presentAddress?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  permanentAddress?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  previousInstitute?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  experience?: Prisma.FloatNullableWithAggregatesFilter<"Teacher"> | number | null
+  passedSchool?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  passedCollege?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  reference?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  nidImageUrl?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  teacherPhotoUrl?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  universityIdCardUrl?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  facebookLink?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  instagramLink?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  linkedinLink?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
   isDeleted?: Prisma.BoolWithAggregatesFilter<"Teacher"> | boolean
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Teacher"> | Date | string | null
   deletedBy?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
@@ -694,6 +878,21 @@ export type TeacherCreateInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -738,6 +937,21 @@ export type TeacherUncheckedCreateInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -780,6 +994,21 @@ export type TeacherUpdateInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -824,6 +1053,21 @@ export type TeacherUncheckedUpdateInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -867,6 +1111,21 @@ export type TeacherCreateManyInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -906,6 +1165,21 @@ export type TeacherUpdateManyMutationInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -946,6 +1220,21 @@ export type TeacherUncheckedUpdateManyInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -991,6 +1280,21 @@ export type TeacherCountOrderByAggregateInput = {
   state?: Prisma.SortOrder
   streetAddress?: Prisma.SortOrder
   universityName?: Prisma.SortOrder
+  fatherName?: Prisma.SortOrder
+  motherName?: Prisma.SortOrder
+  presentAddress?: Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrder
+  previousInstitute?: Prisma.SortOrder
+  experience?: Prisma.SortOrder
+  passedSchool?: Prisma.SortOrder
+  passedCollege?: Prisma.SortOrder
+  reference?: Prisma.SortOrder
+  nidImageUrl?: Prisma.SortOrder
+  teacherPhotoUrl?: Prisma.SortOrder
+  universityIdCardUrl?: Prisma.SortOrder
+  facebookLink?: Prisma.SortOrder
+  instagramLink?: Prisma.SortOrder
+  linkedinLink?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   deletedBy?: Prisma.SortOrder
@@ -1000,6 +1304,7 @@ export type TeacherCountOrderByAggregateInput = {
 export type TeacherAvgOrderByAggregateInput = {
   cgpa?: Prisma.SortOrder
   salary?: Prisma.SortOrder
+  experience?: Prisma.SortOrder
 }
 
 export type TeacherMaxOrderByAggregateInput = {
@@ -1036,6 +1341,21 @@ export type TeacherMaxOrderByAggregateInput = {
   state?: Prisma.SortOrder
   streetAddress?: Prisma.SortOrder
   universityName?: Prisma.SortOrder
+  fatherName?: Prisma.SortOrder
+  motherName?: Prisma.SortOrder
+  presentAddress?: Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrder
+  previousInstitute?: Prisma.SortOrder
+  experience?: Prisma.SortOrder
+  passedSchool?: Prisma.SortOrder
+  passedCollege?: Prisma.SortOrder
+  reference?: Prisma.SortOrder
+  nidImageUrl?: Prisma.SortOrder
+  teacherPhotoUrl?: Prisma.SortOrder
+  universityIdCardUrl?: Prisma.SortOrder
+  facebookLink?: Prisma.SortOrder
+  instagramLink?: Prisma.SortOrder
+  linkedinLink?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   deletedBy?: Prisma.SortOrder
@@ -1076,6 +1396,21 @@ export type TeacherMinOrderByAggregateInput = {
   state?: Prisma.SortOrder
   streetAddress?: Prisma.SortOrder
   universityName?: Prisma.SortOrder
+  fatherName?: Prisma.SortOrder
+  motherName?: Prisma.SortOrder
+  presentAddress?: Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrder
+  previousInstitute?: Prisma.SortOrder
+  experience?: Prisma.SortOrder
+  passedSchool?: Prisma.SortOrder
+  passedCollege?: Prisma.SortOrder
+  reference?: Prisma.SortOrder
+  nidImageUrl?: Prisma.SortOrder
+  teacherPhotoUrl?: Prisma.SortOrder
+  universityIdCardUrl?: Prisma.SortOrder
+  facebookLink?: Prisma.SortOrder
+  instagramLink?: Prisma.SortOrder
+  linkedinLink?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   deletedBy?: Prisma.SortOrder
@@ -1085,6 +1420,7 @@ export type TeacherMinOrderByAggregateInput = {
 export type TeacherSumOrderByAggregateInput = {
   cgpa?: Prisma.SortOrder
   salary?: Prisma.SortOrder
+  experience?: Prisma.SortOrder
 }
 
 export type TeacherScalarRelationFilter = {
@@ -1239,6 +1575,21 @@ export type TeacherCreateWithoutUserInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -1281,6 +1632,21 @@ export type TeacherUncheckedCreateWithoutUserInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -1339,6 +1705,21 @@ export type TeacherUpdateWithoutUserInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1381,6 +1762,21 @@ export type TeacherUncheckedUpdateWithoutUserInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1423,6 +1819,21 @@ export type TeacherCreateWithoutClassSectionsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -1466,6 +1877,21 @@ export type TeacherUncheckedCreateWithoutClassSectionsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -1523,6 +1949,21 @@ export type TeacherUpdateWithoutClassSectionsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1566,6 +2007,21 @@ export type TeacherUncheckedUpdateWithoutClassSectionsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1607,6 +2063,21 @@ export type TeacherCreateWithoutPaymentsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -1650,6 +2121,21 @@ export type TeacherUncheckedCreateWithoutPaymentsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -1707,6 +2193,21 @@ export type TeacherUpdateWithoutPaymentsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1750,6 +2251,21 @@ export type TeacherUncheckedUpdateWithoutPaymentsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1791,6 +2307,21 @@ export type TeacherCreateWithoutExamsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -1834,6 +2365,21 @@ export type TeacherUncheckedCreateWithoutExamsInput = {
   state?: string | null
   streetAddress?: string | null
   universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
   isDeleted?: boolean
   deletedAt?: Date | string | null
   deletedBy?: string | null
@@ -1891,6 +2437,21 @@ export type TeacherUpdateWithoutExamsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1934,6 +2495,21 @@ export type TeacherUncheckedUpdateWithoutExamsInput = {
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2025,6 +2601,21 @@ export type TeacherSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   state?: boolean
   streetAddress?: boolean
   universityName?: boolean
+  fatherName?: boolean
+  motherName?: boolean
+  presentAddress?: boolean
+  permanentAddress?: boolean
+  previousInstitute?: boolean
+  experience?: boolean
+  passedSchool?: boolean
+  passedCollege?: boolean
+  reference?: boolean
+  nidImageUrl?: boolean
+  teacherPhotoUrl?: boolean
+  universityIdCardUrl?: boolean
+  facebookLink?: boolean
+  instagramLink?: boolean
+  linkedinLink?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
   deletedBy?: boolean
@@ -2070,6 +2661,21 @@ export type TeacherSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   state?: boolean
   streetAddress?: boolean
   universityName?: boolean
+  fatherName?: boolean
+  motherName?: boolean
+  presentAddress?: boolean
+  permanentAddress?: boolean
+  previousInstitute?: boolean
+  experience?: boolean
+  passedSchool?: boolean
+  passedCollege?: boolean
+  reference?: boolean
+  nidImageUrl?: boolean
+  teacherPhotoUrl?: boolean
+  universityIdCardUrl?: boolean
+  facebookLink?: boolean
+  instagramLink?: boolean
+  linkedinLink?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
   deletedBy?: boolean
@@ -2111,6 +2717,21 @@ export type TeacherSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   state?: boolean
   streetAddress?: boolean
   universityName?: boolean
+  fatherName?: boolean
+  motherName?: boolean
+  presentAddress?: boolean
+  permanentAddress?: boolean
+  previousInstitute?: boolean
+  experience?: boolean
+  passedSchool?: boolean
+  passedCollege?: boolean
+  reference?: boolean
+  nidImageUrl?: boolean
+  teacherPhotoUrl?: boolean
+  universityIdCardUrl?: boolean
+  facebookLink?: boolean
+  instagramLink?: boolean
+  linkedinLink?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
   deletedBy?: boolean
@@ -2152,13 +2773,28 @@ export type TeacherSelectScalar = {
   state?: boolean
   streetAddress?: boolean
   universityName?: boolean
+  fatherName?: boolean
+  motherName?: boolean
+  presentAddress?: boolean
+  permanentAddress?: boolean
+  previousInstitute?: boolean
+  experience?: boolean
+  passedSchool?: boolean
+  passedCollege?: boolean
+  reference?: boolean
+  nidImageUrl?: boolean
+  teacherPhotoUrl?: boolean
+  universityIdCardUrl?: boolean
+  facebookLink?: boolean
+  instagramLink?: boolean
+  linkedinLink?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
   deletedBy?: boolean
   deleteReason?: boolean
 }
 
-export type TeacherOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "subject" | "qualifications" | "joinDate" | "status" | "createdAt" | "updatedAt" | "userId" | "bloodGroup" | "cgpa" | "city" | "country" | "cv" | "dateOfBirth" | "emergencyContactName" | "emergencyContactPhone" | "emergencyContactRelation" | "gender" | "idProof" | "nationality" | "nid" | "paymentType" | "postalCode" | "profileImage" | "religion" | "salary" | "state" | "streetAddress" | "universityName" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason", ExtArgs["result"]["teacher"]>
+export type TeacherOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "subject" | "qualifications" | "joinDate" | "status" | "createdAt" | "updatedAt" | "userId" | "bloodGroup" | "cgpa" | "city" | "country" | "cv" | "dateOfBirth" | "emergencyContactName" | "emergencyContactPhone" | "emergencyContactRelation" | "gender" | "idProof" | "nationality" | "nid" | "paymentType" | "postalCode" | "profileImage" | "religion" | "salary" | "state" | "streetAddress" | "universityName" | "fatherName" | "motherName" | "presentAddress" | "permanentAddress" | "previousInstitute" | "experience" | "passedSchool" | "passedCollege" | "reference" | "nidImageUrl" | "teacherPhotoUrl" | "universityIdCardUrl" | "facebookLink" | "instagramLink" | "linkedinLink" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason", ExtArgs["result"]["teacher"]>
 export type TeacherInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   classSections?: boolean | Prisma.Teacher$classSectionsArgs<ExtArgs>
   payments?: boolean | Prisma.Teacher$paymentsArgs<ExtArgs>
@@ -2215,6 +2851,21 @@ export type $TeacherPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     state: string | null
     streetAddress: string | null
     universityName: string | null
+    fatherName: string | null
+    motherName: string | null
+    presentAddress: string | null
+    permanentAddress: string | null
+    previousInstitute: string | null
+    experience: number | null
+    passedSchool: string | null
+    passedCollege: string | null
+    reference: string | null
+    nidImageUrl: string | null
+    teacherPhotoUrl: string | null
+    universityIdCardUrl: string | null
+    facebookLink: string | null
+    instagramLink: string | null
+    linkedinLink: string | null
     isDeleted: boolean
     deletedAt: Date | null
     deletedBy: string | null
@@ -2679,6 +3330,21 @@ export interface TeacherFieldRefs {
   readonly state: Prisma.FieldRef<"Teacher", 'String'>
   readonly streetAddress: Prisma.FieldRef<"Teacher", 'String'>
   readonly universityName: Prisma.FieldRef<"Teacher", 'String'>
+  readonly fatherName: Prisma.FieldRef<"Teacher", 'String'>
+  readonly motherName: Prisma.FieldRef<"Teacher", 'String'>
+  readonly presentAddress: Prisma.FieldRef<"Teacher", 'String'>
+  readonly permanentAddress: Prisma.FieldRef<"Teacher", 'String'>
+  readonly previousInstitute: Prisma.FieldRef<"Teacher", 'String'>
+  readonly experience: Prisma.FieldRef<"Teacher", 'Float'>
+  readonly passedSchool: Prisma.FieldRef<"Teacher", 'String'>
+  readonly passedCollege: Prisma.FieldRef<"Teacher", 'String'>
+  readonly reference: Prisma.FieldRef<"Teacher", 'String'>
+  readonly nidImageUrl: Prisma.FieldRef<"Teacher", 'String'>
+  readonly teacherPhotoUrl: Prisma.FieldRef<"Teacher", 'String'>
+  readonly universityIdCardUrl: Prisma.FieldRef<"Teacher", 'String'>
+  readonly facebookLink: Prisma.FieldRef<"Teacher", 'String'>
+  readonly instagramLink: Prisma.FieldRef<"Teacher", 'String'>
+  readonly linkedinLink: Prisma.FieldRef<"Teacher", 'String'>
   readonly isDeleted: Prisma.FieldRef<"Teacher", 'Boolean'>
   readonly deletedAt: Prisma.FieldRef<"Teacher", 'DateTime'>
   readonly deletedBy: Prisma.FieldRef<"Teacher", 'String'>
