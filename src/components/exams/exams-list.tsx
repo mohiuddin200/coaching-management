@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Table,
   TableBody,
@@ -95,8 +95,13 @@ export function ExamsList({ refreshTrigger }: ExamsListProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshTrigger]);
 
+  // Debounced filter effect to prevent multiple rapid API calls
   useEffect(() => {
-    fetchExams();
+    const timeoutId = setTimeout(() => {
+      fetchExams();
+    }, 300); // 300ms debounce delay
+
+    return () => clearTimeout(timeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
@@ -105,10 +110,15 @@ export function ExamsList({ refreshTrigger }: ExamsListProps) {
       fetchSubjects(filters.levelId);
     } else {
       setSubjects([]);
+      // Reset subject filter when level changes
+      if (filters.subjectId !== "all") {
+        setFilters(prev => ({ ...prev, subjectId: "all" }));
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters.levelId]);
 
-  const fetchExams = async () => {
+  const fetchExams = useCallback(async () => {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams();
@@ -126,13 +136,14 @@ export function ExamsList({ refreshTrigger }: ExamsListProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
 
   const fetchLevels = async () => {
     try {
       const response = await fetch("/api/levels");
       const data = await response.json();
-      setLevels(data.data || []);
+      // API returns array directly, not wrapped in { data: ... }
+      setLevels(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching levels:", error);
     }
@@ -142,7 +153,8 @@ export function ExamsList({ refreshTrigger }: ExamsListProps) {
     try {
       const response = await fetch(`/api/subjects?levelId=${levelId}`);
       const data = await response.json();
-      setSubjects(data || []);
+      // API returns array directly, not wrapped in { data: ... }
+      setSubjects(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching subjects:", error);
     }
@@ -226,7 +238,7 @@ export function ExamsList({ refreshTrigger }: ExamsListProps) {
             <Select
               value={filters.levelId}
               onValueChange={(value) =>
-                setFilters({ ...filters, levelId: value, subjectId: "all" })
+                setFilters({ ...filters, levelId: value })
               }
             >
               <SelectTrigger>
