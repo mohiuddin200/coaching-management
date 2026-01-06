@@ -22,7 +22,10 @@ interface RelatedRecord {
 }
 
 interface DeletionOptions {
-  deleteReason: string;
+  type: 'SOFT_DELETE' | 'HARD_DELETE' | 'REASSIGN';
+  deleteReason?: string;
+  reassignTo?: string;
+  cascade?: boolean;
 }
 
 interface ProgressiveDeletionDialogProps {
@@ -30,8 +33,10 @@ interface ProgressiveDeletionDialogProps {
   onClose: () => void;
   entityType: 'student' | 'teacher';
   entityName: string;
+  entityId: string;
   relatedRecords?: RelatedRecord[];
   onConfirm: (options: DeletionOptions) => Promise<void>;
+  isLoading?: boolean;
 }
 
 export function ProgressiveDeletionDialog({
@@ -39,8 +44,10 @@ export function ProgressiveDeletionDialog({
   onClose,
   entityType,
   entityName,
+  entityId,
   relatedRecords = [],
   onConfirm,
+  isLoading = false,
 }: ProgressiveDeletionDialogProps) {
   const [deleteReason, setDeleteReason] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,7 +61,7 @@ export function ProgressiveDeletionDialog({
     setIsSubmitting(true);
 
     try {
-      await onConfirm({ deleteReason });
+      await onConfirm({ type: 'SOFT_DELETE', deleteReason });
       onClose();
       setDeleteReason('');
     } catch (error) {
@@ -145,14 +152,14 @@ export function ProgressiveDeletionDialog({
         </div>
 
         <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
+          <Button variant="outline" onClick={onClose} disabled={isSubmitting || isLoading}>
             Cancel
           </Button>
           <Button
             onClick={handleConfirm}
-            disabled={isSubmitting || !deleteReason}
+            disabled={isSubmitting || isLoading || !deleteReason}
           >
-            {isSubmitting ? 'Archiving...' : 'Archive'}
+            {isSubmitting || isLoading ? 'Archiving...' : 'Archive'}
           </Button>
         </DialogFooter>
       </DialogContent>
