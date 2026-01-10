@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { canAccessPage } from '@/lib/permissions/utils';
+import { SystemRole } from '@/lib/permissions/config';
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
@@ -37,8 +39,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/signin', request.url));
   }
 
+  // Get user's organization and role from metadata
+  const metadata = user.user_metadata || {};
+  const organizationId = metadata.organizationId;
+  const systemRole = metadata.systemRole as SystemRole;
+  const legacyRole = metadata.role as string; // For super admins created via script
+  const onboarded = metadata.onboarded;
+
+  // Check if user is a super admin (from metadata "role" field)
+  const userIsSuperAdmin = legacyRole === "SuperAdmin";
+
   // Check if user needs to complete onboarding
-  if (!user.user_metadata.onboarded && !pathname.startsWith('/auth/onboarding')) {
+  if (!onboarded && !pathname.startsWith('/auth/onboarding')) {
     return NextResponse.redirect(new URL('/auth/onboarding', request.url));
   }
 
@@ -47,16 +59,26 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // Protect admin routes - require Admin role
-  if (pathname.startsWith('/admin')) {
-    const userRole = user.user_metadata.role;
-    if (userRole !== 'Admin') {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
+  // If user is onboarded but doesn't have organization context, require re-onboarding
+  // This handles users created before multi-tenant implementation
+  // Exception: Super admins don't need organization context
+  if (onboarded && !userIsSuperAdmin && (!organizationId || !systemRole) && !pathname.startsWith('/auth/onboarding')) {
+    return NextResponse.redirect(new URL('/auth/onboarding', request.url));
+  }
+
+  // Check role-based page access
+  // Use metadata "role" for super admins, "systemRole" for others
+  const effectiveRole = userIsSuperAdmin ? ("SuperAdmin" as SystemRole) : systemRole;
+  if (effectiveRole && !canAccessPage(effectiveRole, pathname)) {
+    // Redirect to dashboard with error message
+    const dashboardUrl = new URL('/dashboard', request.url);
+    dashboardUrl.searchParams.set('error', 'insufficient_permissions');
+    return NextResponse.redirect(dashboardUrl);
   }
 
   return response;
 }
+
 
 export const config = {
   matcher: [

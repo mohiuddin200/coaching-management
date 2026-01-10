@@ -51,6 +51,7 @@ export type TeacherMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
+  organizationId: string | null
   bloodGroup: $Enums.BloodGroup | null
   cgpa: number | null
   city: string | null
@@ -106,6 +107,7 @@ export type TeacherMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
+  organizationId: string | null
   bloodGroup: $Enums.BloodGroup | null
   cgpa: number | null
   city: string | null
@@ -161,6 +163,7 @@ export type TeacherCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   userId: number
+  organizationId: number
   bloodGroup: number
   cgpa: number
   city: number
@@ -230,6 +233,7 @@ export type TeacherMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  organizationId?: true
   bloodGroup?: true
   cgpa?: true
   city?: true
@@ -285,6 +289,7 @@ export type TeacherMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  organizationId?: true
   bloodGroup?: true
   cgpa?: true
   city?: true
@@ -340,6 +345,7 @@ export type TeacherCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  organizationId?: true
   bloodGroup?: true
   cgpa?: true
   city?: true
@@ -482,6 +488,7 @@ export type TeacherGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   userId: string | null
+  organizationId: string
   bloodGroup: $Enums.BloodGroup | null
   cgpa: number | null
   city: string | null
@@ -560,6 +567,7 @@ export type TeacherWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Teacher"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Teacher"> | Date | string
   userId?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  organizationId?: Prisma.StringFilter<"Teacher"> | string
   bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"Teacher"> | $Enums.BloodGroup | null
   cgpa?: Prisma.FloatNullableFilter<"Teacher"> | number | null
   city?: Prisma.StringNullableFilter<"Teacher"> | string | null
@@ -604,6 +612,7 @@ export type TeacherWhereInput = {
   payments?: Prisma.TeacherPaymentListRelationFilter
   exams?: Prisma.ExamListRelationFilter
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }
 
 export type TeacherOrderByWithRelationInput = {
@@ -619,6 +628,7 @@ export type TeacherOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrderInput | Prisma.SortOrder
   cgpa?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -663,6 +673,7 @@ export type TeacherOrderByWithRelationInput = {
   payments?: Prisma.TeacherPaymentOrderByRelationAggregateInput
   exams?: Prisma.ExamOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type TeacherWhereUniqueInput = Prisma.AtLeast<{
@@ -682,6 +693,7 @@ export type TeacherWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumStatusFilter<"Teacher"> | $Enums.Status
   createdAt?: Prisma.DateTimeFilter<"Teacher"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Teacher"> | Date | string
+  organizationId?: Prisma.StringFilter<"Teacher"> | string
   bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"Teacher"> | $Enums.BloodGroup | null
   cgpa?: Prisma.FloatNullableFilter<"Teacher"> | number | null
   city?: Prisma.StringNullableFilter<"Teacher"> | string | null
@@ -725,6 +737,7 @@ export type TeacherWhereUniqueInput = Prisma.AtLeast<{
   payments?: Prisma.TeacherPaymentListRelationFilter
   exams?: Prisma.ExamListRelationFilter
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }, "id" | "userId" | "nid">
 
 export type TeacherOrderByWithAggregationInput = {
@@ -740,6 +753,7 @@ export type TeacherOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrderInput | Prisma.SortOrder
   cgpa?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -803,6 +817,7 @@ export type TeacherScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Teacher"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Teacher"> | Date | string
   userId?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
+  organizationId?: Prisma.StringWithAggregatesFilter<"Teacher"> | string
   bloodGroup?: Prisma.EnumBloodGroupNullableWithAggregatesFilter<"Teacher"> | $Enums.BloodGroup | null
   cgpa?: Prisma.FloatNullableWithAggregatesFilter<"Teacher"> | number | null
   city?: Prisma.StringNullableWithAggregatesFilter<"Teacher"> | string | null
@@ -901,6 +916,7 @@ export type TeacherCreateInput = {
   payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
   exams?: Prisma.ExamCreateNestedManyWithoutTeacherInput
   user?: Prisma.UserCreateNestedOneWithoutTeacherProfileInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutTeachersInput
 }
 
 export type TeacherUncheckedCreateInput = {
@@ -916,6 +932,7 @@ export type TeacherUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
+  organizationId: string
   bloodGroup?: $Enums.BloodGroup | null
   cgpa?: number | null
   city?: string | null
@@ -1017,6 +1034,7 @@ export type TeacherUpdateInput = {
   payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
   exams?: Prisma.ExamUpdateManyWithoutTeacherNestedInput
   user?: Prisma.UserUpdateOneWithoutTeacherProfileNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutTeachersNestedInput
 }
 
 export type TeacherUncheckedUpdateInput = {
@@ -1032,6 +1050,7 @@ export type TeacherUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   cgpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1090,6 +1109,7 @@ export type TeacherCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
+  organizationId: string
   bloodGroup?: $Enums.BloodGroup | null
   cgpa?: number | null
   city?: string | null
@@ -1199,6 +1219,7 @@ export type TeacherUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   cgpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1246,6 +1267,16 @@ export type TeacherNullableScalarRelationFilter = {
   isNot?: Prisma.TeacherWhereInput | null
 }
 
+export type TeacherListRelationFilter = {
+  every?: Prisma.TeacherWhereInput
+  some?: Prisma.TeacherWhereInput
+  none?: Prisma.TeacherWhereInput
+}
+
+export type TeacherOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type TeacherCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
@@ -1259,6 +1290,7 @@ export type TeacherCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   cgpa?: Prisma.SortOrder
   city?: Prisma.SortOrder
@@ -1320,6 +1352,7 @@ export type TeacherMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   cgpa?: Prisma.SortOrder
   city?: Prisma.SortOrder
@@ -1375,6 +1408,7 @@ export type TeacherMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   bloodGroup?: Prisma.SortOrder
   cgpa?: Prisma.SortOrder
   city?: Prisma.SortOrder
@@ -1460,8 +1494,46 @@ export type TeacherUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TeacherUpdateToOneWithWhereWithoutUserInput, Prisma.TeacherUpdateWithoutUserInput>, Prisma.TeacherUncheckedUpdateWithoutUserInput>
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type TeacherCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.TeacherCreateWithoutOrganizationInput, Prisma.TeacherUncheckedCreateWithoutOrganizationInput> | Prisma.TeacherCreateWithoutOrganizationInput[] | Prisma.TeacherUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.TeacherCreateOrConnectWithoutOrganizationInput | Prisma.TeacherCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.TeacherCreateManyOrganizationInputEnvelope
+  connect?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+}
+
+export type TeacherUncheckedCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.TeacherCreateWithoutOrganizationInput, Prisma.TeacherUncheckedCreateWithoutOrganizationInput> | Prisma.TeacherCreateWithoutOrganizationInput[] | Prisma.TeacherUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.TeacherCreateOrConnectWithoutOrganizationInput | Prisma.TeacherCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.TeacherCreateManyOrganizationInputEnvelope
+  connect?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+}
+
+export type TeacherUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.TeacherCreateWithoutOrganizationInput, Prisma.TeacherUncheckedCreateWithoutOrganizationInput> | Prisma.TeacherCreateWithoutOrganizationInput[] | Prisma.TeacherUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.TeacherCreateOrConnectWithoutOrganizationInput | Prisma.TeacherCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.TeacherUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.TeacherUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.TeacherCreateManyOrganizationInputEnvelope
+  set?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+  disconnect?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+  delete?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+  connect?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+  update?: Prisma.TeacherUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.TeacherUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.TeacherUpdateManyWithWhereWithoutOrganizationInput | Prisma.TeacherUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.TeacherScalarWhereInput | Prisma.TeacherScalarWhereInput[]
+}
+
+export type TeacherUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.TeacherCreateWithoutOrganizationInput, Prisma.TeacherUncheckedCreateWithoutOrganizationInput> | Prisma.TeacherCreateWithoutOrganizationInput[] | Prisma.TeacherUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.TeacherCreateOrConnectWithoutOrganizationInput | Prisma.TeacherCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.TeacherUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.TeacherUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.TeacherCreateManyOrganizationInputEnvelope
+  set?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+  disconnect?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+  delete?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+  connect?: Prisma.TeacherWhereUniqueInput | Prisma.TeacherWhereUniqueInput[]
+  update?: Prisma.TeacherUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.TeacherUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.TeacherUpdateManyWithWhereWithoutOrganizationInput | Prisma.TeacherUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.TeacherScalarWhereInput | Prisma.TeacherScalarWhereInput[]
 }
 
 export type EnumStatusFieldUpdateOperationsInput = {
@@ -1490,10 +1562,6 @@ export type NullableEnumGenderFieldUpdateOperationsInput = {
 
 export type NullableEnumPaymentTypeFieldUpdateOperationsInput = {
   set?: $Enums.PaymentType | null
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type NullableEnumDeleteReasonFieldUpdateOperationsInput = {
@@ -1597,6 +1665,7 @@ export type TeacherCreateWithoutUserInput = {
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
   exams?: Prisma.ExamCreateNestedManyWithoutTeacherInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutTeachersInput
 }
 
 export type TeacherUncheckedCreateWithoutUserInput = {
@@ -1611,6 +1680,7 @@ export type TeacherUncheckedCreateWithoutUserInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
   bloodGroup?: $Enums.BloodGroup | null
   cgpa?: number | null
   city?: string | null
@@ -1727,6 +1797,7 @@ export type TeacherUpdateWithoutUserInput = {
   classSections?: Prisma.ClassSectionUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
   exams?: Prisma.ExamUpdateManyWithoutTeacherNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutTeachersNestedInput
 }
 
 export type TeacherUncheckedUpdateWithoutUserInput = {
@@ -1741,6 +1812,7 @@ export type TeacherUncheckedUpdateWithoutUserInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   cgpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1784,6 +1856,207 @@ export type TeacherUncheckedUpdateWithoutUserInput = {
   classSections?: Prisma.ClassSectionUncheckedUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUncheckedUpdateManyWithoutTeacherNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutTeacherNestedInput
+}
+
+export type TeacherCreateWithoutOrganizationInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email?: string | null
+  phoneNumber: string
+  subject?: string | null
+  qualifications?: string | null
+  joinDate?: Date | string
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  bloodGroup?: $Enums.BloodGroup | null
+  cgpa?: number | null
+  city?: string | null
+  country?: string | null
+  cv?: string | null
+  dateOfBirth?: Date | string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  gender?: $Enums.Gender | null
+  idProof?: string | null
+  nationality?: string | null
+  nid?: string | null
+  paymentType?: $Enums.PaymentType | null
+  postalCode?: string | null
+  profileImage?: string | null
+  religion?: string | null
+  salary?: number | null
+  state?: string | null
+  streetAddress?: string | null
+  universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
+  classSections?: Prisma.ClassSectionCreateNestedManyWithoutTeacherInput
+  payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
+  exams?: Prisma.ExamCreateNestedManyWithoutTeacherInput
+  user?: Prisma.UserCreateNestedOneWithoutTeacherProfileInput
+}
+
+export type TeacherUncheckedCreateWithoutOrganizationInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email?: string | null
+  phoneNumber: string
+  subject?: string | null
+  qualifications?: string | null
+  joinDate?: Date | string
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userId?: string | null
+  bloodGroup?: $Enums.BloodGroup | null
+  cgpa?: number | null
+  city?: string | null
+  country?: string | null
+  cv?: string | null
+  dateOfBirth?: Date | string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  gender?: $Enums.Gender | null
+  idProof?: string | null
+  nationality?: string | null
+  nid?: string | null
+  paymentType?: $Enums.PaymentType | null
+  postalCode?: string | null
+  profileImage?: string | null
+  religion?: string | null
+  salary?: number | null
+  state?: string | null
+  streetAddress?: string | null
+  universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
+  classSections?: Prisma.ClassSectionUncheckedCreateNestedManyWithoutTeacherInput
+  payments?: Prisma.TeacherPaymentUncheckedCreateNestedManyWithoutTeacherInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutTeacherInput
+}
+
+export type TeacherCreateOrConnectWithoutOrganizationInput = {
+  where: Prisma.TeacherWhereUniqueInput
+  create: Prisma.XOR<Prisma.TeacherCreateWithoutOrganizationInput, Prisma.TeacherUncheckedCreateWithoutOrganizationInput>
+}
+
+export type TeacherCreateManyOrganizationInputEnvelope = {
+  data: Prisma.TeacherCreateManyOrganizationInput | Prisma.TeacherCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
+}
+
+export type TeacherUpsertWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.TeacherWhereUniqueInput
+  update: Prisma.XOR<Prisma.TeacherUpdateWithoutOrganizationInput, Prisma.TeacherUncheckedUpdateWithoutOrganizationInput>
+  create: Prisma.XOR<Prisma.TeacherCreateWithoutOrganizationInput, Prisma.TeacherUncheckedCreateWithoutOrganizationInput>
+}
+
+export type TeacherUpdateWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.TeacherWhereUniqueInput
+  data: Prisma.XOR<Prisma.TeacherUpdateWithoutOrganizationInput, Prisma.TeacherUncheckedUpdateWithoutOrganizationInput>
+}
+
+export type TeacherUpdateManyWithWhereWithoutOrganizationInput = {
+  where: Prisma.TeacherScalarWhereInput
+  data: Prisma.XOR<Prisma.TeacherUpdateManyMutationInput, Prisma.TeacherUncheckedUpdateManyWithoutOrganizationInput>
+}
+
+export type TeacherScalarWhereInput = {
+  AND?: Prisma.TeacherScalarWhereInput | Prisma.TeacherScalarWhereInput[]
+  OR?: Prisma.TeacherScalarWhereInput[]
+  NOT?: Prisma.TeacherScalarWhereInput | Prisma.TeacherScalarWhereInput[]
+  id?: Prisma.StringFilter<"Teacher"> | string
+  firstName?: Prisma.StringFilter<"Teacher"> | string
+  lastName?: Prisma.StringFilter<"Teacher"> | string
+  email?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  phoneNumber?: Prisma.StringFilter<"Teacher"> | string
+  subject?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  qualifications?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  joinDate?: Prisma.DateTimeFilter<"Teacher"> | Date | string
+  status?: Prisma.EnumStatusFilter<"Teacher"> | $Enums.Status
+  createdAt?: Prisma.DateTimeFilter<"Teacher"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Teacher"> | Date | string
+  userId?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  organizationId?: Prisma.StringFilter<"Teacher"> | string
+  bloodGroup?: Prisma.EnumBloodGroupNullableFilter<"Teacher"> | $Enums.BloodGroup | null
+  cgpa?: Prisma.FloatNullableFilter<"Teacher"> | number | null
+  city?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  country?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  cv?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  dateOfBirth?: Prisma.DateTimeNullableFilter<"Teacher"> | Date | string | null
+  emergencyContactName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  emergencyContactPhone?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  emergencyContactRelation?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  gender?: Prisma.EnumGenderNullableFilter<"Teacher"> | $Enums.Gender | null
+  idProof?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  nationality?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  nid?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  paymentType?: Prisma.EnumPaymentTypeNullableFilter<"Teacher"> | $Enums.PaymentType | null
+  postalCode?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  profileImage?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  religion?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  salary?: Prisma.FloatNullableFilter<"Teacher"> | number | null
+  state?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  streetAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  universityName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  fatherName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  motherName?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  presentAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  permanentAddress?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  previousInstitute?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  experience?: Prisma.FloatNullableFilter<"Teacher"> | number | null
+  passedSchool?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  passedCollege?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  reference?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  nidImageUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  teacherPhotoUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  universityIdCardUrl?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  facebookLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  instagramLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  linkedinLink?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  isDeleted?: Prisma.BoolFilter<"Teacher"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"Teacher"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"Teacher"> | string | null
+  deleteReason?: Prisma.EnumDeleteReasonNullableFilter<"Teacher"> | $Enums.DeleteReason | null
 }
 
 export type TeacherCreateWithoutClassSectionsInput = {
@@ -1841,6 +2114,7 @@ export type TeacherCreateWithoutClassSectionsInput = {
   payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
   exams?: Prisma.ExamCreateNestedManyWithoutTeacherInput
   user?: Prisma.UserCreateNestedOneWithoutTeacherProfileInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutTeachersInput
 }
 
 export type TeacherUncheckedCreateWithoutClassSectionsInput = {
@@ -1856,6 +2130,7 @@ export type TeacherUncheckedCreateWithoutClassSectionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
+  organizationId: string
   bloodGroup?: $Enums.BloodGroup | null
   cgpa?: number | null
   city?: string | null
@@ -1971,6 +2246,7 @@ export type TeacherUpdateWithoutClassSectionsInput = {
   payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
   exams?: Prisma.ExamUpdateManyWithoutTeacherNestedInput
   user?: Prisma.UserUpdateOneWithoutTeacherProfileNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutTeachersNestedInput
 }
 
 export type TeacherUncheckedUpdateWithoutClassSectionsInput = {
@@ -1986,6 +2262,7 @@ export type TeacherUncheckedUpdateWithoutClassSectionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   cgpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2085,6 +2362,7 @@ export type TeacherCreateWithoutPaymentsInput = {
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutTeacherInput
   exams?: Prisma.ExamCreateNestedManyWithoutTeacherInput
   user?: Prisma.UserCreateNestedOneWithoutTeacherProfileInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutTeachersInput
 }
 
 export type TeacherUncheckedCreateWithoutPaymentsInput = {
@@ -2100,6 +2378,7 @@ export type TeacherUncheckedCreateWithoutPaymentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
+  organizationId: string
   bloodGroup?: $Enums.BloodGroup | null
   cgpa?: number | null
   city?: string | null
@@ -2215,6 +2494,7 @@ export type TeacherUpdateWithoutPaymentsInput = {
   classSections?: Prisma.ClassSectionUpdateManyWithoutTeacherNestedInput
   exams?: Prisma.ExamUpdateManyWithoutTeacherNestedInput
   user?: Prisma.UserUpdateOneWithoutTeacherProfileNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutTeachersNestedInput
 }
 
 export type TeacherUncheckedUpdateWithoutPaymentsInput = {
@@ -2230,6 +2510,7 @@ export type TeacherUncheckedUpdateWithoutPaymentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
   cgpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2329,6 +2610,7 @@ export type TeacherCreateWithoutExamsInput = {
   classSections?: Prisma.ClassSectionCreateNestedManyWithoutTeacherInput
   payments?: Prisma.TeacherPaymentCreateNestedManyWithoutTeacherInput
   user?: Prisma.UserCreateNestedOneWithoutTeacherProfileInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutTeachersInput
 }
 
 export type TeacherUncheckedCreateWithoutExamsInput = {
@@ -2344,6 +2626,7 @@ export type TeacherUncheckedCreateWithoutExamsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId?: string | null
+  organizationId: string
   bloodGroup?: $Enums.BloodGroup | null
   cgpa?: number | null
   city?: string | null
@@ -2459,9 +2742,181 @@ export type TeacherUpdateWithoutExamsInput = {
   classSections?: Prisma.ClassSectionUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
   user?: Prisma.UserUpdateOneWithoutTeacherProfileNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutTeachersNestedInput
 }
 
 export type TeacherUncheckedUpdateWithoutExamsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  cgpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cv?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  idProof?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentType?: Prisma.NullableEnumPaymentTypeFieldUpdateOperationsInput | $Enums.PaymentType | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
+  classSections?: Prisma.ClassSectionUncheckedUpdateManyWithoutTeacherNestedInput
+  payments?: Prisma.TeacherPaymentUncheckedUpdateManyWithoutTeacherNestedInput
+}
+
+export type TeacherCreateManyOrganizationInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  email?: string | null
+  phoneNumber: string
+  subject?: string | null
+  qualifications?: string | null
+  joinDate?: Date | string
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userId?: string | null
+  bloodGroup?: $Enums.BloodGroup | null
+  cgpa?: number | null
+  city?: string | null
+  country?: string | null
+  cv?: string | null
+  dateOfBirth?: Date | string | null
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelation?: string | null
+  gender?: $Enums.Gender | null
+  idProof?: string | null
+  nationality?: string | null
+  nid?: string | null
+  paymentType?: $Enums.PaymentType | null
+  postalCode?: string | null
+  profileImage?: string | null
+  religion?: string | null
+  salary?: number | null
+  state?: string | null
+  streetAddress?: string | null
+  universityName?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  presentAddress?: string | null
+  permanentAddress?: string | null
+  previousInstitute?: string | null
+  experience?: number | null
+  passedSchool?: string | null
+  passedCollege?: string | null
+  reference?: string | null
+  nidImageUrl?: string | null
+  teacherPhotoUrl?: string | null
+  universityIdCardUrl?: string | null
+  facebookLink?: string | null
+  instagramLink?: string | null
+  linkedinLink?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
+}
+
+export type TeacherUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  cgpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cv?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  idProof?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentType?: Prisma.NullableEnumPaymentTypeFieldUpdateOperationsInput | $Enums.PaymentType | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
+  classSections?: Prisma.ClassSectionUpdateManyWithoutTeacherNestedInput
+  payments?: Prisma.TeacherPaymentUpdateManyWithoutTeacherNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutTeacherNestedInput
+  user?: Prisma.UserUpdateOneWithoutTeacherProfileNestedInput
+}
+
+export type TeacherUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.StringFieldUpdateOperationsInput | string
   lastName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2516,6 +2971,62 @@ export type TeacherUncheckedUpdateWithoutExamsInput = {
   deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   classSections?: Prisma.ClassSectionUncheckedUpdateManyWithoutTeacherNestedInput
   payments?: Prisma.TeacherPaymentUncheckedUpdateManyWithoutTeacherNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutTeacherNestedInput
+}
+
+export type TeacherUncheckedUpdateManyWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bloodGroup?: Prisma.NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+  cgpa?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cv?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emergencyContactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyContactRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  idProof?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentType?: Prisma.NullableEnumPaymentTypeFieldUpdateOperationsInput | $Enums.PaymentType | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streetAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousInstitute?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  passedSchool?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passedCollege?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nidImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universityIdCardUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  facebookLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
 }
 
 
@@ -2580,6 +3091,7 @@ export type TeacherSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  organizationId?: boolean
   bloodGroup?: boolean
   cgpa?: boolean
   city?: boolean
@@ -2624,6 +3136,7 @@ export type TeacherSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   payments?: boolean | Prisma.Teacher$paymentsArgs<ExtArgs>
   exams?: boolean | Prisma.Teacher$examsArgs<ExtArgs>
   user?: boolean | Prisma.Teacher$userArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.TeacherCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["teacher"]>
 
@@ -2640,6 +3153,7 @@ export type TeacherSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  organizationId?: boolean
   bloodGroup?: boolean
   cgpa?: boolean
   city?: boolean
@@ -2681,6 +3195,7 @@ export type TeacherSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   deletedBy?: boolean
   deleteReason?: boolean
   user?: boolean | Prisma.Teacher$userArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["teacher"]>
 
 export type TeacherSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2696,6 +3211,7 @@ export type TeacherSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  organizationId?: boolean
   bloodGroup?: boolean
   cgpa?: boolean
   city?: boolean
@@ -2737,6 +3253,7 @@ export type TeacherSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   deletedBy?: boolean
   deleteReason?: boolean
   user?: boolean | Prisma.Teacher$userArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["teacher"]>
 
 export type TeacherSelectScalar = {
@@ -2752,6 +3269,7 @@ export type TeacherSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  organizationId?: boolean
   bloodGroup?: boolean
   cgpa?: boolean
   city?: boolean
@@ -2794,19 +3312,22 @@ export type TeacherSelectScalar = {
   deleteReason?: boolean
 }
 
-export type TeacherOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "subject" | "qualifications" | "joinDate" | "status" | "createdAt" | "updatedAt" | "userId" | "bloodGroup" | "cgpa" | "city" | "country" | "cv" | "dateOfBirth" | "emergencyContactName" | "emergencyContactPhone" | "emergencyContactRelation" | "gender" | "idProof" | "nationality" | "nid" | "paymentType" | "postalCode" | "profileImage" | "religion" | "salary" | "state" | "streetAddress" | "universityName" | "fatherName" | "motherName" | "presentAddress" | "permanentAddress" | "previousInstitute" | "experience" | "passedSchool" | "passedCollege" | "reference" | "nidImageUrl" | "teacherPhotoUrl" | "universityIdCardUrl" | "facebookLink" | "instagramLink" | "linkedinLink" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason", ExtArgs["result"]["teacher"]>
+export type TeacherOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "phoneNumber" | "subject" | "qualifications" | "joinDate" | "status" | "createdAt" | "updatedAt" | "userId" | "organizationId" | "bloodGroup" | "cgpa" | "city" | "country" | "cv" | "dateOfBirth" | "emergencyContactName" | "emergencyContactPhone" | "emergencyContactRelation" | "gender" | "idProof" | "nationality" | "nid" | "paymentType" | "postalCode" | "profileImage" | "religion" | "salary" | "state" | "streetAddress" | "universityName" | "fatherName" | "motherName" | "presentAddress" | "permanentAddress" | "previousInstitute" | "experience" | "passedSchool" | "passedCollege" | "reference" | "nidImageUrl" | "teacherPhotoUrl" | "universityIdCardUrl" | "facebookLink" | "instagramLink" | "linkedinLink" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason", ExtArgs["result"]["teacher"]>
 export type TeacherInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   classSections?: boolean | Prisma.Teacher$classSectionsArgs<ExtArgs>
   payments?: boolean | Prisma.Teacher$paymentsArgs<ExtArgs>
   exams?: boolean | Prisma.Teacher$examsArgs<ExtArgs>
   user?: boolean | Prisma.Teacher$userArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.TeacherCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TeacherIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Teacher$userArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 export type TeacherIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Teacher$userArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 
 export type $TeacherPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2816,6 +3337,7 @@ export type $TeacherPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     payments: Prisma.$TeacherPaymentPayload<ExtArgs>[]
     exams: Prisma.$ExamPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs> | null
+    organization: Prisma.$OrganizationPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2830,6 +3352,7 @@ export type $TeacherPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     createdAt: Date
     updatedAt: Date
     userId: string | null
+    organizationId: string
     bloodGroup: $Enums.BloodGroup | null
     cgpa: number | null
     city: string | null
@@ -3268,6 +3791,7 @@ export interface Prisma__TeacherClient<T, Null = never, ExtArgs extends runtime.
   payments<T extends Prisma.Teacher$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Teacher$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeacherPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   exams<T extends Prisma.Teacher$examsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Teacher$examsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.Teacher$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Teacher$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3309,6 +3833,7 @@ export interface TeacherFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Teacher", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Teacher", 'DateTime'>
   readonly userId: Prisma.FieldRef<"Teacher", 'String'>
+  readonly organizationId: Prisma.FieldRef<"Teacher", 'String'>
   readonly bloodGroup: Prisma.FieldRef<"Teacher", 'BloodGroup'>
   readonly cgpa: Prisma.FieldRef<"Teacher", 'Float'>
   readonly city: Prisma.FieldRef<"Teacher", 'String'>

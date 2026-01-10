@@ -27,6 +27,8 @@ import { NavSecondary } from "./nav-secondary";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useUserContext } from "@/lib/permissions/client";
+import { canAccessPage } from "@/lib/permissions/utils";
 
 const data = {
   navMain: [
@@ -128,12 +130,48 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
+  const { role, isLoading } = useUserContext();
 
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/signin");
   };
+
+  // Filter menu items based on role permissions
+  const filteredNavMain = React.useMemo(() => {
+    if (isLoading) return [];
+    
+    return data.navMain
+      .map((item) => {
+        // Check if the main item is accessible
+        const canAccessMain = canAccessPage(role, item.url);
+        
+        if (!canAccessMain) {
+          return null;
+        }
+
+        // If the item has sub-items, filter them too
+        if (item.items) {
+          const filteredSubItems = item.items.filter((subItem) =>
+            canAccessPage(role, subItem.url)
+          );
+
+          // If all sub-items are filtered out, hide the parent
+          if (filteredSubItems.length === 0) {
+            return null;
+          }
+
+          return {
+            ...item,
+            items: filteredSubItems,
+          };
+        }
+
+        return item;
+      })
+      .filter((item) => item !== null);
+  }, [role, isLoading]);
 
   return (
     <Sidebar
@@ -160,7 +198,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={filteredNavMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

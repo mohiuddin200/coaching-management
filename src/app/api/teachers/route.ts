@@ -1,19 +1,25 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { requirePageAccess } from "@/lib/permissions/server";
 
 export async function GET(request: Request) {
   try {
+    // Require authentication and check page access
+    const userContext = await requirePageAccess('/teachers');
+    
     const { searchParams } = new URL(request.url);
     const excludeId = searchParams.get('excludeId');
 
     const whereClause: {
       isDeleted: boolean;
+      organizationId: string;
       id?: {
         not: string;
       };
     } = {
       isDeleted: false, // Filter out soft-deleted records
+      organizationId: userContext.organizationId, // Filter by organization
     };
 
     // Add excludeId filter if provided
@@ -32,6 +38,14 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ teachers });
   } catch (error) {
+    // Handle permission errors
+    if (error instanceof Error && (error.message.includes("Forbidden") || error.message.includes("Unauthorized"))) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.message.includes("Forbidden") ? 403 : 401 }
+      );
+    }
+    
     console.error("Error fetching teachers:", error);
     return NextResponse.json(
       { error: "Failed to fetch teachers" },
@@ -42,6 +56,9 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    // Require authentication and check page access
+    const userContext = await requirePageAccess('/teachers');
+    
     const body = await request.json();
     const {
       firstName,
@@ -82,7 +99,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create the teacher
+    // Create the teacher with organization context
     const teacher = await prisma.teacher.create({
       data: {
         firstName,
@@ -113,11 +130,20 @@ export async function POST(request: Request) {
         cv: cv || null,
         salary: salary || null,
         paymentType: paymentType || null,
+        organizationId: userContext.organizationId, // NEW: Link to organization
       },
     });
 
     return NextResponse.json({ teacher }, { status: 201 });
   } catch (error) {
+    // Handle permission errors
+    if (error instanceof Error && (error.message.includes("Forbidden") || error.message.includes("Unauthorized"))) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.message.includes("Forbidden") ? 403 : 401 }
+      );
+    }
+    
     console.error("Error creating teacher:", error);
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === "P2002") {

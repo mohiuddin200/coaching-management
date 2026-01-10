@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { SystemRole } from "@/lib/permissions/config";
 
 export async function completeOnboarding(formData: FormData) {
   // Use the standard server client (not admin) to get/update the user
@@ -38,7 +39,18 @@ export async function completeOnboarding(formData: FormData) {
       throw new Error(`Failed to set password: ${passwordError.message}`);
     }
 
-    // --- STEP 2: Update Metadata (Admin) ---
+    // --- STEP 2: Get organization and role from metadata ---
+    const organizationId = user.user_metadata.organizationId;
+    const systemRole = user.user_metadata.systemRole as SystemRole;
+    const canInvite = user.user_metadata.canInvite || false;
+    const teacherId = user.user_metadata.teacherId;
+
+    // Validate required metadata
+    if (!organizationId || !systemRole) {
+      throw new Error("Missing organization or role information. Please contact your administrator.");
+    }
+
+    // --- STEP 3: Update Metadata (Admin) ---
     // Mark user as onboarded
     const supabaseAdmin = await createAdminClient();
     const { error: adminError } = await supabaseAdmin.auth.admin.updateUserById(
@@ -56,40 +68,62 @@ export async function completeOnboarding(formData: FormData) {
       throw new Error(`Failed to update user metadata: ${adminError.message}`);
     }
 
-    // --- STEP 3: Update your Prisma User table (minimal sync) ---
+    // --- STEP 4: Update your Prisma User table (minimal sync) ---
     // Use upsert with email to avoid race conditions or duplicate user creation
-    // This handles cases where user might already exist with same email
     await prisma.user.upsert({
       where: { email: user.email! },
       update: {
         // Ensure ID and role are correct
         id: user.id,
-        role: user.user_metadata.role || 'Teacher',
+        role: user.user_metadata.role || 'Teacher', // Legacy field
       },
       create: {
         id: user.id,
         email: user.email!,
-        role: user.user_metadata.role || 'Teacher',
+        role: user.user_metadata.role || 'Teacher', // Legacy field
       }
     });
 
-    // --- STEP 4: Link Teacher profile if role is Teacher ---
-    if (user.user_metadata.role === 'Teacher') {
-      const teacherId = user.user_metadata.teacherId;
-      
-      if (teacherId) {
-        // Update the existing teacher profile with the user ID
-        await prisma.teacher.update({
-          where: { id: teacherId },
-          data: {
-            userId: user.id,
-          }
-        });
-      } else {
-        // This shouldn't happen - all teachers should be invited from the teacher table
-        console.warn('Teacher invited without teacherId in metadata');
+    // --- STEP 5: Create UserOrganization record (NEW) ---
+    await prisma.userOrganization.upsert({
+      where: {
+        userId_organizationId: {
+          userId: user.id,
+          organizationId: organizationId,
+        }
+      },
+      update: {
+        role: systemRole,
+        canInvite: canInvite,
+        isActive: true,
+      },
+      create: {
+        userId: user.id,
+        organizationId: organizationId,
+        role: systemRole,
+        canInvite: canInvite,
+        isActive: true,
       }
+    });
+
+    // --- STEP 6: Link Teacher profile if role is Teacher ---
+    if (user.user_metadata.role === 'Teacher' && teacherId) {
+      // Update the existing teacher profile with the user ID
+      await prisma.teacher.update({
+        where: { id: teacherId },
+        data: {
+          userId: user.id,
+        }
+      });
     }
+
+    console.log("Onboarding completed successfully:", {
+      userId: user.id,
+      email: user.email,
+      organizationId,
+      role: systemRole,
+      canInvite,
+    });
 
   } catch (error: unknown) {
     console.error("Onboarding Error:", error);

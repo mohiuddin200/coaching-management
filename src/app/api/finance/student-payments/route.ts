@@ -2,19 +2,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { PaymentStatus } from "@/generated/enums";
+import { requirePageAccess } from "@/lib/permissions/server";
 
 // GET - List all student payments
 export async function GET(request: NextRequest) {
   try {
+    // Require finance page access
+    const userContext = await requirePageAccess("/finance");
+
     const { searchParams } = new URL(request.url);
     const studentId = searchParams.get("studentId");
     const status = searchParams.get("status");
     const monthYear = searchParams.get("monthYear");
 
-    console.log("Fetching payments with filters:", { studentId, status, monthYear });
+    console.log("Fetching payments with filters:", { studentId, status, monthYear, organizationId: userContext.organizationId });
 
     const payments = await prisma.studentPayment.findMany({
       where: {
+        organizationId: userContext.organizationId, // Filter by organization
         isDeleted: false, // Only return non-deleted payments
         ...(studentId && { studentId }),
         ...(status && { status: status as PaymentStatus }),
@@ -69,6 +74,7 @@ export async function GET(request: NextRequest) {
       // Refetch with updated status
       const updatedPayments = await prisma.studentPayment.findMany({
         where: {
+          organizationId: userContext.organizationId, // Filter by organization
           isDeleted: false, // Only return non-deleted payments
           ...(studentId && { studentId }),
           ...(status && { status: status as PaymentStatus }),
@@ -117,6 +123,9 @@ export async function GET(request: NextRequest) {
 // POST - Create new student payment
 export async function POST(request: Request) {
   try {
+    // Require finance page access
+    const userContext = await requirePageAccess("/finance");
+
     const body = await request.json();
     const {
       studentId,
@@ -147,9 +156,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if student exists
-    const student = await prisma.student.findUnique({
-      where: { id: studentId },
+    // Check if student exists and belongs to organization
+    const student = await prisma.student.findFirst({
+      where: { 
+        id: studentId,
+        organizationId: userContext.organizationId
+      },
     });
 
     if (!student) {
@@ -170,6 +182,7 @@ export async function POST(request: Request) {
     const payment = await prisma.studentPayment.create({
       data: {
         studentId,
+        organizationId: userContext.organizationId, // Link to organization
         amount: parseFloat(amount),
         paymentDate: new Date(paymentDate),
         dueDate: new Date(dueDate),
@@ -210,6 +223,9 @@ export async function POST(request: Request) {
 // PUT - Bulk update student payments (for status updates, etc.)
 export async function PUT(request: NextRequest) {
   try {
+    // Require finance page access
+    const userContext = await requirePageAccess("/finance");
+
     const body = await request.json();
     const { paymentIds, updates } = body;
 
@@ -227,10 +243,11 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Validate that all payments exist and are not deleted
+    // Validate that all payments exist, belong to organization, and are not deleted
     const existingPayments = await prisma.studentPayment.findMany({
       where: {
         id: { in: paymentIds },
+        organizationId: userContext.organizationId,
         isDeleted: false
       },
       select: { id: true }
@@ -280,6 +297,7 @@ export async function PUT(request: NextRequest) {
     const result = await prisma.studentPayment.updateMany({
       where: {
         id: { in: paymentIds },
+        organizationId: userContext.organizationId,
         isDeleted: false
       },
       data: updateData

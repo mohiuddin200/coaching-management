@@ -8,14 +8,63 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  email          String   @unique
-  role           UserRole @default(Teacher)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  teacherProfile Teacher? @relation("UserToTeacher")
+  id             String             @id @default(uuid())
+  email          String             @unique
+  role           UserRole           @default(Teacher) // DEPRECATED (keep for transition)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  teacherProfile Teacher?           @relation("UserToTeacher")
+  organizations  UserOrganization[] // NEW
 
   @@map("users")
+}
+
+// New Organization Model
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  email       String?
+  phone       String?
+  address     String?
+  logo        String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  users           UserOrganization[]
+  teachers        Teacher[]
+  students        Student[]
+  levels          Level[]
+  classSections   ClassSection[]
+  exams           Exam[]
+  feeStructures   FeeStructure[]
+  studentPayments StudentPayment[]
+  teacherPayments TeacherPayment[]
+  expenses        Expense[]
+
+  @@map("organizations")
+}
+
+// New UserOrganization Junction Table
+model UserOrganization {
+  id             String       @id @default(cuid())
+  userId         String
+  organizationId String
+  role           SystemRole   @default(AcademicCoordinator)
+  canInvite      Boolean      @default(false)
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([userId])
+  @@index([organizationId])
+  @@map("user_organizations")
 }
 
 model Teacher {
@@ -31,6 +80,7 @@ model Teacher {
   createdAt                DateTime         @default(now())
   updatedAt                DateTime         @updatedAt
   userId                   String?          @unique
+  organizationId           String           // NEW
   bloodGroup               BloodGroup?
   cgpa                     Float?
   city                     String?
@@ -81,6 +131,7 @@ model Teacher {
   payments                 TeacherPayment[]
   exams                    Exam[]
   user                     User?            @relation("UserToTeacher", fields: [userId], references: [id])
+  organization             Organization     @relation(fields: [organizationId], references: [id]) // NEW
 
   @@map("teachers")
 }
@@ -102,6 +153,7 @@ model Student {
   createdAt                DateTime         @default(now())
   updatedAt                DateTime         @updatedAt
   levelId                  String
+  organizationId           String           // NEW
   birthCertificate         String?
   bloodGroup               BloodGroup?
   city                     String?
@@ -133,6 +185,7 @@ model Student {
   payments                 StudentPayment[]
   examResults              ExamResult[]
   level                    Level            @relation(fields: [levelId], references: [id])
+  organization             Organization     @relation(fields: [organizationId], references: [id]) // NEW
 
   @@map("students")
 }
@@ -145,10 +198,12 @@ model Level {
   status        Status         @default(Active)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  organizationId String        // NEW
   students      Student[]
   subjects      Subject[]
   feeStructures FeeStructure[]
   exams         Exam[]
+  organization  Organization   @relation(fields: [organizationId], references: [id]) // NEW
 
   @@map("levels")
 }
@@ -171,21 +226,23 @@ model Subject {
 }
 
 model ClassSection {
-  id           String       @id @default(cuid())
-  name         String
-  subjectId    String
-  teacherId    String
-  capacity     Int          @default(30)
-  roomNumber   String?
-  academicYear String
-  status       ClassStatus  @default(Scheduled)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  attendances  Attendance[]
-  subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  teacher      Teacher      @relation("TeacherToClassSection", fields: [teacherId], references: [id])
-  enrollments  Enrollment[]
-  schedules    Schedule[]
+  id             String       @id @default(cuid())
+  name           String
+  subjectId      String
+  teacherId      String
+  capacity       Int          @default(30)
+  roomNumber     String?
+  academicYear   String
+  status         ClassStatus  @default(Scheduled)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organizationId String       // NEW
+  attendances    Attendance[]
+  subject        Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  teacher        Teacher      @relation("TeacherToClassSection", fields: [teacherId], references: [id])
+  enrollments    Enrollment[]
+  schedules      Schedule[]
+  organization   Organization @relation(fields: [organizationId], references: [id]) // NEW
 
   @@map("class_sections")
 }
@@ -289,38 +346,42 @@ model Feedback {
 }
 
 model FeeStructure {
-  id           String       @id @default(cuid())
-  name         String
-  levelId      String?
-  amount       Float
-  frequency    FeeFrequency @default(Monthly)
-  academicYear String
-  description  String?
-  isActive     Boolean      @default(true)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  level        Level?       @relation(fields: [levelId], references: [id])
+  id             String       @id @default(cuid())
+  name           String
+  levelId        String?
+  amount         Float
+  frequency      FeeFrequency @default(Monthly)
+  academicYear   String
+  description    String?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organizationId String       // NEW
+  level          Level?       @relation(fields: [levelId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id]) // NEW
 
   @@map("fee_structures")
 }
 
 model StudentPayment {
-  id           String        @id @default(cuid())
-  studentId    String
-  amount       Float
-  paymentDate  DateTime
-  dueDate      DateTime
-  status       PaymentStatus @default(Pending)
-  monthYear    String
-  description  String?
-  receiptNo    String?
-  isDeleted    Boolean       @default(false) @map("is_deleted")
-  deletedAt    DateTime?     @map("deleted_at")
-  deletedBy    String?       @map("deleted_by")
-  deleteReason DeleteReason? @map("delete_reason")
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  student      Student       @relation(fields: [studentId], references: [id])
+  id             String        @id @default(cuid())
+  studentId      String
+  amount         Float
+  paymentDate    DateTime
+  dueDate        DateTime
+  status         PaymentStatus @default(Pending)
+  monthYear      String
+  description    String?
+  receiptNo      String?
+  isDeleted      Boolean       @default(false) @map("is_deleted")
+  deletedAt      DateTime?     @map("deleted_at")
+  deletedBy      String?       @map("deleted_by")
+  deleteReason   DeleteReason? @map("delete_reason")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organizationId String        // NEW
+  student        Student       @relation(fields: [studentId], references: [id])
+  organization   Organization  @relation(fields: [organizationId], references: [id]) // NEW
 
   @@index([isDeleted])
   @@index([deletedAt])
@@ -328,22 +389,24 @@ model StudentPayment {
 }
 
 model TeacherPayment {
-  id           String        @id @default(cuid())
-  teacherId    String
-  amount       Float
-  paymentDate  DateTime
-  periodStart  DateTime
-  periodEnd    DateTime
-  status       PaymentStatus @default(Paid)
-  description  String?
-  receiptNo    String?
-  isDeleted    Boolean       @default(false) @map("is_deleted")
-  deletedAt    DateTime?     @map("deleted_at")
-  deletedBy    String?       @map("deleted_by")
-  deleteReason DeleteReason? @map("delete_reason")
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  teacher      Teacher       @relation(fields: [teacherId], references: [id])
+  id             String        @id @default(cuid())
+  teacherId      String
+  amount         Float
+  paymentDate    DateTime
+  periodStart    DateTime
+  periodEnd      DateTime
+  status         PaymentStatus @default(Paid)
+  description    String?
+  receiptNo      String?
+  isDeleted      Boolean       @default(false) @map("is_deleted")
+  deletedAt      DateTime?     @map("deleted_at")
+  deletedBy      String?       @map("deleted_by")
+  deleteReason   DeleteReason? @map("delete_reason")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organizationId String        // NEW
+  teacher        Teacher       @relation(fields: [teacherId], references: [id])
+  organization   Organization  @relation(fields: [organizationId], references: [id]) // NEW
 
   @@index([isDeleted])
   @@index([deletedAt])
@@ -351,30 +414,32 @@ model TeacherPayment {
 }
 
 model Expense {
-  id          String          @id @default(cuid())
-  category    ExpenseCategory
-  amount      Float
-  expenseDate DateTime
-  description String
-  vendor      String?
-  receiptNo   String?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  id             String          @id @default(cuid())
+  category       ExpenseCategory
+  amount         Float
+  expenseDate    DateTime
+  description    String
+  vendor         String?
+  receiptNo      String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  organizationId String          // NEW
+  organization   Organization    @relation(fields: [organizationId], references: [id]) // NEW
 
   @@map("expenses")
 }
 
 model Exam {
-  id               String        @id @default(cuid())
+  id               String         @id @default(cuid())
   name             String
-  type             ExamType      @default(Monthly)
+  type             ExamType       @default(Monthly)
   description      String?
   subjectId        String
-  subject          Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subject          Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   levelId          String
-  level            Level         @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  level            Level          @relation(fields: [levelId], references: [id], onDelete: Cascade)
   teacherId        String
-  teacher          Teacher       @relation(fields: [teacherId], references: [id])
+  teacher          Teacher        @relation(fields: [teacherId], references: [id])
   totalMarks       Float
   passingMarks     Float?
   examDate         DateTime
@@ -385,16 +450,18 @@ model Exam {
   endTime          String?
   roomNumber       String?
   academicYear     String
-  status           ExamStatus    @default(Scheduled)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  status           ExamStatus     @default(Scheduled)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
   createdBy        String?
-  isDeleted        Boolean       @default(false) @map("is_deleted")
-  deletedAt        DateTime?     @map("deleted_at")
-  deletedBy        String?       @map("deleted_by")
-  deleteReason     DeleteReason? @map("delete_reason")
+  isDeleted        Boolean        @default(false) @map("is_deleted")
+  deletedAt        DateTime?      @map("deleted_at")
+  deletedBy        String?        @map("deleted_by")
+  deleteReason     DeleteReason?  @map("delete_reason")
+  organizationId   String         // NEW
   results          ExamResult[]
   notifications    Notification[]
+  organization     Organization   @relation(fields: [organizationId], references: [id]) // NEW
 
   @@index([isDeleted])
   @@index([deletedAt])
@@ -442,6 +509,14 @@ model Notification {
   @@index([isRead])
   @@index([createdAt])
   @@map("notifications")
+}
+
+// New SystemRole Enum
+enum SystemRole {
+  SuperAdmin
+  OrganizationAdmin
+  FinanceManager
+  AcademicCoordinator
 }
 
 enum ExamType {

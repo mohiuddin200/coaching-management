@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { requirePageAccess } from "@/lib/permissions/server";
 
 const attendanceSchema = z.object({
   studentId: z.string(),
@@ -13,6 +14,9 @@ const attendanceSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
+    // Require attendance page access
+    const userContext = await requirePageAccess("/attendance");
+
     const { searchParams } = new URL(request.url);
     const classSectionId = searchParams.get("classSectionId");
     const date = searchParams.get("date");
@@ -24,6 +28,9 @@ export async function GET(request: NextRequest) {
     const whereClause = {
       date: new Date(date),
       ...(classSectionId && { classSectionId }),
+      student: {
+        organizationId: userContext.organizationId, // Filter by organization through student
+      },
     };
 
     const attendanceRecords = await prisma.attendance.findMany({
@@ -42,9 +49,27 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request) {
   try {
+    // Require attendance page access
+    const userContext = await requirePageAccess("/attendance");
+
     const body = await request.json();
     const { studentId, classSectionId, date, status } =
       attendanceSchema.parse(body);
+
+    // Verify student belongs to organization
+    const student = await prisma.student.findFirst({
+      where: { 
+        id: studentId,
+        organizationId: userContext.organizationId
+      },
+    });
+
+    if (!student) {
+      return NextResponse.json(
+        { error: "Student not found" },
+        { status: 404 }
+      );
+    }
 
     const attendanceDate = new Date(date);
 

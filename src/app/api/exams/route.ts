@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { ExamStatus, ExamType } from "@/generated/enums";
+import { requirePageAccess } from "@/lib/permissions/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // Require authentication and check page access
+    const userContext = await requirePageAccess('/exams');
 
     const { searchParams } = new URL(request.url);
     const levelId = searchParams.get("levelId");
@@ -26,6 +20,7 @@ export async function GET(request: NextRequest) {
     const exams = await prisma.exam.findMany({
       where: {
         isDeleted: false,
+        organizationId: userContext.organizationId, // Filter by organization
         ...(levelId && { levelId }),
         ...(subjectId && { subjectId }),
         ...(teacherId && { teacherId }),
@@ -89,14 +84,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // Require authentication and check page access
+    const userContext = await requirePageAccess('/exams');
 
     const body = await request.json();
     const {
@@ -137,22 +126,25 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify subject belongs to level
+    // Verify subject belongs to level AND organization
     const subject = await prisma.subject.findFirst({
       where: {
         id: subjectId,
         levelId: levelId,
+        level: {
+          organizationId: userContext.organizationId,
+        },
       },
     });
 
     if (!subject) {
       return NextResponse.json(
-        { error: "Subject does not belong to the selected level" },
+        { error: "Subject does not belong to the selected level or your organization" },
         { status: 400 }
       );
     }
 
-    // Create exam
+    // Create exam with organization context
     const exam = await prisma.exam.create({
       data: {
         name,
@@ -171,8 +163,9 @@ export async function POST(request: Request) {
         endTime,
         roomNumber,
         academicYear,
-        createdBy: user.id,
+        createdBy: userContext.userId,
         status: "Scheduled",
+        organizationId: userContext.organizationId, // NEW: Link to organization
       },
       include: {
         subject: true,
@@ -196,6 +189,14 @@ export async function POST(request: Request) {
       message: "Exam created successfully",
     });
   } catch (error) {
+    // Handle permission errors
+    if (error instanceof Error && (error.message.includes("Forbidden") || error.message.includes("Unauthorized"))) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.message.includes("Forbidden") ? 403 : 401 }
+      );
+    }
+    
     console.error("Error creating exam:", error);
     return NextResponse.json(
       { error: "Failed to create exam" },

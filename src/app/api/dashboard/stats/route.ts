@@ -1,9 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { requirePageAccess } from "@/lib/permissions/server";
 
 export async function GET() {
   try {
-    // Get counts
+    // Require dashboard page access
+    const userContext = await requirePageAccess("/dashboard");
+
+    // Get counts filtered by organization
     const [
       totalStudents,
       totalTeachers,
@@ -11,32 +15,52 @@ export async function GET() {
       activeEnrollments,
     ] = await Promise.all([
       prisma.student.count({
-        where: { status: "Active" },
+        where: { 
+          status: "Active",
+          organizationId: userContext.organizationId
+        },
       }),
       prisma.teacher.count({
-        where: { status: "Active" },
+        where: { 
+          status: "Active",
+          organizationId: userContext.organizationId
+        },
       }),
       prisma.classSection.count({
-        where: { status: "Scheduled" },
+        where: { 
+          status: "Scheduled",
+          organizationId: userContext.organizationId
+        },
       }),
       prisma.enrollment.count({
-        where: { status: "Active" },
+        where: { 
+          status: "Active",
+          student: {
+            organizationId: userContext.organizationId
+          }
+        },
       }),
     ]);
 
-    // Get recent students
+    // Get recent students filtered by organization
     const recentStudents = await prisma.student.findMany({
       take: 5,
+      where: {
+        organizationId: userContext.organizationId
+      },
       orderBy: { enrollmentDate: "desc" },
       include: {
         level: true,
       },
     });
 
-    // Get class sections with enrollment counts
+    // Get class sections with enrollment counts filtered by organization
     const classSections = await prisma.classSection.findMany({
       take: 10,
-      where: { status: "Scheduled" },
+      where: { 
+        status: "Scheduled",
+        organizationId: userContext.organizationId
+      },
       include: {
         subject: {
           include: {
@@ -53,8 +77,11 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    // Get enrollment by level
+    // Get enrollment by level filtered by organization
     const enrollmentsByLevel = await prisma.level.findMany({
+      where: {
+        organizationId: userContext.organizationId
+      },
       include: {
         _count: {
           select: {

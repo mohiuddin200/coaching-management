@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ViewTeacherDetailsDialog } from "./view-teacher-details-dialog"
-import { MoreHorizontal, Pencil, Mail, Trash2, Eye } from "lucide-react"
+import { MoreHorizontal, Pencil, Trash2, Eye, Mail } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -42,6 +42,7 @@ import {
 import { Teacher } from "./columns"
 import { ProgressiveDeletionDialog } from "@/components/deletion/progressive-deletion-dialog"
 import { toast } from "sonner"
+import { InviteTeacherDialog } from "./invite-teacher-dialog"
 
 interface TeacherActionsProps {
   teacher: Teacher
@@ -63,11 +64,10 @@ type TeacherFormValues = z.infer<typeof teacherFormSchema>
 
 export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherActionsProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
-  const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [isSendingInvite, setIsSendingInvite] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [relatedRecords, setRelatedRecords] = useState<Array<{ type: string; count: number }>>([])
 
@@ -172,37 +172,6 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
     }
   }
 
-  const handleSendInvite = async () => {
-    setIsSendingInvite(true)
-    try {
-      const response = await fetch(`/api/teachers/${teacher.id}/invite`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Failed to send invitation")
-      }
-
-      const data = await response.json()
-      toast.success("Portal invitation sent successfully!", {
-        description: data.message,
-      })
-      setInviteDialogOpen(false)
-      onUpdate?.()
-    } catch (err) {
-      toast.error("Failed to send invitation", {
-        description: err instanceof Error ? err.message : "An error occurred",
-      })
-    } finally {
-      setIsSendingInvite(false)
-    }
-  }
-
-
   return (
     <div className="text-right">
       <DropdownMenu>
@@ -258,24 +227,15 @@ export function TeacherActions({ teacher, onUpdate, isAdmin = false }: TeacherAc
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Send Portal Invite</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to send a portal invitation to {teacher.firstName} {teacher.lastName}{teacher.email ? ` (${teacher.email})` : ''}? They will receive an email with instructions to set up their account.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setInviteDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSendInvite} disabled={isSendingInvite}>
-              {isSendingInvite ? "Sending..." : "Send Invite"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Invite Dialog - Role selection dialog */}
+      <InviteTeacherDialog
+        teacherId={teacher.id}
+        teacherEmail={teacher.email || ""}
+        teacherName={`${teacher.firstName} ${teacher.lastName}`}
+        open={inviteDialogOpen}
+        onOpenChange={setInviteDialogOpen}
+        onInviteSent={onUpdate}
+      />
 
       <ProgressiveDeletionDialog
         isOpen={deleteDialogOpen}

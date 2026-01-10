@@ -50,6 +50,7 @@ export type TeacherPaymentMinAggregateOutputType = {
   deleteReason: $Enums.DeleteReason | null
   createdAt: Date | null
   updatedAt: Date | null
+  organizationId: string | null
 }
 
 export type TeacherPaymentMaxAggregateOutputType = {
@@ -68,6 +69,7 @@ export type TeacherPaymentMaxAggregateOutputType = {
   deleteReason: $Enums.DeleteReason | null
   createdAt: Date | null
   updatedAt: Date | null
+  organizationId: string | null
 }
 
 export type TeacherPaymentCountAggregateOutputType = {
@@ -86,6 +88,7 @@ export type TeacherPaymentCountAggregateOutputType = {
   deleteReason: number
   createdAt: number
   updatedAt: number
+  organizationId: number
   _all: number
 }
 
@@ -114,6 +117,7 @@ export type TeacherPaymentMinAggregateInputType = {
   deleteReason?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
 }
 
 export type TeacherPaymentMaxAggregateInputType = {
@@ -132,6 +136,7 @@ export type TeacherPaymentMaxAggregateInputType = {
   deleteReason?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
 }
 
 export type TeacherPaymentCountAggregateInputType = {
@@ -150,6 +155,7 @@ export type TeacherPaymentCountAggregateInputType = {
   deleteReason?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
   _all?: true
 }
 
@@ -255,6 +261,7 @@ export type TeacherPaymentGroupByOutputType = {
   deleteReason: $Enums.DeleteReason | null
   createdAt: Date
   updatedAt: Date
+  organizationId: string
   _count: TeacherPaymentCountAggregateOutputType | null
   _avg: TeacherPaymentAvgAggregateOutputType | null
   _sum: TeacherPaymentSumAggregateOutputType | null
@@ -296,7 +303,9 @@ export type TeacherPaymentWhereInput = {
   deleteReason?: Prisma.EnumDeleteReasonNullableFilter<"TeacherPayment"> | $Enums.DeleteReason | null
   createdAt?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
+  organizationId?: Prisma.StringFilter<"TeacherPayment"> | string
   teacher?: Prisma.XOR<Prisma.TeacherScalarRelationFilter, Prisma.TeacherWhereInput>
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }
 
 export type TeacherPaymentOrderByWithRelationInput = {
@@ -315,7 +324,9 @@ export type TeacherPaymentOrderByWithRelationInput = {
   deleteReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   teacher?: Prisma.TeacherOrderByWithRelationInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type TeacherPaymentWhereUniqueInput = Prisma.AtLeast<{
@@ -337,7 +348,9 @@ export type TeacherPaymentWhereUniqueInput = Prisma.AtLeast<{
   deleteReason?: Prisma.EnumDeleteReasonNullableFilter<"TeacherPayment"> | $Enums.DeleteReason | null
   createdAt?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
+  organizationId?: Prisma.StringFilter<"TeacherPayment"> | string
   teacher?: Prisma.XOR<Prisma.TeacherScalarRelationFilter, Prisma.TeacherWhereInput>
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }, "id">
 
 export type TeacherPaymentOrderByWithAggregationInput = {
@@ -356,6 +369,7 @@ export type TeacherPaymentOrderByWithAggregationInput = {
   deleteReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   _count?: Prisma.TeacherPaymentCountOrderByAggregateInput
   _avg?: Prisma.TeacherPaymentAvgOrderByAggregateInput
   _max?: Prisma.TeacherPaymentMaxOrderByAggregateInput
@@ -382,6 +396,7 @@ export type TeacherPaymentScalarWhereWithAggregatesInput = {
   deleteReason?: Prisma.EnumDeleteReasonNullableWithAggregatesFilter<"TeacherPayment"> | $Enums.DeleteReason | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TeacherPayment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TeacherPayment"> | Date | string
+  organizationId?: Prisma.StringWithAggregatesFilter<"TeacherPayment"> | string
 }
 
 export type TeacherPaymentCreateInput = {
@@ -400,6 +415,7 @@ export type TeacherPaymentCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.TeacherCreateNestedOneWithoutPaymentsInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutTeacherPaymentsInput
 }
 
 export type TeacherPaymentUncheckedCreateInput = {
@@ -418,6 +434,7 @@ export type TeacherPaymentUncheckedCreateInput = {
   deleteReason?: $Enums.DeleteReason | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type TeacherPaymentUpdateInput = {
@@ -436,6 +453,7 @@ export type TeacherPaymentUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.TeacherUpdateOneRequiredWithoutPaymentsNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutTeacherPaymentsNestedInput
 }
 
 export type TeacherPaymentUncheckedUpdateInput = {
@@ -454,6 +472,7 @@ export type TeacherPaymentUncheckedUpdateInput = {
   deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TeacherPaymentCreateManyInput = {
@@ -472,6 +491,7 @@ export type TeacherPaymentCreateManyInput = {
   deleteReason?: $Enums.DeleteReason | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type TeacherPaymentUpdateManyMutationInput = {
@@ -507,6 +527,7 @@ export type TeacherPaymentUncheckedUpdateManyInput = {
   deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TeacherPaymentListRelationFilter = {
@@ -535,6 +556,7 @@ export type TeacherPaymentCountOrderByAggregateInput = {
   deleteReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type TeacherPaymentAvgOrderByAggregateInput = {
@@ -557,6 +579,7 @@ export type TeacherPaymentMaxOrderByAggregateInput = {
   deleteReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type TeacherPaymentMinOrderByAggregateInput = {
@@ -575,10 +598,53 @@ export type TeacherPaymentMinOrderByAggregateInput = {
   deleteReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type TeacherPaymentSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+}
+
+export type TeacherPaymentCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.TeacherPaymentCreateWithoutOrganizationInput, Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput> | Prisma.TeacherPaymentCreateWithoutOrganizationInput[] | Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.TeacherPaymentCreateOrConnectWithoutOrganizationInput | Prisma.TeacherPaymentCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.TeacherPaymentCreateManyOrganizationInputEnvelope
+  connect?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+}
+
+export type TeacherPaymentUncheckedCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.TeacherPaymentCreateWithoutOrganizationInput, Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput> | Prisma.TeacherPaymentCreateWithoutOrganizationInput[] | Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.TeacherPaymentCreateOrConnectWithoutOrganizationInput | Prisma.TeacherPaymentCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.TeacherPaymentCreateManyOrganizationInputEnvelope
+  connect?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+}
+
+export type TeacherPaymentUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.TeacherPaymentCreateWithoutOrganizationInput, Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput> | Prisma.TeacherPaymentCreateWithoutOrganizationInput[] | Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.TeacherPaymentCreateOrConnectWithoutOrganizationInput | Prisma.TeacherPaymentCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.TeacherPaymentUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.TeacherPaymentUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.TeacherPaymentCreateManyOrganizationInputEnvelope
+  set?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+  disconnect?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+  delete?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+  connect?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+  update?: Prisma.TeacherPaymentUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.TeacherPaymentUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.TeacherPaymentUpdateManyWithWhereWithoutOrganizationInput | Prisma.TeacherPaymentUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.TeacherPaymentScalarWhereInput | Prisma.TeacherPaymentScalarWhereInput[]
+}
+
+export type TeacherPaymentUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.TeacherPaymentCreateWithoutOrganizationInput, Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput> | Prisma.TeacherPaymentCreateWithoutOrganizationInput[] | Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.TeacherPaymentCreateOrConnectWithoutOrganizationInput | Prisma.TeacherPaymentCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.TeacherPaymentUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.TeacherPaymentUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.TeacherPaymentCreateManyOrganizationInputEnvelope
+  set?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+  disconnect?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+  delete?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+  connect?: Prisma.TeacherPaymentWhereUniqueInput | Prisma.TeacherPaymentWhereUniqueInput[]
+  update?: Prisma.TeacherPaymentUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.TeacherPaymentUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.TeacherPaymentUpdateManyWithWhereWithoutOrganizationInput | Prisma.TeacherPaymentUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.TeacherPaymentScalarWhereInput | Prisma.TeacherPaymentScalarWhereInput[]
 }
 
 export type TeacherPaymentCreateNestedManyWithoutTeacherInput = {
@@ -623,6 +689,90 @@ export type TeacherPaymentUncheckedUpdateManyWithoutTeacherNestedInput = {
   deleteMany?: Prisma.TeacherPaymentScalarWhereInput | Prisma.TeacherPaymentScalarWhereInput[]
 }
 
+export type TeacherPaymentCreateWithoutOrganizationInput = {
+  id?: string
+  amount: number
+  paymentDate: Date | string
+  periodStart: Date | string
+  periodEnd: Date | string
+  status?: $Enums.PaymentStatus
+  description?: string | null
+  receiptNo?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.TeacherCreateNestedOneWithoutPaymentsInput
+}
+
+export type TeacherPaymentUncheckedCreateWithoutOrganizationInput = {
+  id?: string
+  teacherId: string
+  amount: number
+  paymentDate: Date | string
+  periodStart: Date | string
+  periodEnd: Date | string
+  status?: $Enums.PaymentStatus
+  description?: string | null
+  receiptNo?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TeacherPaymentCreateOrConnectWithoutOrganizationInput = {
+  where: Prisma.TeacherPaymentWhereUniqueInput
+  create: Prisma.XOR<Prisma.TeacherPaymentCreateWithoutOrganizationInput, Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput>
+}
+
+export type TeacherPaymentCreateManyOrganizationInputEnvelope = {
+  data: Prisma.TeacherPaymentCreateManyOrganizationInput | Prisma.TeacherPaymentCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
+}
+
+export type TeacherPaymentUpsertWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.TeacherPaymentWhereUniqueInput
+  update: Prisma.XOR<Prisma.TeacherPaymentUpdateWithoutOrganizationInput, Prisma.TeacherPaymentUncheckedUpdateWithoutOrganizationInput>
+  create: Prisma.XOR<Prisma.TeacherPaymentCreateWithoutOrganizationInput, Prisma.TeacherPaymentUncheckedCreateWithoutOrganizationInput>
+}
+
+export type TeacherPaymentUpdateWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.TeacherPaymentWhereUniqueInput
+  data: Prisma.XOR<Prisma.TeacherPaymentUpdateWithoutOrganizationInput, Prisma.TeacherPaymentUncheckedUpdateWithoutOrganizationInput>
+}
+
+export type TeacherPaymentUpdateManyWithWhereWithoutOrganizationInput = {
+  where: Prisma.TeacherPaymentScalarWhereInput
+  data: Prisma.XOR<Prisma.TeacherPaymentUpdateManyMutationInput, Prisma.TeacherPaymentUncheckedUpdateManyWithoutOrganizationInput>
+}
+
+export type TeacherPaymentScalarWhereInput = {
+  AND?: Prisma.TeacherPaymentScalarWhereInput | Prisma.TeacherPaymentScalarWhereInput[]
+  OR?: Prisma.TeacherPaymentScalarWhereInput[]
+  NOT?: Prisma.TeacherPaymentScalarWhereInput | Prisma.TeacherPaymentScalarWhereInput[]
+  id?: Prisma.StringFilter<"TeacherPayment"> | string
+  teacherId?: Prisma.StringFilter<"TeacherPayment"> | string
+  amount?: Prisma.FloatFilter<"TeacherPayment"> | number
+  paymentDate?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
+  periodStart?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
+  periodEnd?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
+  status?: Prisma.EnumPaymentStatusFilter<"TeacherPayment"> | $Enums.PaymentStatus
+  description?: Prisma.StringNullableFilter<"TeacherPayment"> | string | null
+  receiptNo?: Prisma.StringNullableFilter<"TeacherPayment"> | string | null
+  isDeleted?: Prisma.BoolFilter<"TeacherPayment"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"TeacherPayment"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"TeacherPayment"> | string | null
+  deleteReason?: Prisma.EnumDeleteReasonNullableFilter<"TeacherPayment"> | $Enums.DeleteReason | null
+  createdAt?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
+  organizationId?: Prisma.StringFilter<"TeacherPayment"> | string
+}
+
 export type TeacherPaymentCreateWithoutTeacherInput = {
   id?: string
   amount: number
@@ -638,6 +788,7 @@ export type TeacherPaymentCreateWithoutTeacherInput = {
   deleteReason?: $Enums.DeleteReason | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutTeacherPaymentsInput
 }
 
 export type TeacherPaymentUncheckedCreateWithoutTeacherInput = {
@@ -655,6 +806,7 @@ export type TeacherPaymentUncheckedCreateWithoutTeacherInput = {
   deleteReason?: $Enums.DeleteReason | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type TeacherPaymentCreateOrConnectWithoutTeacherInput = {
@@ -683,25 +835,76 @@ export type TeacherPaymentUpdateManyWithWhereWithoutTeacherInput = {
   data: Prisma.XOR<Prisma.TeacherPaymentUpdateManyMutationInput, Prisma.TeacherPaymentUncheckedUpdateManyWithoutTeacherInput>
 }
 
-export type TeacherPaymentScalarWhereInput = {
-  AND?: Prisma.TeacherPaymentScalarWhereInput | Prisma.TeacherPaymentScalarWhereInput[]
-  OR?: Prisma.TeacherPaymentScalarWhereInput[]
-  NOT?: Prisma.TeacherPaymentScalarWhereInput | Prisma.TeacherPaymentScalarWhereInput[]
-  id?: Prisma.StringFilter<"TeacherPayment"> | string
-  teacherId?: Prisma.StringFilter<"TeacherPayment"> | string
-  amount?: Prisma.FloatFilter<"TeacherPayment"> | number
-  paymentDate?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
-  periodStart?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
-  periodEnd?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
-  status?: Prisma.EnumPaymentStatusFilter<"TeacherPayment"> | $Enums.PaymentStatus
-  description?: Prisma.StringNullableFilter<"TeacherPayment"> | string | null
-  receiptNo?: Prisma.StringNullableFilter<"TeacherPayment"> | string | null
-  isDeleted?: Prisma.BoolFilter<"TeacherPayment"> | boolean
-  deletedAt?: Prisma.DateTimeNullableFilter<"TeacherPayment"> | Date | string | null
-  deletedBy?: Prisma.StringNullableFilter<"TeacherPayment"> | string | null
-  deleteReason?: Prisma.EnumDeleteReasonNullableFilter<"TeacherPayment"> | $Enums.DeleteReason | null
-  createdAt?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"TeacherPayment"> | Date | string
+export type TeacherPaymentCreateManyOrganizationInput = {
+  id?: string
+  teacherId: string
+  amount: number
+  paymentDate: Date | string
+  periodStart: Date | string
+  periodEnd: Date | string
+  status?: $Enums.PaymentStatus
+  description?: string | null
+  receiptNo?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  deleteReason?: $Enums.DeleteReason | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TeacherPaymentUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receiptNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.TeacherUpdateOneRequiredWithoutPaymentsNestedInput
+}
+
+export type TeacherPaymentUncheckedUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receiptNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TeacherPaymentUncheckedUpdateManyWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  teacherId?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  periodEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receiptNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TeacherPaymentCreateManyTeacherInput = {
@@ -719,6 +922,7 @@ export type TeacherPaymentCreateManyTeacherInput = {
   deleteReason?: $Enums.DeleteReason | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type TeacherPaymentUpdateWithoutTeacherInput = {
@@ -736,6 +940,7 @@ export type TeacherPaymentUpdateWithoutTeacherInput = {
   deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutTeacherPaymentsNestedInput
 }
 
 export type TeacherPaymentUncheckedUpdateWithoutTeacherInput = {
@@ -753,6 +958,7 @@ export type TeacherPaymentUncheckedUpdateWithoutTeacherInput = {
   deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TeacherPaymentUncheckedUpdateManyWithoutTeacherInput = {
@@ -770,6 +976,7 @@ export type TeacherPaymentUncheckedUpdateManyWithoutTeacherInput = {
   deleteReason?: Prisma.NullableEnumDeleteReasonFieldUpdateOperationsInput | $Enums.DeleteReason | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -790,7 +997,9 @@ export type TeacherPaymentSelect<ExtArgs extends runtime.Types.Extensions.Intern
   deleteReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
   teacher?: boolean | Prisma.TeacherDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["teacherPayment"]>
 
 export type TeacherPaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -809,7 +1018,9 @@ export type TeacherPaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   deleteReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
   teacher?: boolean | Prisma.TeacherDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["teacherPayment"]>
 
 export type TeacherPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -828,7 +1039,9 @@ export type TeacherPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   deleteReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
   teacher?: boolean | Prisma.TeacherDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["teacherPayment"]>
 
 export type TeacherPaymentSelectScalar = {
@@ -847,23 +1060,28 @@ export type TeacherPaymentSelectScalar = {
   deleteReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
 }
 
-export type TeacherPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "teacherId" | "amount" | "paymentDate" | "periodStart" | "periodEnd" | "status" | "description" | "receiptNo" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason" | "createdAt" | "updatedAt", ExtArgs["result"]["teacherPayment"]>
+export type TeacherPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "teacherId" | "amount" | "paymentDate" | "periodStart" | "periodEnd" | "status" | "description" | "receiptNo" | "isDeleted" | "deletedAt" | "deletedBy" | "deleteReason" | "createdAt" | "updatedAt" | "organizationId", ExtArgs["result"]["teacherPayment"]>
 export type TeacherPaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.TeacherDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 export type TeacherPaymentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.TeacherDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 export type TeacherPaymentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.TeacherDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 
 export type $TeacherPaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TeacherPayment"
   objects: {
     teacher: Prisma.$TeacherPayload<ExtArgs>
+    organization: Prisma.$OrganizationPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -881,6 +1099,7 @@ export type $TeacherPaymentPayload<ExtArgs extends runtime.Types.Extensions.Inte
     deleteReason: $Enums.DeleteReason | null
     createdAt: Date
     updatedAt: Date
+    organizationId: string
   }, ExtArgs["result"]["teacherPayment"]>
   composites: {}
 }
@@ -1276,6 +1495,7 @@ readonly fields: TeacherPaymentFieldRefs;
 export interface Prisma__TeacherPaymentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   teacher<T extends Prisma.TeacherDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TeacherDefaultArgs<ExtArgs>>): Prisma.Prisma__TeacherClient<runtime.Types.Result.GetResult<Prisma.$TeacherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1320,6 +1540,7 @@ export interface TeacherPaymentFieldRefs {
   readonly deleteReason: Prisma.FieldRef<"TeacherPayment", 'DeleteReason'>
   readonly createdAt: Prisma.FieldRef<"TeacherPayment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TeacherPayment", 'DateTime'>
+  readonly organizationId: Prisma.FieldRef<"TeacherPayment", 'String'>
 }
     
 

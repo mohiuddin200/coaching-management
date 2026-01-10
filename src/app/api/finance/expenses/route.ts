@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ExpenseCategory } from "@/generated/enums";
 import { SmsLog } from "@/generated/client";
+import { requirePageAccess } from "@/lib/permissions/server";
 
 
 // GET - List all expenses
 export async function GET(request: NextRequest) {
   try {
+    // Require finance page access
+    const userContext = await requirePageAccess("/finance");
+
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const startDate = searchParams.get("startDate");
@@ -14,6 +18,7 @@ export async function GET(request: NextRequest) {
 
     const expenses = await prisma.expense.findMany({
       where: {
+        organizationId: userContext.organizationId, // Filter by organization
         ...(category && { category: category as ExpenseCategory }),
         ...(startDate &&
           endDate && {
@@ -83,6 +88,9 @@ export async function GET(request: NextRequest) {
 // POST - Create new expense
 export async function POST(request: Request) {
   try {
+    // Require finance page access
+    const userContext = await requirePageAccess("/finance");
+
     const body = await request.json();
     const { category, amount, expenseDate, description, vendor, receiptNo } =
       body;
@@ -107,6 +115,7 @@ export async function POST(request: Request) {
 
     const expense = await prisma.expense.create({
       data: {
+        organizationId: userContext.organizationId, // Link to organization
         category: category as ExpenseCategory,
         amount: parseFloat(amount),
         expenseDate: new Date(expenseDate),

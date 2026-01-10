@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requirePageAccess } from "@/lib/permissions/server";
 
 // GET - List all teacher payments
 export async function GET(request: NextRequest) {
   try {
+    // Require finance page access
+    const userContext = await requirePageAccess("/finance");
+
     const { searchParams } = new URL(request.url);
     const teacherId = searchParams.get("teacherId");
 
     const payments = await prisma.teacherPayment.findMany({
       where: {
+        organizationId: userContext.organizationId, // Filter by organization
         ...(teacherId && { teacherId }),
       },
       include: {
@@ -42,6 +47,9 @@ export async function GET(request: NextRequest) {
 // POST - Create new teacher payment
 export async function POST(request: Request) {
   try {
+    // Require finance page access
+    const userContext = await requirePageAccess("/finance");
+
     const body = await request.json();
     const {
       teacherId,
@@ -71,9 +79,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if teacher exists
-    const teacher = await prisma.teacher.findUnique({
-      where: { id: teacherId },
+    // Check if teacher exists and belongs to organization
+    const teacher = await prisma.teacher.findFirst({
+      where: { 
+        id: teacherId,
+        organizationId: userContext.organizationId
+      },
     });
 
     if (!teacher) {
@@ -86,6 +97,7 @@ export async function POST(request: Request) {
     const payment = await prisma.teacherPayment.create({
       data: {
         teacherId,
+        organizationId: userContext.organizationId, // Link to organization
         amount: parseFloat(amount),
         paymentDate: new Date(paymentDate),
         periodStart: new Date(periodStart),

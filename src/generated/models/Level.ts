@@ -42,6 +42,7 @@ export type LevelMinAggregateOutputType = {
   status: $Enums.Status | null
   createdAt: Date | null
   updatedAt: Date | null
+  organizationId: string | null
 }
 
 export type LevelMaxAggregateOutputType = {
@@ -52,6 +53,7 @@ export type LevelMaxAggregateOutputType = {
   status: $Enums.Status | null
   createdAt: Date | null
   updatedAt: Date | null
+  organizationId: string | null
 }
 
 export type LevelCountAggregateOutputType = {
@@ -62,6 +64,7 @@ export type LevelCountAggregateOutputType = {
   status: number
   createdAt: number
   updatedAt: number
+  organizationId: number
   _all: number
 }
 
@@ -82,6 +85,7 @@ export type LevelMinAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
 }
 
 export type LevelMaxAggregateInputType = {
@@ -92,6 +96,7 @@ export type LevelMaxAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
 }
 
 export type LevelCountAggregateInputType = {
@@ -102,6 +107,7 @@ export type LevelCountAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
   _all?: true
 }
 
@@ -199,6 +205,7 @@ export type LevelGroupByOutputType = {
   status: $Enums.Status
   createdAt: Date
   updatedAt: Date
+  organizationId: string
   _count: LevelCountAggregateOutputType | null
   _avg: LevelAvgAggregateOutputType | null
   _sum: LevelSumAggregateOutputType | null
@@ -232,10 +239,12 @@ export type LevelWhereInput = {
   status?: Prisma.EnumStatusFilter<"Level"> | $Enums.Status
   createdAt?: Prisma.DateTimeFilter<"Level"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Level"> | Date | string
+  organizationId?: Prisma.StringFilter<"Level"> | string
   students?: Prisma.StudentListRelationFilter
   subjects?: Prisma.SubjectListRelationFilter
   feeStructures?: Prisma.FeeStructureListRelationFilter
   exams?: Prisma.ExamListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }
 
 export type LevelOrderByWithRelationInput = {
@@ -246,10 +255,12 @@ export type LevelOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   students?: Prisma.StudentOrderByRelationAggregateInput
   subjects?: Prisma.SubjectOrderByRelationAggregateInput
   feeStructures?: Prisma.FeeStructureOrderByRelationAggregateInput
   exams?: Prisma.ExamOrderByRelationAggregateInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type LevelWhereUniqueInput = Prisma.AtLeast<{
@@ -263,10 +274,12 @@ export type LevelWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumStatusFilter<"Level"> | $Enums.Status
   createdAt?: Prisma.DateTimeFilter<"Level"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Level"> | Date | string
+  organizationId?: Prisma.StringFilter<"Level"> | string
   students?: Prisma.StudentListRelationFilter
   subjects?: Prisma.SubjectListRelationFilter
   feeStructures?: Prisma.FeeStructureListRelationFilter
   exams?: Prisma.ExamListRelationFilter
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }, "id" | "name" | "levelNumber">
 
 export type LevelOrderByWithAggregationInput = {
@@ -277,6 +290,7 @@ export type LevelOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   _count?: Prisma.LevelCountOrderByAggregateInput
   _avg?: Prisma.LevelAvgOrderByAggregateInput
   _max?: Prisma.LevelMaxOrderByAggregateInput
@@ -295,6 +309,7 @@ export type LevelScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumStatusWithAggregatesFilter<"Level"> | $Enums.Status
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Level"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Level"> | Date | string
+  organizationId?: Prisma.StringWithAggregatesFilter<"Level"> | string
 }
 
 export type LevelCreateInput = {
@@ -309,6 +324,7 @@ export type LevelCreateInput = {
   subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
   exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutLevelsInput
 }
 
 export type LevelUncheckedCreateInput = {
@@ -319,6 +335,7 @@ export type LevelUncheckedCreateInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
@@ -337,6 +354,7 @@ export type LevelUpdateInput = {
   subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
   exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutLevelsNestedInput
 }
 
 export type LevelUncheckedUpdateInput = {
@@ -347,6 +365,7 @@ export type LevelUncheckedUpdateInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
@@ -361,6 +380,7 @@ export type LevelCreateManyInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type LevelUpdateManyMutationInput = {
@@ -381,6 +401,17 @@ export type LevelUncheckedUpdateManyInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type LevelListRelationFilter = {
+  every?: Prisma.LevelWhereInput
+  some?: Prisma.LevelWhereInput
+  none?: Prisma.LevelWhereInput
+}
+
+export type LevelOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type LevelScalarRelationFilter = {
@@ -396,6 +427,7 @@ export type LevelCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type LevelAvgOrderByAggregateInput = {
@@ -410,6 +442,7 @@ export type LevelMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type LevelMinOrderByAggregateInput = {
@@ -420,6 +453,7 @@ export type LevelMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type LevelSumOrderByAggregateInput = {
@@ -429,6 +463,48 @@ export type LevelSumOrderByAggregateInput = {
 export type LevelNullableScalarRelationFilter = {
   is?: Prisma.LevelWhereInput | null
   isNot?: Prisma.LevelWhereInput | null
+}
+
+export type LevelCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.LevelCreateWithoutOrganizationInput, Prisma.LevelUncheckedCreateWithoutOrganizationInput> | Prisma.LevelCreateWithoutOrganizationInput[] | Prisma.LevelUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.LevelCreateOrConnectWithoutOrganizationInput | Prisma.LevelCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.LevelCreateManyOrganizationInputEnvelope
+  connect?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+}
+
+export type LevelUncheckedCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.LevelCreateWithoutOrganizationInput, Prisma.LevelUncheckedCreateWithoutOrganizationInput> | Prisma.LevelCreateWithoutOrganizationInput[] | Prisma.LevelUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.LevelCreateOrConnectWithoutOrganizationInput | Prisma.LevelCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.LevelCreateManyOrganizationInputEnvelope
+  connect?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+}
+
+export type LevelUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.LevelCreateWithoutOrganizationInput, Prisma.LevelUncheckedCreateWithoutOrganizationInput> | Prisma.LevelCreateWithoutOrganizationInput[] | Prisma.LevelUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.LevelCreateOrConnectWithoutOrganizationInput | Prisma.LevelCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.LevelUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.LevelUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.LevelCreateManyOrganizationInputEnvelope
+  set?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+  disconnect?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+  delete?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+  connect?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+  update?: Prisma.LevelUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.LevelUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.LevelUpdateManyWithWhereWithoutOrganizationInput | Prisma.LevelUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.LevelScalarWhereInput | Prisma.LevelScalarWhereInput[]
+}
+
+export type LevelUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.LevelCreateWithoutOrganizationInput, Prisma.LevelUncheckedCreateWithoutOrganizationInput> | Prisma.LevelCreateWithoutOrganizationInput[] | Prisma.LevelUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.LevelCreateOrConnectWithoutOrganizationInput | Prisma.LevelCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.LevelUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.LevelUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.LevelCreateManyOrganizationInputEnvelope
+  set?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+  disconnect?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+  delete?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+  connect?: Prisma.LevelWhereUniqueInput | Prisma.LevelWhereUniqueInput[]
+  update?: Prisma.LevelUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.LevelUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.LevelUpdateManyWithWhereWithoutOrganizationInput | Prisma.LevelUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.LevelScalarWhereInput | Prisma.LevelScalarWhereInput[]
 }
 
 export type LevelCreateNestedOneWithoutStudentsInput = {
@@ -497,6 +573,74 @@ export type LevelUpdateOneRequiredWithoutExamsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LevelUpdateToOneWithWhereWithoutExamsInput, Prisma.LevelUpdateWithoutExamsInput>, Prisma.LevelUncheckedUpdateWithoutExamsInput>
 }
 
+export type LevelCreateWithoutOrganizationInput = {
+  id?: string
+  name: string
+  levelNumber: number
+  description?: string | null
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  students?: Prisma.StudentCreateNestedManyWithoutLevelInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
+  feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
+}
+
+export type LevelUncheckedCreateWithoutOrganizationInput = {
+  id?: string
+  name: string
+  levelNumber: number
+  description?: string | null
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
+  feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutLevelInput
+}
+
+export type LevelCreateOrConnectWithoutOrganizationInput = {
+  where: Prisma.LevelWhereUniqueInput
+  create: Prisma.XOR<Prisma.LevelCreateWithoutOrganizationInput, Prisma.LevelUncheckedCreateWithoutOrganizationInput>
+}
+
+export type LevelCreateManyOrganizationInputEnvelope = {
+  data: Prisma.LevelCreateManyOrganizationInput | Prisma.LevelCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
+}
+
+export type LevelUpsertWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.LevelWhereUniqueInput
+  update: Prisma.XOR<Prisma.LevelUpdateWithoutOrganizationInput, Prisma.LevelUncheckedUpdateWithoutOrganizationInput>
+  create: Prisma.XOR<Prisma.LevelCreateWithoutOrganizationInput, Prisma.LevelUncheckedCreateWithoutOrganizationInput>
+}
+
+export type LevelUpdateWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.LevelWhereUniqueInput
+  data: Prisma.XOR<Prisma.LevelUpdateWithoutOrganizationInput, Prisma.LevelUncheckedUpdateWithoutOrganizationInput>
+}
+
+export type LevelUpdateManyWithWhereWithoutOrganizationInput = {
+  where: Prisma.LevelScalarWhereInput
+  data: Prisma.XOR<Prisma.LevelUpdateManyMutationInput, Prisma.LevelUncheckedUpdateManyWithoutOrganizationInput>
+}
+
+export type LevelScalarWhereInput = {
+  AND?: Prisma.LevelScalarWhereInput | Prisma.LevelScalarWhereInput[]
+  OR?: Prisma.LevelScalarWhereInput[]
+  NOT?: Prisma.LevelScalarWhereInput | Prisma.LevelScalarWhereInput[]
+  id?: Prisma.StringFilter<"Level"> | string
+  name?: Prisma.StringFilter<"Level"> | string
+  levelNumber?: Prisma.IntFilter<"Level"> | number
+  description?: Prisma.StringNullableFilter<"Level"> | string | null
+  status?: Prisma.EnumStatusFilter<"Level"> | $Enums.Status
+  createdAt?: Prisma.DateTimeFilter<"Level"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Level"> | Date | string
+  organizationId?: Prisma.StringFilter<"Level"> | string
+}
+
 export type LevelCreateWithoutStudentsInput = {
   id?: string
   name: string
@@ -508,6 +652,7 @@ export type LevelCreateWithoutStudentsInput = {
   subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
   exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutLevelsInput
 }
 
 export type LevelUncheckedCreateWithoutStudentsInput = {
@@ -518,6 +663,7 @@ export type LevelUncheckedCreateWithoutStudentsInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutLevelInput
@@ -550,6 +696,7 @@ export type LevelUpdateWithoutStudentsInput = {
   subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
   exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutLevelsNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutStudentsInput = {
@@ -560,6 +707,7 @@ export type LevelUncheckedUpdateWithoutStudentsInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutLevelNestedInput
@@ -576,6 +724,7 @@ export type LevelCreateWithoutSubjectsInput = {
   students?: Prisma.StudentCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
   exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutLevelsInput
 }
 
 export type LevelUncheckedCreateWithoutSubjectsInput = {
@@ -586,6 +735,7 @@ export type LevelUncheckedCreateWithoutSubjectsInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutLevelInput
@@ -618,6 +768,7 @@ export type LevelUpdateWithoutSubjectsInput = {
   students?: Prisma.StudentUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
   exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutLevelsNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutSubjectsInput = {
@@ -628,6 +779,7 @@ export type LevelUncheckedUpdateWithoutSubjectsInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutLevelNestedInput
@@ -644,6 +796,7 @@ export type LevelCreateWithoutFeeStructuresInput = {
   students?: Prisma.StudentCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
   exams?: Prisma.ExamCreateNestedManyWithoutLevelInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutLevelsInput
 }
 
 export type LevelUncheckedCreateWithoutFeeStructuresInput = {
@@ -654,6 +807,7 @@ export type LevelUncheckedCreateWithoutFeeStructuresInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
   exams?: Prisma.ExamUncheckedCreateNestedManyWithoutLevelInput
@@ -686,6 +840,7 @@ export type LevelUpdateWithoutFeeStructuresInput = {
   students?: Prisma.StudentUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
   exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutLevelsNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutFeeStructuresInput = {
@@ -696,6 +851,7 @@ export type LevelUncheckedUpdateWithoutFeeStructuresInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
   exams?: Prisma.ExamUncheckedUpdateManyWithoutLevelNestedInput
@@ -712,6 +868,7 @@ export type LevelCreateWithoutExamsInput = {
   students?: Prisma.StudentCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutLevelInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutLevelsInput
 }
 
 export type LevelUncheckedCreateWithoutExamsInput = {
@@ -722,6 +879,7 @@ export type LevelUncheckedCreateWithoutExamsInput = {
   status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
   students?: Prisma.StudentUncheckedCreateNestedManyWithoutLevelInput
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutLevelInput
   feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutLevelInput
@@ -754,6 +912,7 @@ export type LevelUpdateWithoutExamsInput = {
   students?: Prisma.StudentUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutLevelsNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutExamsInput = {
@@ -764,9 +923,58 @@ export type LevelUncheckedUpdateWithoutExamsInput = {
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
   feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
+}
+
+export type LevelCreateManyOrganizationInput = {
+  id?: string
+  name: string
+  levelNumber: number
+  description?: string | null
+  status?: $Enums.Status
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type LevelUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  levelNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  students?: Prisma.StudentUpdateManyWithoutLevelNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutLevelNestedInput
+  feeStructures?: Prisma.FeeStructureUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutLevelNestedInput
+}
+
+export type LevelUncheckedUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  levelNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  students?: Prisma.StudentUncheckedUpdateManyWithoutLevelNestedInput
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutLevelNestedInput
+  feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutLevelNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutLevelNestedInput
+}
+
+export type LevelUncheckedUpdateManyWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  levelNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -835,10 +1043,12 @@ export type LevelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
   students?: boolean | Prisma.Level$studentsArgs<ExtArgs>
   subjects?: boolean | Prisma.Level$subjectsArgs<ExtArgs>
   feeStructures?: boolean | Prisma.Level$feeStructuresArgs<ExtArgs>
   exams?: boolean | Prisma.Level$examsArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.LevelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["level"]>
 
@@ -850,6 +1060,8 @@ export type LevelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["level"]>
 
 export type LevelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -860,6 +1072,8 @@ export type LevelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["level"]>
 
 export type LevelSelectScalar = {
@@ -870,18 +1084,24 @@ export type LevelSelectScalar = {
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
 }
 
-export type LevelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "levelNumber" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["level"]>
+export type LevelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "levelNumber" | "description" | "status" | "createdAt" | "updatedAt" | "organizationId", ExtArgs["result"]["level"]>
 export type LevelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   students?: boolean | Prisma.Level$studentsArgs<ExtArgs>
   subjects?: boolean | Prisma.Level$subjectsArgs<ExtArgs>
   feeStructures?: boolean | Prisma.Level$feeStructuresArgs<ExtArgs>
   exams?: boolean | Prisma.Level$examsArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.LevelCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type LevelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type LevelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type LevelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+}
+export type LevelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+}
 
 export type $LevelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Level"
@@ -890,6 +1110,7 @@ export type $LevelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     subjects: Prisma.$SubjectPayload<ExtArgs>[]
     feeStructures: Prisma.$FeeStructurePayload<ExtArgs>[]
     exams: Prisma.$ExamPayload<ExtArgs>[]
+    organization: Prisma.$OrganizationPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -899,6 +1120,7 @@ export type $LevelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     status: $Enums.Status
     createdAt: Date
     updatedAt: Date
+    organizationId: string
   }, ExtArgs["result"]["level"]>
   composites: {}
 }
@@ -1297,6 +1519,7 @@ export interface Prisma__LevelClient<T, Null = never, ExtArgs extends runtime.Ty
   subjects<T extends Prisma.Level$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   feeStructures<T extends Prisma.Level$feeStructuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$feeStructuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeeStructurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   exams<T extends Prisma.Level$examsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$examsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1333,6 +1556,7 @@ export interface LevelFieldRefs {
   readonly status: Prisma.FieldRef<"Level", 'Status'>
   readonly createdAt: Prisma.FieldRef<"Level", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Level", 'DateTime'>
+  readonly organizationId: Prisma.FieldRef<"Level", 'String'>
 }
     
 
@@ -1582,6 +1806,10 @@ export type LevelCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.LevelCreateManyInput | Prisma.LevelCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LevelIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1652,6 +1880,10 @@ export type LevelUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Levels to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LevelIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

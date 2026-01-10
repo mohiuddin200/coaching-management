@@ -52,6 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Organization: 'Organization',
+  UserOrganization: 'UserOrganization',
   Teacher: 'Teacher',
   Student: 'Student',
   Level: 'Level',
@@ -100,6 +102,36 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const OrganizationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  logo: 'logo',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const UserOrganizationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  organizationId: 'organizationId',
+  role: 'role',
+  canInvite: 'canInvite',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserOrganizationScalarFieldEnum = (typeof UserOrganizationScalarFieldEnum)[keyof typeof UserOrganizationScalarFieldEnum]
+
+
 export const TeacherScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
@@ -113,6 +145,7 @@ export const TeacherScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',
+  organizationId: 'organizationId',
   bloodGroup: 'bloodGroup',
   cgpa: 'cgpa',
   city: 'city',
@@ -175,6 +208,7 @@ export const StudentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   levelId: 'levelId',
+  organizationId: 'organizationId',
   birthCertificate: 'birthCertificate',
   bloodGroup: 'bloodGroup',
   city: 'city',
@@ -213,7 +247,8 @@ export const LevelScalarFieldEnum = {
   description: 'description',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
 } as const
 
 export type LevelScalarFieldEnum = (typeof LevelScalarFieldEnum)[keyof typeof LevelScalarFieldEnum]
@@ -243,7 +278,8 @@ export const ClassSectionScalarFieldEnum = {
   academicYear: 'academicYear',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
 } as const
 
 export type ClassSectionScalarFieldEnum = (typeof ClassSectionScalarFieldEnum)[keyof typeof ClassSectionScalarFieldEnum]
@@ -356,7 +392,8 @@ export const FeeStructureScalarFieldEnum = {
   description: 'description',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
 } as const
 
 export type FeeStructureScalarFieldEnum = (typeof FeeStructureScalarFieldEnum)[keyof typeof FeeStructureScalarFieldEnum]
@@ -377,7 +414,8 @@ export const StudentPaymentScalarFieldEnum = {
   deletedBy: 'deletedBy',
   deleteReason: 'deleteReason',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
 } as const
 
 export type StudentPaymentScalarFieldEnum = (typeof StudentPaymentScalarFieldEnum)[keyof typeof StudentPaymentScalarFieldEnum]
@@ -398,7 +436,8 @@ export const TeacherPaymentScalarFieldEnum = {
   deletedBy: 'deletedBy',
   deleteReason: 'deleteReason',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
 } as const
 
 export type TeacherPaymentScalarFieldEnum = (typeof TeacherPaymentScalarFieldEnum)[keyof typeof TeacherPaymentScalarFieldEnum]
@@ -413,7 +452,8 @@ export const ExpenseScalarFieldEnum = {
   vendor: 'vendor',
   receiptNo: 'receiptNo',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  organizationId: 'organizationId'
 } as const
 
 export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
@@ -444,7 +484,8 @@ export const ExamScalarFieldEnum = {
   isDeleted: 'isDeleted',
   deletedAt: 'deletedAt',
   deletedBy: 'deletedBy',
-  deleteReason: 'deleteReason'
+  deleteReason: 'deleteReason',
+  organizationId: 'organizationId'
 } as const
 
 export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]

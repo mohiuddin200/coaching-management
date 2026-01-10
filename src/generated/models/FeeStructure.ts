@@ -45,6 +45,7 @@ export type FeeStructureMinAggregateOutputType = {
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  organizationId: string | null
 }
 
 export type FeeStructureMaxAggregateOutputType = {
@@ -58,6 +59,7 @@ export type FeeStructureMaxAggregateOutputType = {
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  organizationId: string | null
 }
 
 export type FeeStructureCountAggregateOutputType = {
@@ -71,6 +73,7 @@ export type FeeStructureCountAggregateOutputType = {
   isActive: number
   createdAt: number
   updatedAt: number
+  organizationId: number
   _all: number
 }
 
@@ -94,6 +97,7 @@ export type FeeStructureMinAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
 }
 
 export type FeeStructureMaxAggregateInputType = {
@@ -107,6 +111,7 @@ export type FeeStructureMaxAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
 }
 
 export type FeeStructureCountAggregateInputType = {
@@ -120,6 +125,7 @@ export type FeeStructureCountAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  organizationId?: true
   _all?: true
 }
 
@@ -220,6 +226,7 @@ export type FeeStructureGroupByOutputType = {
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+  organizationId: string
   _count: FeeStructureCountAggregateOutputType | null
   _avg: FeeStructureAvgAggregateOutputType | null
   _sum: FeeStructureSumAggregateOutputType | null
@@ -256,7 +263,9 @@ export type FeeStructureWhereInput = {
   isActive?: Prisma.BoolFilter<"FeeStructure"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FeeStructure"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FeeStructure"> | Date | string
+  organizationId?: Prisma.StringFilter<"FeeStructure"> | string
   level?: Prisma.XOR<Prisma.LevelNullableScalarRelationFilter, Prisma.LevelWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }
 
 export type FeeStructureOrderByWithRelationInput = {
@@ -270,7 +279,9 @@ export type FeeStructureOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   level?: Prisma.LevelOrderByWithRelationInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type FeeStructureWhereUniqueInput = Prisma.AtLeast<{
@@ -287,7 +298,9 @@ export type FeeStructureWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"FeeStructure"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FeeStructure"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FeeStructure"> | Date | string
+  organizationId?: Prisma.StringFilter<"FeeStructure"> | string
   level?: Prisma.XOR<Prisma.LevelNullableScalarRelationFilter, Prisma.LevelWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }, "id">
 
 export type FeeStructureOrderByWithAggregationInput = {
@@ -301,6 +314,7 @@ export type FeeStructureOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   _count?: Prisma.FeeStructureCountOrderByAggregateInput
   _avg?: Prisma.FeeStructureAvgOrderByAggregateInput
   _max?: Prisma.FeeStructureMaxOrderByAggregateInput
@@ -322,6 +336,7 @@ export type FeeStructureScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"FeeStructure"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FeeStructure"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FeeStructure"> | Date | string
+  organizationId?: Prisma.StringWithAggregatesFilter<"FeeStructure"> | string
 }
 
 export type FeeStructureCreateInput = {
@@ -335,6 +350,7 @@ export type FeeStructureCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   level?: Prisma.LevelCreateNestedOneWithoutFeeStructuresInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutFeeStructuresInput
 }
 
 export type FeeStructureUncheckedCreateInput = {
@@ -348,6 +364,7 @@ export type FeeStructureUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type FeeStructureUpdateInput = {
@@ -361,6 +378,7 @@ export type FeeStructureUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   level?: Prisma.LevelUpdateOneWithoutFeeStructuresNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutFeeStructuresNestedInput
 }
 
 export type FeeStructureUncheckedUpdateInput = {
@@ -374,6 +392,7 @@ export type FeeStructureUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FeeStructureCreateManyInput = {
@@ -387,6 +406,7 @@ export type FeeStructureCreateManyInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type FeeStructureUpdateManyMutationInput = {
@@ -412,6 +432,7 @@ export type FeeStructureUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FeeStructureListRelationFilter = {
@@ -435,6 +456,7 @@ export type FeeStructureCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type FeeStructureAvgOrderByAggregateInput = {
@@ -452,6 +474,7 @@ export type FeeStructureMaxOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type FeeStructureMinOrderByAggregateInput = {
@@ -465,10 +488,53 @@ export type FeeStructureMinOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
 }
 
 export type FeeStructureSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+}
+
+export type FeeStructureCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.FeeStructureCreateWithoutOrganizationInput, Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput> | Prisma.FeeStructureCreateWithoutOrganizationInput[] | Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.FeeStructureCreateOrConnectWithoutOrganizationInput | Prisma.FeeStructureCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.FeeStructureCreateManyOrganizationInputEnvelope
+  connect?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+}
+
+export type FeeStructureUncheckedCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.FeeStructureCreateWithoutOrganizationInput, Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput> | Prisma.FeeStructureCreateWithoutOrganizationInput[] | Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.FeeStructureCreateOrConnectWithoutOrganizationInput | Prisma.FeeStructureCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.FeeStructureCreateManyOrganizationInputEnvelope
+  connect?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+}
+
+export type FeeStructureUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.FeeStructureCreateWithoutOrganizationInput, Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput> | Prisma.FeeStructureCreateWithoutOrganizationInput[] | Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.FeeStructureCreateOrConnectWithoutOrganizationInput | Prisma.FeeStructureCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.FeeStructureUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.FeeStructureUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.FeeStructureCreateManyOrganizationInputEnvelope
+  set?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+  disconnect?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+  delete?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+  connect?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+  update?: Prisma.FeeStructureUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.FeeStructureUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.FeeStructureUpdateManyWithWhereWithoutOrganizationInput | Prisma.FeeStructureUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.FeeStructureScalarWhereInput | Prisma.FeeStructureScalarWhereInput[]
+}
+
+export type FeeStructureUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.FeeStructureCreateWithoutOrganizationInput, Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput> | Prisma.FeeStructureCreateWithoutOrganizationInput[] | Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.FeeStructureCreateOrConnectWithoutOrganizationInput | Prisma.FeeStructureCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.FeeStructureUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.FeeStructureUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.FeeStructureCreateManyOrganizationInputEnvelope
+  set?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+  disconnect?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+  delete?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+  connect?: Prisma.FeeStructureWhereUniqueInput | Prisma.FeeStructureWhereUniqueInput[]
+  update?: Prisma.FeeStructureUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.FeeStructureUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.FeeStructureUpdateManyWithWhereWithoutOrganizationInput | Prisma.FeeStructureUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.FeeStructureScalarWhereInput | Prisma.FeeStructureScalarWhereInput[]
 }
 
 export type FeeStructureCreateNestedManyWithoutLevelInput = {
@@ -525,6 +591,75 @@ export type EnumFeeFrequencyFieldUpdateOperationsInput = {
   set?: $Enums.FeeFrequency
 }
 
+export type FeeStructureCreateWithoutOrganizationInput = {
+  id?: string
+  name: string
+  amount: number
+  frequency?: $Enums.FeeFrequency
+  academicYear: string
+  description?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  level?: Prisma.LevelCreateNestedOneWithoutFeeStructuresInput
+}
+
+export type FeeStructureUncheckedCreateWithoutOrganizationInput = {
+  id?: string
+  name: string
+  levelId?: string | null
+  amount: number
+  frequency?: $Enums.FeeFrequency
+  academicYear: string
+  description?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FeeStructureCreateOrConnectWithoutOrganizationInput = {
+  where: Prisma.FeeStructureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FeeStructureCreateWithoutOrganizationInput, Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput>
+}
+
+export type FeeStructureCreateManyOrganizationInputEnvelope = {
+  data: Prisma.FeeStructureCreateManyOrganizationInput | Prisma.FeeStructureCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
+}
+
+export type FeeStructureUpsertWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.FeeStructureWhereUniqueInput
+  update: Prisma.XOR<Prisma.FeeStructureUpdateWithoutOrganizationInput, Prisma.FeeStructureUncheckedUpdateWithoutOrganizationInput>
+  create: Prisma.XOR<Prisma.FeeStructureCreateWithoutOrganizationInput, Prisma.FeeStructureUncheckedCreateWithoutOrganizationInput>
+}
+
+export type FeeStructureUpdateWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.FeeStructureWhereUniqueInput
+  data: Prisma.XOR<Prisma.FeeStructureUpdateWithoutOrganizationInput, Prisma.FeeStructureUncheckedUpdateWithoutOrganizationInput>
+}
+
+export type FeeStructureUpdateManyWithWhereWithoutOrganizationInput = {
+  where: Prisma.FeeStructureScalarWhereInput
+  data: Prisma.XOR<Prisma.FeeStructureUpdateManyMutationInput, Prisma.FeeStructureUncheckedUpdateManyWithoutOrganizationInput>
+}
+
+export type FeeStructureScalarWhereInput = {
+  AND?: Prisma.FeeStructureScalarWhereInput | Prisma.FeeStructureScalarWhereInput[]
+  OR?: Prisma.FeeStructureScalarWhereInput[]
+  NOT?: Prisma.FeeStructureScalarWhereInput | Prisma.FeeStructureScalarWhereInput[]
+  id?: Prisma.StringFilter<"FeeStructure"> | string
+  name?: Prisma.StringFilter<"FeeStructure"> | string
+  levelId?: Prisma.StringNullableFilter<"FeeStructure"> | string | null
+  amount?: Prisma.FloatFilter<"FeeStructure"> | number
+  frequency?: Prisma.EnumFeeFrequencyFilter<"FeeStructure"> | $Enums.FeeFrequency
+  academicYear?: Prisma.StringFilter<"FeeStructure"> | string
+  description?: Prisma.StringNullableFilter<"FeeStructure"> | string | null
+  isActive?: Prisma.BoolFilter<"FeeStructure"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"FeeStructure"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"FeeStructure"> | Date | string
+  organizationId?: Prisma.StringFilter<"FeeStructure"> | string
+}
+
 export type FeeStructureCreateWithoutLevelInput = {
   id?: string
   name: string
@@ -535,6 +670,7 @@ export type FeeStructureCreateWithoutLevelInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutFeeStructuresInput
 }
 
 export type FeeStructureUncheckedCreateWithoutLevelInput = {
@@ -547,6 +683,7 @@ export type FeeStructureUncheckedCreateWithoutLevelInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type FeeStructureCreateOrConnectWithoutLevelInput = {
@@ -575,20 +712,56 @@ export type FeeStructureUpdateManyWithWhereWithoutLevelInput = {
   data: Prisma.XOR<Prisma.FeeStructureUpdateManyMutationInput, Prisma.FeeStructureUncheckedUpdateManyWithoutLevelInput>
 }
 
-export type FeeStructureScalarWhereInput = {
-  AND?: Prisma.FeeStructureScalarWhereInput | Prisma.FeeStructureScalarWhereInput[]
-  OR?: Prisma.FeeStructureScalarWhereInput[]
-  NOT?: Prisma.FeeStructureScalarWhereInput | Prisma.FeeStructureScalarWhereInput[]
-  id?: Prisma.StringFilter<"FeeStructure"> | string
-  name?: Prisma.StringFilter<"FeeStructure"> | string
-  levelId?: Prisma.StringNullableFilter<"FeeStructure"> | string | null
-  amount?: Prisma.FloatFilter<"FeeStructure"> | number
-  frequency?: Prisma.EnumFeeFrequencyFilter<"FeeStructure"> | $Enums.FeeFrequency
-  academicYear?: Prisma.StringFilter<"FeeStructure"> | string
-  description?: Prisma.StringNullableFilter<"FeeStructure"> | string | null
-  isActive?: Prisma.BoolFilter<"FeeStructure"> | boolean
-  createdAt?: Prisma.DateTimeFilter<"FeeStructure"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"FeeStructure"> | Date | string
+export type FeeStructureCreateManyOrganizationInput = {
+  id?: string
+  name: string
+  levelId?: string | null
+  amount: number
+  frequency?: $Enums.FeeFrequency
+  academicYear: string
+  description?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FeeStructureUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  frequency?: Prisma.EnumFeeFrequencyFieldUpdateOperationsInput | $Enums.FeeFrequency
+  academicYear?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  level?: Prisma.LevelUpdateOneWithoutFeeStructuresNestedInput
+}
+
+export type FeeStructureUncheckedUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  levelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  frequency?: Prisma.EnumFeeFrequencyFieldUpdateOperationsInput | $Enums.FeeFrequency
+  academicYear?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FeeStructureUncheckedUpdateManyWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  levelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  frequency?: Prisma.EnumFeeFrequencyFieldUpdateOperationsInput | $Enums.FeeFrequency
+  academicYear?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type FeeStructureCreateManyLevelInput = {
@@ -601,6 +774,7 @@ export type FeeStructureCreateManyLevelInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organizationId: string
 }
 
 export type FeeStructureUpdateWithoutLevelInput = {
@@ -613,6 +787,7 @@ export type FeeStructureUpdateWithoutLevelInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutFeeStructuresNestedInput
 }
 
 export type FeeStructureUncheckedUpdateWithoutLevelInput = {
@@ -625,6 +800,7 @@ export type FeeStructureUncheckedUpdateWithoutLevelInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FeeStructureUncheckedUpdateManyWithoutLevelInput = {
@@ -637,6 +813,7 @@ export type FeeStructureUncheckedUpdateManyWithoutLevelInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -652,7 +829,9 @@ export type FeeStructureSelect<ExtArgs extends runtime.Types.Extensions.Internal
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
   level?: boolean | Prisma.FeeStructure$levelArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feeStructure"]>
 
 export type FeeStructureSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -666,7 +845,9 @@ export type FeeStructureSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
   level?: boolean | Prisma.FeeStructure$levelArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feeStructure"]>
 
 export type FeeStructureSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -680,7 +861,9 @@ export type FeeStructureSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
   level?: boolean | Prisma.FeeStructure$levelArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feeStructure"]>
 
 export type FeeStructureSelectScalar = {
@@ -694,23 +877,28 @@ export type FeeStructureSelectScalar = {
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organizationId?: boolean
 }
 
-export type FeeStructureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "levelId" | "amount" | "frequency" | "academicYear" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["feeStructure"]>
+export type FeeStructureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "levelId" | "amount" | "frequency" | "academicYear" | "description" | "isActive" | "createdAt" | "updatedAt" | "organizationId", ExtArgs["result"]["feeStructure"]>
 export type FeeStructureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   level?: boolean | Prisma.FeeStructure$levelArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 export type FeeStructureIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   level?: boolean | Prisma.FeeStructure$levelArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 export type FeeStructureIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   level?: boolean | Prisma.FeeStructure$levelArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 
 export type $FeeStructurePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FeeStructure"
   objects: {
     level: Prisma.$LevelPayload<ExtArgs> | null
+    organization: Prisma.$OrganizationPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -723,6 +911,7 @@ export type $FeeStructurePayload<ExtArgs extends runtime.Types.Extensions.Intern
     isActive: boolean
     createdAt: Date
     updatedAt: Date
+    organizationId: string
   }, ExtArgs["result"]["feeStructure"]>
   composites: {}
 }
@@ -1118,6 +1307,7 @@ readonly fields: FeeStructureFieldRefs;
 export interface Prisma__FeeStructureClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   level<T extends Prisma.FeeStructure$levelArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FeeStructure$levelArgs<ExtArgs>>): Prisma.Prisma__LevelClient<runtime.Types.Result.GetResult<Prisma.$LevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1157,6 +1347,7 @@ export interface FeeStructureFieldRefs {
   readonly isActive: Prisma.FieldRef<"FeeStructure", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"FeeStructure", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FeeStructure", 'DateTime'>
+  readonly organizationId: Prisma.FieldRef<"FeeStructure", 'String'>
 }
     
 

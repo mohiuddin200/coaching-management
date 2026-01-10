@@ -9,6 +9,16 @@
 * 🟢 You can import this file directly.
 */
 
+export const SystemRole = {
+  SuperAdmin: 'SuperAdmin',
+  OrganizationAdmin: 'OrganizationAdmin',
+  FinanceManager: 'FinanceManager',
+  AcademicCoordinator: 'AcademicCoordinator'
+} as const
+
+export type SystemRole = (typeof SystemRole)[keyof typeof SystemRole]
+
+
 export const ExamType = {
   Monthly: 'Monthly',
   Weekly: 'Weekly',
